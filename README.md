@@ -1,4 +1,4 @@
-# HomeSafe CS460 Team 1
+# HomeSafe CS460 Team 01
 ## Members:
 - Marina Seheon (Manager)
 - Andrei Phelps (Document Manager)

@@ -24,7 +24,7 @@ public class KeyPadApp extends Application {
 
         Button volumeUpButton = createButton("^", "volume up");
         Button zeroButton = createButton("0", "0");
-        Button volumeDownButton = createButton("↓", "volume down");
+        Button volumeDownButton = createButton("v", "volume down");
 
         gridPane.add(volumeUpButton, 0, 3);
         gridPane.add(zeroButton, 1, 3);

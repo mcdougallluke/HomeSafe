@@ -1,15 +1,17 @@
-import javafx.application.Application;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
-public class KeyPadApp extends Application {
+public class KeyPadApp {
 
-    @Override
-    public void start(Stage primaryStage) {
+    private Screen screen;
+
+    public KeyPadApp(Screen screen) {
+        this.screen = screen;
+    }
+
+    public GridPane createKeypad() {
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
         gridPane.setHgap(10);
@@ -42,21 +44,18 @@ public class KeyPadApp extends Application {
         gridPane.add(asteriskButton, 1, 4);
         gridPane.add(enterButton, 2, 4);
 
-        Scene scene = new Scene(gridPane, 300, 400);
-        primaryStage.setTitle("KeyPad App");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        return gridPane;
     }
 
     private Button createButton(String text, String printText) {
         Button btn = new Button(text);
         btn.setPrefSize(60, 60);
         btn.setStyle("-fx-background-color: black; -fx-text-fill: white;"); // Set button background to black and text to white
-        btn.setOnAction(event -> System.out.println(printText));
+        // Style when button is pressed
+        btn.setOnMousePressed(event -> btn.setStyle("-fx-background-color: darkgray; -fx-text-fill: white;"));
+        // Reset to default style when button is released
+        btn.setOnMouseReleased(event -> btn.setStyle("-fx-background-color: black; -fx-text-fill: white;"));
+        btn.setOnAction(event -> screen.appendKeyEntry(printText));
         return btn;
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

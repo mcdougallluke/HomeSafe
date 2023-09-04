@@ -5,6 +5,12 @@ import javafx.scene.paint.Color;
 
 public class KeyPadApp {
 
+    private Screen screen;
+
+    public KeyPadApp(Screen screen) {
+        this.screen = screen;
+    }
+
     public GridPane createKeypad() {
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
@@ -45,7 +51,11 @@ public class KeyPadApp {
         Button btn = new Button(text);
         btn.setPrefSize(60, 60);
         btn.setStyle("-fx-background-color: black; -fx-text-fill: white;"); // Set button background to black and text to white
-        btn.setOnAction(event -> System.out.println(printText));
+        // Style when button is pressed
+        btn.setOnMousePressed(event -> btn.setStyle("-fx-background-color: darkgray; -fx-text-fill: white;"));
+        // Reset to default style when button is released
+        btn.setOnMouseReleased(event -> btn.setStyle("-fx-background-color: black; -fx-text-fill: white;"));
+        btn.setOnAction(event -> screen.appendKeyEntry(printText));
         return btn;
     }
 }

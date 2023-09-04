@@ -1,6 +1,5 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -19,13 +18,29 @@ public class Safe extends Application {
         imageView.fitHeightProperty().bind(primaryStage.heightProperty());
         imageView.setPreserveRatio(true);
 
-        KeyPadApp keypadApp = new KeyPadApp();
+        // Create the screen and get its component
+        Screen screen = new Screen();
+        StackPane screenComponent = screen.getScreenComponent();
+
+        KeyPadApp keypadApp = new KeyPadApp(screen);
         GridPane keypad = keypadApp.createKeypad();
 
-        AnchorPane keypadWrapper = new AnchorPane(keypad);
+        AnchorPane keypadWrapper = new AnchorPane(keypad, screenComponent); // Add the screen component to the wrapper
 
         StackPane root = new StackPane();
         root.getChildren().addAll(imageView, keypadWrapper);
+
+        // Position the keypad
+        double keypadXCoordinate = 175;
+        double keypadYCoordinate = 325;
+        AnchorPane.setTopAnchor(keypad, keypadYCoordinate);
+        AnchorPane.setLeftAnchor(keypad, keypadXCoordinate);
+
+        // Position the screen above the keypad
+        double screenXCoordinate = 175;
+        double screenYCoordinate = 250; // Adjust as needed
+        AnchorPane.setTopAnchor(screenComponent, screenYCoordinate);
+        AnchorPane.setLeftAnchor(screenComponent, screenXCoordinate);
 
         Scene scene = new Scene(root, 700, 700);
         primaryStage.setTitle("Digital Safe");

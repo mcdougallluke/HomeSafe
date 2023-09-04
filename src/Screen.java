@@ -1,3 +1,4 @@
+import javafx.geometry.Insets;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -10,15 +11,26 @@ public class Screen {
 
     public Screen() {
         display = new TextArea();
-        display.setEditable(false); // Prevent manual editing
-        display.setWrapText(true);  // Wrap text if it overflows
-        display.setStyle("-fx-background-color: black; -fx-text-fill: white; -fx-font-size: 20; -fx-border-color: none; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;"); // Style the display
+        display.setEditable(false);
+        display.setWrapText(true);
+        display.setStyle("-fx-background-color: black; " +
+                "-fx-text-fill: white; " +
+                "-fx-font-size: 20; " +
+                "-fx-border-color: black; " +
+                "-fx-focus-color: black; " +
+                "-fx-faint-focus-color: black; " +
+                "-fx-control-inner-background: black; " +
+                "-fx-padding: 0;");
 
         // Create a background for the screen
         Rectangle background = new Rectangle(250, 50, Color.BLACK); // Set size of the screen to 250x50, adjust as needed
 
         screenComponent = new StackPane();
         screenComponent.getChildren().addAll(background, display);
+
+        // Define the size of the screen
+        screenComponent.setPrefWidth(270);
+        screenComponent.setPrefHeight(185);
     }
 
     // Method to display a message on the screen

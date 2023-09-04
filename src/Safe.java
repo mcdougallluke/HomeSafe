@@ -37,8 +37,8 @@ public class Safe extends Application {
         AnchorPane.setLeftAnchor(keypad, keypadXCoordinate);
 
         // Position the screen above the keypad
-        double screenXCoordinate = 175;
-        double screenYCoordinate = 250; // Adjust as needed
+        double screenXCoordinate = 70;
+        double screenYCoordinate = 95;
         AnchorPane.setTopAnchor(screenComponent, screenYCoordinate);
         AnchorPane.setLeftAnchor(screenComponent, screenXCoordinate);
 

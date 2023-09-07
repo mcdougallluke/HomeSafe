@@ -19,6 +19,7 @@ public class Safe extends Application {
         imageView.setPreserveRatio(true);
 
         // Create the screen and get its component
+        // Create the screen and get its component
         Screen screen = new Screen();
         StackPane screenComponent = screen.getScreenComponent();
 

@@ -4,14 +4,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.paint.Color;
+import javafx.scene.media.AudioClip;
 
 
-public class KeyPadApp {
+public class KeyPad {
 
     private Screen screen;
-
-    public KeyPadApp(Screen screen) {
+    private final AudioClip buttonSound = new AudioClip(getClass().getResource("pinPadBeap.mp3").toString());
+    public KeyPad(Screen screen) {
         this.screen = screen;
     }
 
@@ -103,7 +103,10 @@ public class KeyPadApp {
         });
 
 
-        btn.setOnAction(event -> screen.appendKeyEntry(printText));
+        btn.setOnAction(event -> {
+            screen.appendKeyEntry(printText);
+            buttonSound.play();
+        });
 
         return btn;
     }

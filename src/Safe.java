@@ -23,7 +23,7 @@ public class Safe extends Application {
         Screen screen = new Screen();
         StackPane screenComponent = screen.getScreenComponent();
 
-        KeyPadApp keypadApp = new KeyPadApp(screen);
+        KeyPad keypadApp = new KeyPad(screen);
         GridPane keypad = keypadApp.createKeypad();
 
         AnchorPane keypadWrapper = new AnchorPane(keypad, screenComponent); // Add the screen component to the wrapper

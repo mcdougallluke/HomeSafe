@@ -1,8 +1,6 @@
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static java.lang.Thread.sleep;
-
 public class Battery {
     private static final double FULL_CHARGE = 100.0;
     private static final int LOW_BATTERY_THRESHOLD = 20;
@@ -16,11 +14,6 @@ public class Battery {
         this.remainingWorkingTime = 48 * 60; // 48 hours in minutes
 
         startBatteryDepletion(); // Starting battery depletion
-
-//        sleep(70000);
-//        System.out.println(getRemainingWorkingTime());
-//        System.out.println(getChargeLevel());
-
     }
 
     private void startBatteryDepletion() {
@@ -55,6 +48,7 @@ public class Battery {
             chargeLevel -= amount;
         }
     }
+
     private boolean isVoltageSafe(int voltage) {
         // Check if the voltage is within a safe range
         return voltage >= 220 && voltage <= 240;
@@ -82,5 +76,36 @@ public class Battery {
 
     public int getRemainingWorkingTime() { // Returns remaining running time in minutes
         return remainingWorkingTime;
+    }
+
+    // Nested Main class for testing
+    public static class Main {
+        public static void main(String[] args) {
+            try {
+                // Create an instance of the Battery class
+                Battery battery = new Battery();
+
+                // Simulate using the battery for some time
+                for (int i = 0; i < 70; i++) {
+                    // Discharge the battery by 1% every minute (for demonstration purposes)
+                    battery.discharge(1.0);
+
+                    // Check if the battery is low and print a message
+                    if (battery.isLow()) {
+                        System.out.println("Battery is low! Please recharge.");
+                    }
+
+                    // Print the current charge level and remaining working time
+                    System.out.println("Charge Level: " + battery.getChargeLevel() + "%");
+                    System.out.println("Remaining Working Time: " + battery.getRemainingWorkingTime() + " minutes");
+
+                    // Sleep for 1 minute (simulating the passage of time)
+                    Thread.sleep(60000);
+                }
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

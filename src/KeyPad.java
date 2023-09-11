@@ -11,6 +11,7 @@ public class KeyPad {
 
     private Screen screen;
     private final AudioClip buttonSound = new AudioClip(getClass().getResource("pinPadBeap.mp3").toString());
+    private double currentVolume = 1.0; // start at maximum volume
     public KeyPad(Screen screen) {
         this.screen = screen;
     }
@@ -32,8 +33,20 @@ public class KeyPad {
         }
 
         Button volumeUpButton = createButton("^", "volume up");
+        volumeUpButton.setOnAction(event -> {
+                increaseVolume();
+                buttonSound.setVolume(currentVolume); // Set volume level
+                buttonSound.play();
+        });
+
         Button zeroButton = createButton("0", "0");
+
         Button volumeDownButton = createButton("v", "volume down");
+        volumeDownButton.setOnAction(event -> {
+            decreaseVolume();
+            buttonSound.setVolume(currentVolume); // Set volume level
+            buttonSound.play();
+        });
 
         gridPane.add(volumeUpButton, 0, 3);
         gridPane.add(zeroButton, 1, 3);
@@ -51,6 +64,19 @@ public class KeyPad {
         gridPane.add(enterButton, 2, 4);
 
         return gridPane;
+    }
+    private void increaseVolume() {
+        if (currentVolume < 1.0) {
+            currentVolume += 0.1; // Increase volume by 10%
+            if (currentVolume > 1.0) currentVolume = 1.0; // Ensure we don't exceed maximum volume
+        }
+    }
+
+    private void decreaseVolume() {
+        if (currentVolume > 0.0) {
+            currentVolume -= 0.1; // Decrease volume by 10%
+            if (currentVolume < 0.0) currentVolume = 0.0; // Ensure we don't go below mute
+        }
     }
 
     private Button createButton(String text, String printText) {
@@ -107,9 +133,10 @@ public class KeyPad {
 
         btn.setOnAction(event -> {
             screen.appendKeyEntry(printText);
+            buttonSound.setVolume(currentVolume); // Set volume level
             buttonSound.play();
-
         });
+
 
         return btn;
     }

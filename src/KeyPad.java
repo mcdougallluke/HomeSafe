@@ -5,6 +5,9 @@ import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.media.AudioClip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 
 
 public class KeyPad {
@@ -55,7 +58,7 @@ public class KeyPad {
 
         Button cancelButton = createButton("X", "cancel");
         cancelButton.setTextFill(Color.RED);  // Set the X button text color to red
-        Button asteriskButton = createButton("*", "*");
+        Button asteriskButton = createButton("*", "power");
         Button enterButton = createButton("O", "enter");
         enterButton.setTextFill(Color.GREEN); // Set the O button text color to green
 
@@ -82,6 +85,15 @@ public class KeyPad {
     private Button createButton(String text, String printText) {
         Button btn = new Button(text);
         btn.setPrefSize(55, 55);
+
+        if ("*".equals(text)) {
+            // Load the image for the asterisk button
+            ImageView asteriskImage = new ImageView(new Image(getClass().getResource("power-symbol.png").toString()));
+            asteriskImage.setFitHeight(30); // Set desired height, adjust accordingly
+            asteriskImage.setFitWidth(30);  // Set desired width, adjust accordingly
+            btn.setGraphic(asteriskImage);
+            btn.setText(""); // Clear the text as we're using an image now
+        }
 
         // Linear gradient to give depth to the button
         String gradientBackground = "-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #3E3E3E, #2E2E2E);";

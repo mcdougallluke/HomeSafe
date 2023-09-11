@@ -86,6 +86,7 @@ public class KeyPad {
             }
             shadow.setOffsetX(1);
             shadow.setOffsetY(1);
+
         });
 
 
@@ -100,12 +101,14 @@ public class KeyPad {
             }
             shadow.setOffsetX(3);
             shadow.setOffsetY(3);
+
         });
 
 
         btn.setOnAction(event -> {
             screen.appendKeyEntry(printText);
             buttonSound.play();
+
         });
 
         return btn;

@@ -22,7 +22,7 @@ public class Screen {
 
         display.setStyle("-fx-background-color: #141314; " +
                 "-fx-text-fill: white; " +
-                "-fx-font-size: 35; " +
+                "-fx-font-size: 20; " +
                 "-fx-border-color: #141314; " +
                 "-fx-focus-color: #141314; " +
                 "-fx-faint-focus-color: #141314; " +
@@ -41,7 +41,7 @@ public class Screen {
         screenComponent.setPrefWidth(250);
         screenComponent.setPrefHeight(40);
 
-        final int MAX_CHARACTERS = 10;
+        final int MAX_CHARACTERS = 19;
         display.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > MAX_CHARACTERS) {
                 display.setText(oldValue);

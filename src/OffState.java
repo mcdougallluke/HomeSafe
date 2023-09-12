@@ -9,7 +9,7 @@ public class OffState implements SafeState {
 
     @Override
     public void handlePowerButton() {
-        screen.displayTempMessage("[SAFE ON]", 3);
+        screen.displayTempMessage("ON", 3);
         safe.setState(safe.getSetUpState());
     }
 

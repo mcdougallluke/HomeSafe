@@ -14,59 +14,69 @@ public class KeyPad {
 
     private Screen screen;
     private final AudioClip buttonSound = new AudioClip(getClass().getResource("pinPadBeap.mp3").toString());
-    private double currentVolume = 1.0; // start at maximum volume
+    private double currentVolume = 0.0; // start at maximum volume
+    private GridPane keyPadComponent = null; // Added this line
+
     public KeyPad(Screen screen) {
         this.screen = screen;
     }
 
     public GridPane createKeypad() {
-        GridPane gridPane = new GridPane();
-        gridPane.setAlignment(Pos.CENTER);
-        gridPane.setPadding(new Insets(10, 10, 10, 10)); // Add padding to create a border around the buttons
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
-        gridPane.setStyle("-fx-background-color: linear-gradient(to bottom, #a9a9a9, #ffffff, #a9a9a9);");
+        if (keyPadComponent != null) {
+            return keyPadComponent;
+        }
+
+        keyPadComponent = new GridPane();
+        keyPadComponent.setAlignment(Pos.CENTER);
+        keyPadComponent.setPadding(new Insets(10, 10, 10, 10));
+        keyPadComponent.setHgap(10);
+        keyPadComponent.setVgap(10);
+        keyPadComponent.setStyle("-fx-background-color: linear-gradient(to bottom, #a9a9a9, #ffffff, #a9a9a9);");
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 int number = i * 3 + j + 1;
                 Button btn = createButton(String.valueOf(number), String.valueOf(number));
-                gridPane.add(btn, j, i);
+                keyPadComponent.add(btn, j, i);
             }
         }
 
         Button volumeUpButton = createButton("^", "volume up");
         volumeUpButton.setOnAction(event -> {
-                increaseVolume();
-                buttonSound.setVolume(currentVolume); // Set volume level
-                buttonSound.play();
+            increaseVolume();
+            buttonSound.setVolume(currentVolume);
+            buttonSound.play();
         });
-
         Button zeroButton = createButton("0", "0");
-
         Button volumeDownButton = createButton("v", "volume down");
         volumeDownButton.setOnAction(event -> {
             decreaseVolume();
-            buttonSound.setVolume(currentVolume); // Set volume level
+            buttonSound.setVolume(currentVolume);
             buttonSound.play();
         });
 
-        gridPane.add(volumeUpButton, 0, 3);
-        gridPane.add(zeroButton, 1, 3);
-        gridPane.add(volumeDownButton, 2, 3);
-
+        keyPadComponent.add(volumeUpButton, 0, 3);
+        keyPadComponent.add(zeroButton, 1, 3);
+        keyPadComponent.add(volumeDownButton, 2, 3);
 
         Button cancelButton = createButton("X", "cancel");
-        cancelButton.setTextFill(Color.RED);  // Set the X button text color to red
+        cancelButton.setTextFill(Color.RED);
         Button asteriskButton = createButton("*", "power");
         Button enterButton = createButton("O", "enter");
-        enterButton.setTextFill(Color.GREEN); // Set the O button text color to green
+        enterButton.setTextFill(Color.GREEN);
 
-        gridPane.add(cancelButton, 0, 4);
-        gridPane.add(asteriskButton, 1, 4);
-        gridPane.add(enterButton, 2, 4);
+        keyPadComponent.add(cancelButton, 0, 4);
+        keyPadComponent.add(asteriskButton, 1, 4);
+        keyPadComponent.add(enterButton, 2, 4);
 
-        return gridPane;
+        return keyPadComponent;
+    }
+
+    public GridPane getKeyPadComponent() {
+        if (keyPadComponent == null) {
+            createKeypad();
+        }
+        return keyPadComponent;
     }
     private void increaseVolume() {
         if (currentVolume < 1.0) {

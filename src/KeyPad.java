@@ -176,9 +176,12 @@ public class KeyPad {
 
 
         btn.setOnAction(event -> {
-            screen.appendKeyEntry(printText);
-            buttonSound.setVolume(currentVolume); // Set volume level
-            buttonSound.play();
+            // Check if the state allows this key to be processed
+            if (safe.getCurrentState().canProcessKey(text.charAt(0))) {
+                screen.appendKeyEntry(printText);
+                buttonSound.setVolume(currentVolume);
+                buttonSound.play();
+            }
         });
 
 

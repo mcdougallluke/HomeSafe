@@ -16,6 +16,12 @@ public class Safe extends Application {
     private Image safeFrontImage;
     private Image safeCloseUpImage;
 
+    private SafeState offState;
+    private SafeState setUpState;
+    private SafeState normalState;
+    private SafeState currentState;
+
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -25,7 +31,7 @@ public class Safe extends Application {
         safeCloseUpImage = new Image(Objects.requireNonNull(getClass().getResource("images/SAFE_FRONT.png")).toExternalForm());
         ImageView imageView = new ImageView(safeFrontImage);
         screen = new Screen();
-        keyPad = new KeyPad(screen);
+        keyPad = new KeyPad(this, screen);
 
         imageView.setOnMouseClicked(event -> {
             imageView.setImage(safeCloseUpImage);
@@ -34,8 +40,8 @@ public class Safe extends Application {
             AnchorPane anchorPane = new AnchorPane();
 
             // Position the screen above the keypad
-            double screenXCoordinate = 75;
-            double screenYCoordinate = 110;
+            double screenXCoordinate = 78;
+            double screenYCoordinate = 150;
             AnchorPane.setTopAnchor(screen.getScreenComponent(), screenYCoordinate);
             AnchorPane.setLeftAnchor(screen.getScreenComponent(), screenXCoordinate);
 
@@ -62,6 +68,33 @@ public class Safe extends Application {
         primaryStage.setTitle("Digital Safe");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    public Safe() {
+        offState = new OffState(this);
+        setUpState = new SetUpState(this);
+        normalState = new NormalState(this);
+        currentState = offState; // initial state
+    }
+
+    public void setState(SafeState state) {
+        this.currentState = state;
+    }
+
+    public SafeState getOffState() {
+        return offState;
+    }
+
+    public SafeState getSetUpState() {
+        return setUpState;
+    }
+
+    public SafeState getNormalState() {
+        return normalState;
+    }
+
+    public SafeState getCurrentState() {
+        return currentState;
     }
 
     public static void main(String[] args) {

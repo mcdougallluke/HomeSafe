@@ -12,24 +12,24 @@ public class Screen {
     public Screen() {
         display = new TextArea();
         display.setEditable(false);
-        // Prevents line wrapping
         display.setWrapText(false);
-        // Always scroll to the bottom (though since we're preventing scrolling, this is more of a safety measure)
         display.setScrollTop(Double.MAX_VALUE);
-        display.setMaxHeight(40); // Set the max height slightly more than font size to ensure proper padding
-        display.setPrefRowCount(1); // Only one line
+        display.setMaxHeight(40);
+        display.setPrefRowCount(1);
+        display.setFocusTraversable(false);
 
-        display.setStyle("-fx-background-color: #141314; " +  // Changed the background color to #141314
+        display.setStyle("-fx-background-color: #141314; " +
                 "-fx-text-fill: white; " +
                 "-fx-font-size: 35; " +
-                "-fx-border-color: #141314; " +  // Changed the border color to #141314
-                "-fx-focus-color: #141314; " +  // Changed the focus color to #141314
-                "-fx-faint-focus-color: #141314; " +  // Changed the faint focus color to #141314
-                "-fx-control-inner-background: #141314; " +  // Changed the control inner background color to #141314
+                "-fx-border-color: #141314; " +
+                "-fx-focus-color: #141314; " +
+                "-fx-faint-focus-color: #141314; " +
+                "-fx-control-inner-background: #141314; " +
                 "-fx-padding: 5;");
 
+
         // Create a background for the screen
-        Rectangle background = new Rectangle(250, 40, Color.web("#141314")); // Adjusted the color to #141314
+        Rectangle background = new Rectangle(250, 40, Color.web("#141314"));
 
         screenComponent = new StackPane();
         screenComponent.setAlignment(Pos.CENTER);
@@ -50,6 +50,10 @@ public class Screen {
     // Method to display a message on the screen
     public void displayMessage(String message) {
         display.setText(message);
+    }
+
+    public String getDisplayText() {
+        return display.getText();
     }
 
     // Method to append a key entry to the current display

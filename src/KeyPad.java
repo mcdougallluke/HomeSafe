@@ -13,13 +13,16 @@ import javafx.scene.image.ImageView;
 public class KeyPad {
 
     private Screen screen;
+    private Safe safe;
     private final AudioClip buttonSound = new AudioClip(getClass().getResource("pinPadBeap.mp3").toString());
     private double currentVolume = 0.0; // start at maximum volume
     private GridPane keyPadComponent = null; // Added this line
 
-    public KeyPad(Screen screen) {
+    public KeyPad(Safe safe, Screen screen) {
+        this.safe = safe;
         this.screen = screen;
     }
+
 
     public GridPane createKeypad() {
         if (keyPadComponent != null) {
@@ -61,7 +64,26 @@ public class KeyPad {
 
         Button cancelButton = createButton("X", "cancel");
         cancelButton.setTextFill(Color.RED);
+        cancelButton.setOnAction(event -> {
+            // Get the current text from the screen
+            String currentText = screen.getDisplayText();
+
+            // Remove the last character if the text isn't empty
+            if (!currentText.isEmpty()) {
+                currentText = currentText.substring(0, currentText.length() - 1);
+                screen.displayMessage(currentText);
+            }
+
+            buttonSound.setVolume(currentVolume); // Set volume level
+            buttonSound.play();
+        });
+
         Button asteriskButton = createButton("*", "power");
+        asteriskButton.setOnAction(event -> {
+            safe.getCurrentState().handlePowerButton();
+            buttonSound.setVolume(currentVolume);
+            buttonSound.play();
+        });
         Button enterButton = createButton("O", "enter");
         enterButton.setTextFill(Color.GREEN);
 
@@ -154,9 +176,11 @@ public class KeyPad {
 
 
         btn.setOnAction(event -> {
-            screen.appendKeyEntry(printText);
-            buttonSound.setVolume(currentVolume); // Set volume level
-            buttonSound.play();
+            if (safe.getCurrentState().canProcessKey(text.charAt(0))) {
+                screen.appendKeyEntry(printText);
+                buttonSound.setVolume(currentVolume);
+                buttonSound.play();
+            }
         });
 
 

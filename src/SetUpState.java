@@ -7,9 +7,7 @@ public class SetUpState implements SafeState {
 
     @Override
     public void handlePowerButton() {
-        // Transition to NORMAL state or perhaps OFF state
         safe.setState(safe.getOffState());
-        // Or any other logic when power button is pressed during setup
     }
 
     @Override

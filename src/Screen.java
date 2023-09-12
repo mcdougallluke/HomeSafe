@@ -1,8 +1,10 @@
+import javafx.animation.PauseTransition;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 public class Screen {
 
@@ -47,9 +49,19 @@ public class Screen {
         });
     }
 
-    // Method to display a message on the screen
     public void displayMessage(String message) {
         display.setText(message);
+    }
+
+    public void displayTempMessage(String message, double seconds) {
+        PauseTransition pause = new PauseTransition(Duration.seconds(seconds));
+        pause.setOnFinished(event -> clearMessage());
+        pause.play();
+        displayMessage(message);
+    }
+
+    private void clearMessage() {
+        display.clear();
     }
 
     public String getDisplayText() {

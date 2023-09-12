@@ -30,7 +30,6 @@ public class Safe extends Application {
         safeFrontImage = new Image(Objects.requireNonNull(getClass().getResource("images/SAFE_DISPLAY.png")).toExternalForm());
         safeCloseUpImage = new Image(Objects.requireNonNull(getClass().getResource("images/SAFE_FRONT.png")).toExternalForm());
         ImageView imageView = new ImageView(safeFrontImage);
-        screen = new Screen();
         keyPad = new KeyPad(this, screen);
 
         imageView.setOnMouseClicked(event -> {
@@ -71,14 +70,19 @@ public class Safe extends Application {
     }
 
     public Safe() {
-        offState = new OffState(this);
+        screen = new Screen();
+        offState = new OffState(this, screen);
         setUpState = new SetUpState(this);
         normalState = new NormalState(this);
-        currentState = offState; // initial state
+        currentState = offState;
     }
 
     public void setState(SafeState state) {
         this.currentState = state;
+    }
+
+    public Screen getScreen() {
+        return screen;
     }
 
     public SafeState getOffState() {

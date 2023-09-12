@@ -7,8 +7,6 @@ public class NormalState implements SafeState {
 
     @Override
     public void handlePowerButton() {
-        // Handle power button when the safe is in NORMAL mode
-        // Perhaps you might want to shut down the safe
         safe.setState(safe.getOffState());
     }
 

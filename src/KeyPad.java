@@ -176,11 +176,9 @@ public class KeyPad {
 
 
         btn.setOnAction(event -> {
-            if (safe.getCurrentState().canProcessKey(text.charAt(0))) {
-                screen.appendKeyEntry(printText);
-                buttonSound.setVolume(currentVolume);
-                buttonSound.play();
-            }
+            screen.appendKeyEntry(printText);
+            buttonSound.setVolume(currentVolume); // Set volume level
+            buttonSound.play();
         });
 
 

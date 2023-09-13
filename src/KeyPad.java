@@ -86,8 +86,8 @@ public class KeyPad {
         btn.setPrefSize(55, 55);
 
         if ("*".equals(text)) {
-            Image asteriskImage = new Image("power-symbol.png");
-            ImageView imageView = new ImageView(asteriskImage);
+            ImageView imageView = new ImageView(new Image(getClass().getResource("power-symbol.png").toString()));
+
             // Load the image for the asterisk button
             imageView.setFitHeight(30); // Set desired height, adjust accordingly
             imageView.setFitWidth(30);  // Set desired width, adjust accordingly

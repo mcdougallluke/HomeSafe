@@ -9,7 +9,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 
-
 public class KeyPad {
 
     private Screen screen;
@@ -87,11 +86,12 @@ public class KeyPad {
         btn.setPrefSize(55, 55);
 
         if ("*".equals(text)) {
+            ImageView imageView = new ImageView(new Image(getClass().getResource("power-symbol.png").toString()));
+
             // Load the image for the asterisk button
-            ImageView asteriskImage = new ImageView(new Image(getClass().getResource("power-symbol.png").toString()));
-            asteriskImage.setFitHeight(30); // Set desired height, adjust accordingly
-            asteriskImage.setFitWidth(30);  // Set desired width, adjust accordingly
-            btn.setGraphic(asteriskImage);
+            imageView.setFitHeight(30); // Set desired height, adjust accordingly
+            imageView.setFitWidth(30);  // Set desired width, adjust accordingly
+            btn.setGraphic(imageView);
             btn.setText(""); // Clear the text as we're using an image now
         }
 

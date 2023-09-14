@@ -100,6 +100,7 @@ public class SafeGUI extends Application {
 
 
     public void closeSafe() {
+        safeController.setState(SafeState.CLOSED);
         imageView.setImage(safeCloseUpImage);
         screen.getScreenComponent().setVisible(true);
         keyPad.setVisible(true);

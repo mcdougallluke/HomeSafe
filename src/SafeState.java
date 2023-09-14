@@ -4,5 +4,6 @@ public enum SafeState {
     SETTING_NEW_PIN,
     NORMAL,
     ADD_NEW_USER,
+    CLOSED,
     LOCKED
 }

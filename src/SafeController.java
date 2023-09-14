@@ -20,14 +20,15 @@ public class SafeController {
 
     public void setState(SafeState newState) {
         currentState = newState;
-
+        System.out.println("Current state: " + currentState);
         switch (currentState) {
             case INITIAL_PIN_SETUP -> handleInitialPinSetup();
             case NORMAL -> handleNormalState();
+            case CLOSED -> handleCloseSafe();
             case ADD_NEW_USER -> handleAddNewUser();
             case LOCKED -> handleLockedState();
         }
-        System.out.println("Current state: " + currentState);
+
     }
 
     private void handleInitialPinSetup() {
@@ -52,7 +53,6 @@ public class SafeController {
 
     public void handleCloseSafe() {
         currentState = SafeState.NORMAL;
-        safeGUI.closeSafe();
         handleNormalState();
     }
 

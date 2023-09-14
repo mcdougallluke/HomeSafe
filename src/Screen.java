@@ -23,7 +23,7 @@ public class Screen {
         line1 = createTextLine();
         line2 = createTextLine();
 
-        textContainer = new VBox(5); // A little spacing between lines
+        textContainer = new VBox(5);
         textContainer.getChildren().addAll(line1, line2);
         textContainer.setAlignment(Pos.CENTER);
 

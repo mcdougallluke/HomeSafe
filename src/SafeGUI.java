@@ -15,6 +15,7 @@ public class SafeGUI extends Application {
     private KeyPad keyPad;
     private Image safeFrontImage;
     private Image safeCloseUpImage;
+    private SafeController safeController;
 
     @Override
     public void start(Stage primaryStage) {
@@ -27,6 +28,9 @@ public class SafeGUI extends Application {
         InputController controller = new InputController();
         screen = new Screen(controller);
         keyPad = new KeyPad(controller);
+
+        safeController = new SafeController(screen);
+        controller.setSafeController(safeController);
 
         imageView.setOnMouseClicked(event -> {
             imageView.setImage(safeCloseUpImage);

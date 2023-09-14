@@ -5,8 +5,9 @@ public class SafeController {
 
     public SafeController(Screen screen) {
         this.screen = screen;
-        currentState = SafeState.INITIAL_PIN_SETUP; // Start with the initial setup
+        currentState = SafeState.OFF;
     }
+
 
     public void setState(SafeState newState) {
         currentState = newState;

@@ -46,8 +46,6 @@ public class Screen {
     }
 
     public void displayMessage(String message) {
-        clearMessage();
-
         if (message.length() <= 20) {
             line1.setText(message);
         } else {
@@ -81,27 +79,9 @@ public class Screen {
         }
     }
 
-
-    public void displayTempMessage(String message, double seconds) {
-        PauseTransition pause = new PauseTransition(Duration.seconds(seconds));
-        pause.setOnFinished(event -> clearMessage());
-        pause.play();
-
-        displayMessage(message);
-    }
-
-    private void clearMessage() {
-        line1.setText("");
-        line2.setText("");
-    }
-
-    public String getDisplayText() {
-        return line1.getText() + line2.getText();
-    }
-
     public void turnOn() {
         screenComponent.setVisible(true);
-        displayTempMessage("WELCOME", 2);
+        displayMessage("WELCOME");
     }
 
     public void turnOff() {

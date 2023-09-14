@@ -52,8 +52,7 @@ public class SafeController {
     }
 
     public void handleCloseSafe() {
-        currentState = SafeState.NORMAL;
-        handleNormalState();
+        setState(SafeState.NORMAL);
     }
 
 
@@ -69,14 +68,14 @@ public class SafeController {
         if (currentState == SafeState.INITIAL_PIN_SETUP) {
             if ("00000".equals(enteredPIN)) {
                 screen.displayMessage("Enter New PIN");
-                currentState = SafeState.SETTING_NEW_PIN;
+                setState(SafeState.SETTING_NEW_PIN);
             } else {
                 screen.displayMessage("Wrong Setup PIN. Try again.");
             }
         } else if (currentState == SafeState.SETTING_NEW_PIN) {
             pinManager.setPIN(enteredPIN);
             screen.displayMessage("PIN Set Successfully");
-            currentState = SafeState.NORMAL;
+            setState(SafeState.NORMAL);
         } else if (currentState == SafeState.NORMAL) {
             if (pinManager.checkPIN(enteredPIN)) {
                 handleUnlockedState();

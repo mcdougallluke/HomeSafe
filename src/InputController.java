@@ -20,11 +20,13 @@ public class InputController {
         }
     }
 
+
     public void handlePowerButton() {
-        //if first time turning on safe & setup not marked complete, run through setup process
-        //if not first time, regular power on
-        //if safe is already on, power off.
-        screen.displayMessage("Powering off...");
+        if(screen.getScreenComponent().isVisible()) {
+            screen.turnOff();
+        } else {
+            screen.turnOn();
+        }
     }
 
 }

@@ -67,12 +67,14 @@ public class KeyPad extends GridPane {
         cancelButton.setTextFill(Color.RED);
         cancelButton.setOnAction(event -> {
             inputController.handleCancel();
+            adjustVolume(0);
             buttonSound.play();
         });
 
         Button powerButton = createButton("*", "power");
         powerButton.setOnAction(event -> {
             inputController.handlePowerButton();
+            adjustVolume(0);
             buttonSound.play();
         });
 
@@ -105,6 +107,7 @@ public class KeyPad extends GridPane {
 
         btn.setOnAction(event -> {
             inputController.handleKeyInput(printText);
+            adjustVolume(0);
             buttonSound.play();
         });
 

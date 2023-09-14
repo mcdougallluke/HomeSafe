@@ -33,8 +33,8 @@ public class SafeGUI extends Application {
             AnchorPane anchorPane = new AnchorPane();
 
             // Position the screen above the keypad
-            double screenXCoordinate = 78;
-            double screenYCoordinate = 150;
+            double screenXCoordinate = 80;
+            double screenYCoordinate = 110;
             AnchorPane.setTopAnchor(screen.getScreenComponent(), screenYCoordinate);
             AnchorPane.setLeftAnchor(screen.getScreenComponent(), screenXCoordinate);
 

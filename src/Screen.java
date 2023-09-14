@@ -1,6 +1,7 @@
 import javafx.animation.PauseTransition;
 import javafx.geometry.Pos;
-import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -8,80 +9,87 @@ import javafx.util.Duration;
 
 public class Screen {
 
-    private final TextArea display;
-    private final StackPane screenComponent;
+    private final Text line1;
+    private final Text line2;
+    private final VBox textContainer;
+    private final Rectangle background;
     private final InputController inputController;
+    private final StackPane screenComponent;
 
     public Screen(InputController inputController) {
         this.inputController = inputController;
         this.inputController.setScreen(this);
-        display = new TextArea();
-        display.setEditable(false);
-        display.setWrapText(false);
-        display.setScrollTop(Double.MAX_VALUE);
-        display.setMaxHeight(40);
-        display.setPrefRowCount(1);
-        display.setFocusTraversable(false);
 
-        display.setStyle("-fx-background-color: #141314; " +
-                "-fx-text-fill: white; " +
-                "-fx-font-size: 35; " +
-                "-fx-border-color: #141314; " +
-                "-fx-focus-color: #141314; " +
-                "-fx-faint-focus-color: #141314; " +
-                "-fx-control-inner-background: #141314; " +
-                "-fx-padding: 5;");
+        line1 = createTextLine();
+        line2 = createTextLine();
 
+        textContainer = new VBox(5); // A little spacing between lines
+        textContainer.getChildren().addAll(line1, line2);
+        textContainer.setAlignment(Pos.CENTER);
 
-        // Create a background for the screen
-        Rectangle background = new Rectangle(250, 40, Color.web("#141314"));
+        background = new Rectangle(250, 150, Color.web("#252525"));
 
         screenComponent = new StackPane();
         screenComponent.setAlignment(Pos.CENTER);
-        screenComponent.getChildren().addAll(background, display);
+        screenComponent.getChildren().addAll(background, textContainer);
 
-        // Define the size of the screen
         screenComponent.setPrefWidth(250);
-        screenComponent.setPrefHeight(40);
+        screenComponent.setPrefHeight(150);
+        screenComponent.setVisible(false);
+    }
 
-        final int MAX_CHARACTERS = 10;
-        display.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > MAX_CHARACTERS) {
-                display.setText(oldValue);
-            }
-        });
+    private Text createTextLine() {
+        Text text = new Text();
+        text.setFill(Color.WHITE);
+        text.setStyle("-fx-font-size: 35;");
+        return text;
     }
 
     public void displayMessage(String message) {
-        display.setText(message);
+        clearMessage();
+
+        if (message.length() <= 13) {
+            line1.setText(message);
+        } else {
+            line1.setText(message.substring(0, 13));
+            line2.setText(message.substring(13));
+        }
     }
 
     public void displayTempMessage(String message, double seconds) {
         PauseTransition pause = new PauseTransition(Duration.seconds(seconds));
         pause.setOnFinished(event -> clearMessage());
         pause.play();
+
         displayMessage(message);
     }
 
     private void clearMessage() {
-        display.clear();
+        line1.setText("");
+        line2.setText("");
     }
 
     public String getDisplayText() {
-        return display.getText();
+        return line1.getText() + line2.getText();
     }
 
-    // Method to append a key entry to the current display
     public void appendKeyEntry(String key) {
-        display.appendText(key);
+        String currentText = getDisplayText() + key;
+
+        if (currentText.length() <= 26) {  // 13 characters * 2 lines
+            displayMessage(currentText);
+        }
     }
 
-    // Method to clear the screen
-    public void clear() {
-        display.clear();
+    public void turnOn() {
+        screenComponent.setVisible(true);
+        displayTempMessage("WELCOME", 2);
     }
 
-    // Method to get the JavaFX component representing the screen
+    public void turnOff() {
+        screenComponent.setVisible(false);
+    }
+
     public StackPane getScreenComponent() {
         return screenComponent;
     }

@@ -46,26 +46,21 @@ public class Screen {
     }
 
     public void displayMessage(String message) {
-        clearMessage();
-
-        if (message.length() <= 20) {  // Updated character limit
+        if (message.length() <= 20) {
             line1.setText(message);
         } else {
-            line1.setText(message.substring(0, 20));  // Updated character limit
+            line1.setText(message.substring(0, 20));
             line2.setText(message.substring(20));
         }
     }
 
     public void appendKeyEntry(String key) {
-        // Only append to the second line
         String currentText = line2.getText() + key;
 
-        if (currentText.length() <= 20) {  // Updated character limit
+        if (currentText.length() <= 20) {
             line2.setText(currentText);
         } else {
-            // If there's an overflow, you can choose to either truncate or handle it differently.
-            // Here, we'll simply truncate the input for simplicity.
-            line2.setText(currentText.substring(0, 20));  // Updated character limit
+            line2.setText(currentText.substring(0, 20));
         }
     }
 
@@ -73,41 +68,20 @@ public class Screen {
         return line2.getText();
     }
 
-    // This method clears the entered PIN from the screen
     public void clearKeyEntry() {
         line2.setText("");
     }
 
     public void removeLastKeyEntry() {
-        // Only remove from the second line
         String currentText = line2.getText();
         if (!currentText.isEmpty()) {
             line2.setText(currentText.substring(0, currentText.length() - 1));
         }
-        // Else, handle if you want to remove from the first line or do nothing
-    }
-
-
-    public void displayTempMessage(String message, double seconds) {
-        PauseTransition pause = new PauseTransition(Duration.seconds(seconds));
-        pause.setOnFinished(event -> clearMessage());
-        pause.play();
-
-        displayMessage(message);
-    }
-
-    private void clearMessage() {
-        line1.setText("");
-        line2.setText("");
-    }
-
-    public String getDisplayText() {
-        return line1.getText() + line2.getText();
     }
 
     public void turnOn() {
         screenComponent.setVisible(true);
-        displayTempMessage("WELCOME", 2);
+        displayMessage("WELCOME");
     }
 
     public void turnOff() {

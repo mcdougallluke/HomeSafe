@@ -20,19 +20,19 @@ public class SafeController {
 
     public void setState(SafeState newState) {
         currentState = newState;
-
+        System.out.println("Current state: " + currentState);
         switch (currentState) {
             case INITIAL_PIN_SETUP -> handleInitialPinSetup();
             case NORMAL -> handleNormalState();
+            case CLOSED -> handleCloseSafe();
             case ADD_NEW_USER -> handleAddNewUser();
-            case UNLOCKED -> handleUnlockedState();
             case LOCKED -> handleLockedState();
         }
-        System.out.println("Current state: " + currentState);
+
     }
 
     private void handleInitialPinSetup() {
-        screen.displayMessage("Set up PIN");
+        screen.displayMessage("Enter Set up PIN");
         // Additional setup logic here
     }
 
@@ -52,15 +52,12 @@ public class SafeController {
     }
 
     public void handleCloseSafe() {
-        currentState = SafeState.NORMAL;
-        safeGUI.closeSafe();
-        handleNormalState();
+        setState(SafeState.NORMAL);
     }
 
 
     private void handleLockedState() {
         screen.displayMessage("Safe Locked");
-        // Logic for locked state
     }
 
     public SafeState getCurrentState() {
@@ -71,14 +68,14 @@ public class SafeController {
         if (currentState == SafeState.INITIAL_PIN_SETUP) {
             if ("00000".equals(enteredPIN)) {
                 screen.displayMessage("Enter New PIN");
-                currentState = SafeState.SETTING_NEW_PIN;
+                setState(SafeState.SETTING_NEW_PIN);
             } else {
                 screen.displayMessage("Wrong Setup PIN. Try again.");
             }
         } else if (currentState == SafeState.SETTING_NEW_PIN) {
             pinManager.setPIN(enteredPIN);
             screen.displayMessage("PIN Set Successfully");
-            currentState = SafeState.NORMAL;
+            setState(SafeState.NORMAL);
         } else if (currentState == SafeState.NORMAL) {
             if (pinManager.checkPIN(enteredPIN)) {
                 handleUnlockedState();

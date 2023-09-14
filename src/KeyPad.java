@@ -47,7 +47,7 @@ public class KeyPad extends GridPane {
     private void addControlButtons() {
         Button volumeUpButton = createButton("^", "volume up");
         volumeUpButton.setOnAction(event -> {
-            adjustVolume(0.1);  // Increase volume
+            adjustVolume(0.1);
             buttonSound.play();
         });
 
@@ -55,7 +55,7 @@ public class KeyPad extends GridPane {
 
         Button volumeDownButton = createButton("v", "volume down");
         volumeDownButton.setOnAction(event -> {
-            adjustVolume(-0.1);  // Decrease volume
+            adjustVolume(-0.1);
             buttonSound.play();
         });
 
@@ -99,7 +99,6 @@ public class KeyPad extends GridPane {
         btn.setPrefSize(55, 55);
         applyDefaultButtonStyle(btn);
 
-        // Set button specific graphics or style
         switch (text) {
             case "*":
                 setPowerButtonGraphics(btn);
@@ -122,7 +121,6 @@ public class KeyPad extends GridPane {
     }
 
     private void applyDefaultButtonStyle(Button btn) {
-        // Common button styling
         String gradientBackground = "-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #3E3E3E, #2E2E2E);";
         btn.setStyle(gradientBackground + "-fx-text-fill: white; -fx-font-size: 24px;");
         DropShadow shadow = new DropShadow();

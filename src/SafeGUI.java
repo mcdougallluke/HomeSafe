@@ -1,5 +1,8 @@
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -8,7 +11,6 @@ import javafx.stage.Stage;
 import java.util.Objects;
 
 
-//Displays the safe GUI
 public class SafeGUI extends Application {
 
     private Screen screen;
@@ -17,6 +19,8 @@ public class SafeGUI extends Application {
     private Image safeCloseUpImage;
     private Image safeOpenImage;
     private ImageView imageView;
+    private Button closeButton;
+
 
     private SafeController safeController;
 
@@ -44,13 +48,11 @@ public class SafeGUI extends Application {
             imageView.setImage(safeCloseUpImage);
             AnchorPane anchorPane = new AnchorPane();
 
-            // Position the screen above the keypad
             double screenXCoordinate = 80;
             double screenYCoordinate = 110;
             AnchorPane.setTopAnchor(screen.getScreenComponent(), screenYCoordinate);
             AnchorPane.setLeftAnchor(screen.getScreenComponent(), screenXCoordinate);
 
-            // Position the keypad
             double keypadXCoordinate = 175;
             double keypadYCoordinate = 325;
             AnchorPane.setTopAnchor(keyPad, keypadYCoordinate);
@@ -77,11 +79,36 @@ public class SafeGUI extends Application {
 
     public void openSafe() {
         imageView.setImage(safeOpenImage);
+        screen.getScreenComponent().setVisible(false);
+        keyPad.setVisible(false);
+
+        if (closeButton == null) {
+            closeButton = new Button("Close Safe");
+            closeButton.setOnAction(event -> {
+                closeSafe();
+                closeButton.setVisible(false);
+            });
+
+            StackPane.setAlignment(closeButton, Pos.BOTTOM_CENTER);
+            StackPane.setMargin(closeButton, new Insets(10, 0, 10, 0));
+
+            ((StackPane) imageView.getParent()).getChildren().add(closeButton);
+        } else {
+            closeButton.setVisible(true);
+        }
     }
 
+
     public void closeSafe() {
-        imageView.setImage(safeFrontImage);
+        safeController.setState(SafeState.CLOSED);
+        imageView.setImage(safeCloseUpImage);
+        screen.getScreenComponent().setVisible(true);
+        keyPad.setVisible(true);
+        if (closeButton != null) {
+            closeButton.setVisible(false);
+        }
     }
+
 
     public static void main(String[] args) {
         launch(args);

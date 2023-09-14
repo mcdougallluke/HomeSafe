@@ -25,14 +25,13 @@ public class SafeController {
             case INITIAL_PIN_SETUP -> handleInitialPinSetup();
             case NORMAL -> handleNormalState();
             case ADD_NEW_USER -> handleAddNewUser();
-            case UNLOCKED -> handleUnlockedState();
             case LOCKED -> handleLockedState();
         }
         System.out.println("Current state: " + currentState);
     }
 
     private void handleInitialPinSetup() {
-        screen.displayMessage("Set up PIN");
+        screen.displayMessage("Enter Set up PIN");
         // Additional setup logic here
     }
 
@@ -60,7 +59,6 @@ public class SafeController {
 
     private void handleLockedState() {
         screen.displayMessage("Safe Locked");
-        // Logic for locked state
     }
 
     public SafeState getCurrentState() {

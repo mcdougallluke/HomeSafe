@@ -1,10 +1,10 @@
-// Handles input from the user via the IRIS scanner and Keypad
 
+// Handles input from the user via the IRIS scanner and Keypad
 public class InputController {
 
     private Screen screen;
     private SafeController safeController;
-    private PINManager pinManager; // Added this line
+    private PINManager pinManager;
 
     public void setSafeController(SafeController safeController) {
         this.safeController = safeController;
@@ -14,13 +14,8 @@ public class InputController {
         this.screen = screen;
     }
 
-    // Setter for PinManager
     public void setPINManager(PINManager pinManager) {
         this.pinManager = pinManager;
-    }
-
-    public void onUnlockButtonPressed() {
-        safeController.setState(SafeState.UNLOCKED);
     }
 
     public void handleKeyInput(String key) {

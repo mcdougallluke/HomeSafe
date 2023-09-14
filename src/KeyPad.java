@@ -10,12 +10,13 @@ import javafx.scene.image.ImageView;
 
 public class KeyPad extends GridPane {
 
-    private Screen screen;
-    private final AudioClip buttonSound = new AudioClip(getClass().getResource("pinPadBeap.mp3").toString());
+    private final AudioClip buttonSound = new AudioClip(getClass().getResource("audio/KeyPadBeep.mp3").toString());
     private double currentVolume = 0.0;
 
-    public KeyPad(Screen screen) {
-        this.screen = screen;
+    private final InputController inputController;
+
+    public KeyPad(InputController inputController) {
+        this.inputController = inputController;
         initKeypad();
     }
 
@@ -65,22 +66,13 @@ public class KeyPad extends GridPane {
         Button cancelButton = createButton("X", "cancel");
         cancelButton.setTextFill(Color.RED);
         cancelButton.setOnAction(event -> {
-            // Get the current text from the screen
-            String currentText = screen.getDisplayText();
-
-            // Remove the last character if the text isn't empty
-            if (!currentText.isEmpty()) {
-                currentText = currentText.substring(0, currentText.length() - 1);
-                screen.displayMessage(currentText);
-            }
-
-            adjustVolume(0);  // Keep current volume
+            inputController.handleCancel();
             buttonSound.play();
         });
 
-        Button asteriskButton = createButton("*", "power");
-        asteriskButton.setOnAction(event -> {
-            adjustVolume(0);  // Keep current volume
+        Button powerButton = createButton("*", "power");
+        powerButton.setOnAction(event -> {
+            inputController.handlePowerButton();
             buttonSound.play();
         });
 
@@ -88,7 +80,7 @@ public class KeyPad extends GridPane {
         enterButton.setTextFill(Color.GREEN);
 
         this.add(cancelButton, 0, 4);
-        this.add(asteriskButton, 1, 4);
+        this.add(powerButton, 1, 4);
         this.add(enterButton, 2, 4);
     }
 
@@ -112,8 +104,7 @@ public class KeyPad extends GridPane {
         }
 
         btn.setOnAction(event -> {
-            screen.appendKeyEntry(printText);
-            adjustVolume(0);  // Keep current volume
+            inputController.handleKeyInput(printText);
             buttonSound.play();
         });
 
@@ -142,7 +133,7 @@ public class KeyPad extends GridPane {
     }
 
     private void setPowerButtonGraphics(Button btn) {
-        ImageView imageView = new ImageView(new Image(getClass().getResource("power-symbol.png").toString()));
+        ImageView imageView = new ImageView(new Image(getClass().getResource("images/PowerButton.png").toString()));
         imageView.setFitHeight(30);
         imageView.setFitWidth(30);
         btn.setGraphic(imageView);

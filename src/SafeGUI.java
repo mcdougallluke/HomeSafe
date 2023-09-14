@@ -23,7 +23,10 @@ public class SafeGUI extends Application {
         safeFrontImage = new Image(Objects.requireNonNull(getClass().getResource("images/SAFE_DISPLAY.png")).toExternalForm());
         safeCloseUpImage = new Image(Objects.requireNonNull(getClass().getResource("images/SAFE_FRONT.png")).toExternalForm());
         ImageView imageView = new ImageView(safeFrontImage);
-        keyPad = new KeyPad(screen);
+
+        InputController controller = new InputController();
+        screen = new Screen(controller);
+        keyPad = new KeyPad(controller);
 
         imageView.setOnMouseClicked(event -> {
             imageView.setImage(safeCloseUpImage);
@@ -58,10 +61,6 @@ public class SafeGUI extends Application {
         primaryStage.setTitle("Digital Safe");
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-    public SafeGUI() {
-        screen = new Screen();
     }
 
     public static void main(String[] args) {

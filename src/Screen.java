@@ -10,8 +10,11 @@ public class Screen {
 
     private final TextArea display;
     private final StackPane screenComponent;
+    private final InputController inputController;
 
-    public Screen() {
+    public Screen(InputController inputController) {
+        this.inputController = inputController;
+        this.inputController.setScreen(this);
         display = new TextArea();
         display.setEditable(false);
         display.setWrapText(false);

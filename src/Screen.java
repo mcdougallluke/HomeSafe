@@ -27,21 +27,21 @@ public class Screen {
         textContainer.getChildren().addAll(line1, line2);
         textContainer.setAlignment(Pos.CENTER);
 
-        background = new Rectangle(255, 150, Color.web("#252525"));
+        background = new Rectangle(255, 160, Color.web("#252525"));
 
         screenComponent = new StackPane();
         screenComponent.setAlignment(Pos.CENTER);
         screenComponent.getChildren().addAll(background, textContainer);
 
         screenComponent.setPrefWidth(255);
-        screenComponent.setPrefHeight(150);
+        screenComponent.setPrefHeight(160);
         screenComponent.setVisible(false);
     }
 
     private Text createTextLine() {
         Text text = new Text();
         text.setFill(Color.WHITE);
-        text.setStyle("-fx-font-size: 24;");  // Adjusted font size to support 20 characters per line
+        text.setStyle("-fx-font-size: 24;");
         return text;
     }
 

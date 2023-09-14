@@ -15,6 +15,9 @@ public class SafeGUI extends Application {
     private KeyPad keyPad;
     private Image safeFrontImage;
     private Image safeCloseUpImage;
+    private Image safeOpenImage;
+    private ImageView imageView;
+
     private SafeController safeController;
 
     @Override
@@ -23,7 +26,8 @@ public class SafeGUI extends Application {
 
         safeFrontImage = new Image(Objects.requireNonNull(getClass().getResource("images/SAFE_DISPLAY.png")).toExternalForm());
         safeCloseUpImage = new Image(Objects.requireNonNull(getClass().getResource("images/SAFE_FRONT.png")).toExternalForm());
-        ImageView imageView = new ImageView(safeFrontImage);
+        safeOpenImage = new Image(Objects.requireNonNull(getClass().getResource("images/SAFE_OPEN.png")).toExternalForm());
+        imageView = new ImageView(safeFrontImage);
 
         PINManager pinManager = new PINManager();
         InputController controller = new InputController();
@@ -31,8 +35,10 @@ public class SafeGUI extends Application {
         screen = new Screen(controller);
         keyPad = new KeyPad(controller);
 
-        safeController = new SafeController(screen);
+        safeController = new SafeController(screen, this);
         controller.setSafeController(safeController);
+
+        safeController.setPINManager(pinManager);
 
         imageView.setOnMouseClicked(event -> {
             imageView.setImage(safeCloseUpImage);
@@ -67,6 +73,14 @@ public class SafeGUI extends Application {
         primaryStage.setTitle("Digital Safe");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    public void openSafe() {
+        imageView.setImage(safeOpenImage);
+    }
+
+    public void closeSafe() {
+        imageView.setImage(safeFrontImage);
     }
 
     public static void main(String[] args) {

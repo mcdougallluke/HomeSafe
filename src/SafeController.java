@@ -2,12 +2,19 @@ public class SafeController {
 
     private SafeState currentState;
     private Screen screen;
-    private final PINManager pinManager = new PINManager();
+    private PINManager pinManager;
+    private SafeGUI safeGUI;
 
 
-    public SafeController(Screen screen) {
+    public SafeController(Screen screen, SafeGUI safeGUI) {
         this.screen = screen;
+        this.safeGUI = safeGUI;
         currentState = SafeState.OFF;
+    }
+
+
+    public void setPINManager(PINManager pinManager) {
+        this.pinManager = pinManager;
     }
 
 
@@ -41,8 +48,15 @@ public class SafeController {
 
     private void handleUnlockedState() {
         screen.displayMessage("Safe Unlocked");
-        // Logic for unlocked state
+        safeGUI.openSafe();
     }
+
+    public void handleCloseSafe() {
+        currentState = SafeState.NORMAL;
+        safeGUI.closeSafe();
+        handleNormalState();
+    }
+
 
     private void handleLockedState() {
         screen.displayMessage("Safe Locked");

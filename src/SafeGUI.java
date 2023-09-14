@@ -25,7 +25,9 @@ public class SafeGUI extends Application {
         safeCloseUpImage = new Image(Objects.requireNonNull(getClass().getResource("images/SAFE_FRONT.png")).toExternalForm());
         ImageView imageView = new ImageView(safeFrontImage);
 
+        PINManager pinManager = new PINManager();
         InputController controller = new InputController();
+        controller.setPINManager(pinManager);
         screen = new Screen(controller);
         keyPad = new KeyPad(controller);
 

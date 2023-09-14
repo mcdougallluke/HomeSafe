@@ -27,13 +27,13 @@ public class Screen {
         textContainer.getChildren().addAll(line1, line2);
         textContainer.setAlignment(Pos.CENTER);
 
-        background = new Rectangle(250, 150, Color.web("#252525"));
+        background = new Rectangle(255, 150, Color.web("#252525"));
 
         screenComponent = new StackPane();
         screenComponent.setAlignment(Pos.CENTER);
         screenComponent.getChildren().addAll(background, textContainer);
 
-        screenComponent.setPrefWidth(250);
+        screenComponent.setPrefWidth(255);
         screenComponent.setPrefHeight(150);
         screenComponent.setVisible(false);
     }
@@ -41,20 +41,52 @@ public class Screen {
     private Text createTextLine() {
         Text text = new Text();
         text.setFill(Color.WHITE);
-        text.setStyle("-fx-font-size: 35;");
+        text.setStyle("-fx-font-size: 24;");  // Adjusted font size to support 20 characters per line
         return text;
     }
 
     public void displayMessage(String message) {
         clearMessage();
 
-        if (message.length() <= 13) {
+        if (message.length() <= 20) {  // Updated character limit
             line1.setText(message);
         } else {
-            line1.setText(message.substring(0, 13));
-            line2.setText(message.substring(13));
+            line1.setText(message.substring(0, 20));  // Updated character limit
+            line2.setText(message.substring(20));
         }
     }
+
+    public void appendKeyEntry(String key) {
+        // Only append to the second line
+        String currentText = line2.getText() + key;
+
+        if (currentText.length() <= 20) {  // Updated character limit
+            line2.setText(currentText);
+        } else {
+            // If there's an overflow, you can choose to either truncate or handle it differently.
+            // Here, we'll simply truncate the input for simplicity.
+            line2.setText(currentText.substring(0, 20));  // Updated character limit
+        }
+    }
+
+    public String getCurrentKeyEntry() {
+        return line2.getText();
+    }
+
+    // This method clears the entered PIN from the screen
+    public void clearKeyEntry() {
+        line2.setText("");
+    }
+
+    public void removeLastKeyEntry() {
+        // Only remove from the second line
+        String currentText = line2.getText();
+        if (!currentText.isEmpty()) {
+            line2.setText(currentText.substring(0, currentText.length() - 1));
+        }
+        // Else, handle if you want to remove from the first line or do nothing
+    }
+
 
     public void displayTempMessage(String message, double seconds) {
         PauseTransition pause = new PauseTransition(Duration.seconds(seconds));
@@ -71,14 +103,6 @@ public class Screen {
 
     public String getDisplayText() {
         return line1.getText() + line2.getText();
-    }
-
-    public void appendKeyEntry(String key) {
-        String currentText = getDisplayText() + key;
-
-        if (currentText.length() <= 26) {  // 13 characters * 2 lines
-            displayMessage(currentText);
-        }
     }
 
     public void turnOn() {

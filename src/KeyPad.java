@@ -80,6 +80,13 @@ public class KeyPad extends GridPane {
 
         Button enterButton = createButton("O", "enter");
         enterButton.setTextFill(Color.GREEN);
+        enterButton.setOnAction(event -> {
+            inputController.handleEnterButton();
+            adjustVolume(0);
+            buttonSound.play();
+        });
+
+        enterButton.setTextFill(Color.GREEN);
 
         this.add(cancelButton, 0, 4);
         this.add(powerButton, 1, 4);

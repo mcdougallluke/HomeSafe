@@ -8,58 +8,59 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-
-public class KeyPad {
+public class KeyPad extends GridPane {
 
     private Screen screen;
-    private Safe safe;
     private final AudioClip buttonSound = new AudioClip(getClass().getResource("pinPadBeap.mp3").toString());
-    private double currentVolume = 0.0; // start at maximum volume
-    private GridPane keyPadComponent = null; // Added this line
+    private double currentVolume = 0.0;
 
-    public KeyPad(Safe safe, Screen screen) {
-        this.safe = safe;
+    public KeyPad(Screen screen) {
         this.screen = screen;
+        initKeypad();
     }
 
+    private void initKeypad() {
+        setLayoutProperties();
+        addNumberButtons();
+        addControlButtons();
+    }
 
-    public GridPane createKeypad() {
-        if (keyPadComponent != null) {
-            return keyPadComponent;
-        }
+    private void setLayoutProperties() {
+        this.setAlignment(Pos.CENTER);
+        this.setPadding(new Insets(10, 10, 10, 10));
+        this.setHgap(10);
+        this.setVgap(10);
+        this.setStyle("-fx-background-color: linear-gradient(to bottom, #a9a9a9, #ffffff, #a9a9a9);");
+    }
 
-        keyPadComponent = new GridPane();
-        keyPadComponent.setAlignment(Pos.CENTER);
-        keyPadComponent.setPadding(new Insets(10, 10, 10, 10));
-        keyPadComponent.setHgap(10);
-        keyPadComponent.setVgap(10);
-        keyPadComponent.setStyle("-fx-background-color: linear-gradient(to bottom, #a9a9a9, #ffffff, #a9a9a9);");
-
+    private void addNumberButtons() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 int number = i * 3 + j + 1;
                 Button btn = createButton(String.valueOf(number), String.valueOf(number));
-                keyPadComponent.add(btn, j, i);
+                this.add(btn, j, i);
             }
         }
+    }
 
+    private void addControlButtons() {
         Button volumeUpButton = createButton("^", "volume up");
         volumeUpButton.setOnAction(event -> {
-            increaseVolume();
-            buttonSound.setVolume(currentVolume);
-            buttonSound.play();
-        });
-        Button zeroButton = createButton("0", "0");
-        Button volumeDownButton = createButton("v", "volume down");
-        volumeDownButton.setOnAction(event -> {
-            decreaseVolume();
-            buttonSound.setVolume(currentVolume);
+            adjustVolume(0.1);  // Increase volume
             buttonSound.play();
         });
 
-        keyPadComponent.add(volumeUpButton, 0, 3);
-        keyPadComponent.add(zeroButton, 1, 3);
-        keyPadComponent.add(volumeDownButton, 2, 3);
+        Button zeroButton = createButton("0", "0");
+
+        Button volumeDownButton = createButton("v", "volume down");
+        volumeDownButton.setOnAction(event -> {
+            adjustVolume(-0.1);  // Decrease volume
+            buttonSound.play();
+        });
+
+        this.add(volumeUpButton, 0, 3);
+        this.add(zeroButton, 1, 3);
+        this.add(volumeDownButton, 2, 3);
 
         Button cancelButton = createButton("X", "cancel");
         cancelButton.setTextFill(Color.RED);
@@ -73,116 +74,86 @@ public class KeyPad {
                 screen.displayMessage(currentText);
             }
 
-            buttonSound.setVolume(currentVolume); // Set volume level
+            adjustVolume(0);  // Keep current volume
             buttonSound.play();
         });
 
         Button asteriskButton = createButton("*", "power");
         asteriskButton.setOnAction(event -> {
-            safe.getCurrentState().handlePowerButton();
-            buttonSound.setVolume(currentVolume);
+            adjustVolume(0);  // Keep current volume
             buttonSound.play();
         });
+
         Button enterButton = createButton("O", "enter");
         enterButton.setTextFill(Color.GREEN);
 
-        keyPadComponent.add(cancelButton, 0, 4);
-        keyPadComponent.add(asteriskButton, 1, 4);
-        keyPadComponent.add(enterButton, 2, 4);
-
-        return keyPadComponent;
+        this.add(cancelButton, 0, 4);
+        this.add(asteriskButton, 1, 4);
+        this.add(enterButton, 2, 4);
     }
 
-    public GridPane getKeyPadComponent() {
-        if (keyPadComponent == null) {
-            createKeypad();
-        }
-        return keyPadComponent;
-    }
-    private void increaseVolume() {
-        if (currentVolume < 1.0) {
-            currentVolume += 0.1; // Increase volume by 10%
-            if (currentVolume > 1.0) currentVolume = 1.0; // Ensure we don't exceed maximum volume
-        }
-    }
-
-    private void decreaseVolume() {
-        if (currentVolume > 0.0) {
-            currentVolume -= 0.1; // Decrease volume by 10%
-            if (currentVolume < 0.0) currentVolume = 0.0; // Ensure we don't go below mute
-        }
-    }
 
     private Button createButton(String text, String printText) {
         Button btn = new Button(text);
         btn.setPrefSize(55, 55);
+        applyDefaultButtonStyle(btn);
 
-        if ("*".equals(text)) {
-            ImageView imageView = new ImageView(new Image(getClass().getResource("power-symbol.png").toString()));
-
-            // Load the image for the asterisk button
-            imageView.setFitHeight(30); // Set desired height, adjust accordingly
-            imageView.setFitWidth(30);  // Set desired width, adjust accordingly
-            btn.setGraphic(imageView);
-            btn.setText(""); // Clear the text as we're using an image now
+        // Set button specific graphics or style
+        switch (text) {
+            case "*":
+                setPowerButtonGraphics(btn);
+                break;
+            case "X":
+                btn.setTextFill(Color.RED);
+                break;
+            case "O":
+                btn.setTextFill(Color.GREEN);
+                break;
         }
 
-        // Linear gradient to give depth to the button
+        btn.setOnAction(event -> {
+            screen.appendKeyEntry(printText);
+            adjustVolume(0);  // Keep current volume
+            buttonSound.play();
+        });
+
+        return btn;
+    }
+
+    private void applyDefaultButtonStyle(Button btn) {
+        // Common button styling
         String gradientBackground = "-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #3E3E3E, #2E2E2E);";
-
-        // Set the button's gradient and text color
-        if (text.equals("X")) {
-            btn.setStyle(gradientBackground + "-fx-text-fill: red; -fx-font-size: 24px;");
-        } else if (text.equals("O")) {
-            btn.setStyle(gradientBackground + "-fx-text-fill: green; -fx-font-size: 24px;");
-        } else {
-            btn.setStyle(gradientBackground + "-fx-text-fill: white; -fx-font-size: 24px;");
-        }
-        // Drop shadow effect
+        btn.setStyle(gradientBackground + "-fx-text-fill: white; -fx-font-size: 24px;");
         DropShadow shadow = new DropShadow();
         shadow.setColor(Color.BLACK);
         shadow.setOffsetX(3);
         shadow.setOffsetY(3);
         btn.setEffect(shadow);
+        btn.setOnMousePressed(event -> setButtonPressedStyle(btn));
+        btn.setOnMouseReleased(event -> applyDefaultButtonStyle(btn));
+    }
 
-        // Style when button is pressed: Adjust gradient and reduce shadow to simulate button press
-        btn.setOnMousePressed(event -> {
-            if (text.equals("X")) {
-                btn.setStyle("-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #2E2E2E, #1E1E1E);" + "-fx-text-fill: red; -fx-font-size: 24px;");
-            } else if (text.equals("O")) {
-                btn.setStyle("-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #2E2E2E, #1E1E1E);" + "-fx-text-fill: green; -fx-font-size: 24px;");
-            } else {
-                btn.setStyle("-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #2E2E2E, #1E1E1E);" + "-fx-text-fill: white; -fx-font-size: 24px;");
-            }
-            shadow.setOffsetX(1);
-            shadow.setOffsetY(1);
+    private void setButtonPressedStyle(Button btn) {
+        String pressedStyle = "-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #2E2E2E, #1E1E1E);";
+        btn.setStyle(pressedStyle + "-fx-text-fill: white; -fx-font-size: 24px;");
+        DropShadow shadow = (DropShadow) btn.getEffect();
+        shadow.setOffsetX(1);
+        shadow.setOffsetY(1);
+    }
 
-        });
+    private void setPowerButtonGraphics(Button btn) {
+        ImageView imageView = new ImageView(new Image(getClass().getResource("power-symbol.png").toString()));
+        imageView.setFitHeight(30);
+        imageView.setFitWidth(30);
+        btn.setGraphic(imageView);
+        btn.setText("");
+    }
 
-
-        // Reset to default style when button is released
-        btn.setOnMouseReleased(event -> {
-            if (text.equals("X")) {
-                btn.setStyle(gradientBackground + "-fx-text-fill: red; -fx-font-size: 24px;");
-            } else if (text.equals("O")) {
-                btn.setStyle(gradientBackground + "-fx-text-fill: green; -fx-font-size: 24px;");
-            } else {
-                btn.setStyle(gradientBackground + "-fx-text-fill: white; -fx-font-size: 24px;");
-            }
-            shadow.setOffsetX(3);
-            shadow.setOffsetY(3);
-
-        });
-
-
-        btn.setOnAction(event -> {
-            screen.appendKeyEntry(printText);
-            buttonSound.setVolume(currentVolume); // Set volume level
-            buttonSound.play();
-        });
-
-
-        return btn;
+    private void adjustVolume(double delta) {
+        currentVolume += delta;
+        if (currentVolume > 1.0) currentVolume = 1.0;
+        else if (currentVolume < 0.0) currentVolume = 0.0;
+        buttonSound.setVolume(currentVolume);
     }
 
 }

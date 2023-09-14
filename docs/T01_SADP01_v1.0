@@ -20,7 +20,7 @@
 \vspace*{1cm}
 
 \Huge
-\textbf{Project 01: Home Safe}
+\textbf{Project 01: Home SafeGUI}
 
 \vspace{0.5cm}
 \Large
@@ -44,7 +44,7 @@
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.25\textwidth]{docs/figs/safe.png}
+    \includegraphics[width=0.25\textwidth]{docs/figs/safeGUI.png}
     \caption*{Image courtesy of Flaticon.com \cite{flaticonSafeDeposit}.}
     \label{fig:safeIcon}
 \end{figure}

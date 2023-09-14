@@ -20,7 +20,7 @@
 \vspace*{1cm}
 
 \Huge
-\textbf{Project 01: Home Safe}
+\textbf{Project 01: Home SafeGUI}
 
 \vspace{0.5cm}
 \Large
@@ -44,7 +44,7 @@
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.25\textwidth]{docs/figs/safe.png}
+    \includegraphics[width=0.25\textwidth]{docs/figs/safeGUI.png}
     \caption*{Image courtesy of Flaticon.com \cite{flaticonSafeDeposit}.}
     \label{fig:safeIcon}
 \end{figure}
@@ -65,7 +65,7 @@
 \newpage
 
 \section{Introduction}
-The specific requirements for HomeSafe are contained herein, our innovative new safe built from the ground up with convenience and security in mind. While traditional lock safes have served their purpose in many households, the surge in demand for digital safes among Americans is a result of their enhanced convenience and security. HomeSafe is poised to redefine conventions by offering an unparalleled fusion of security and convenience. This goal will be achieved by integrating cutting-edge biometric technology, including a retina scanner, seamlessly woven into its two-factor authentication mechanism. Significantly, during the development phase, we actively collaborated with our marketing team to ensure that HomeSafe's features aligned with market expectations and preferences. \\ \\
+The specific requirements for HomeSafe are contained herein, our innovative new safeGUI built from the ground up with convenience and security in mind. While traditional lock safes have served their purpose in many households, the surge in demand for digital safes among Americans is a result of their enhanced convenience and security. HomeSafe is poised to redefine conventions by offering an unparalleled fusion of security and convenience. This goal will be achieved by integrating cutting-edge biometric technology, including a retina scanner, seamlessly woven into its two-factor authentication mechanism. Significantly, during the development phase, we actively collaborated with our marketing team to ensure that HomeSafe's features aligned with market expectations and preferences. \\ \\
 A notable feature distinguishing HomeSafe is its ability to accommodate multiple users seamlessly, making it a versatile solution. Moreover, our design prioritizes ease of maintenance and setup. The user-friendly interface ensures that HomeSafe can be effortlessly managed and configured, allowing a hassle-free experience for administrators and users. This innovation is well-suited for household consumers committed to reinforcing the protection of their assets, including money, jewelry, critical documents, and treasured possessions.
 
 \section{Definition of Terms}
@@ -75,26 +75,26 @@ This section provides definitions for critical terms recurrently utilized throug
     \item[I.] \textbf{Administrator}: An individual with authority to establish and oversee separate user profiles within the system, regulating user access to the system's settings and contents.
     \item[II.] \textbf{Auxiliary}: An additional or secondary power source that supports the main or primary power supply. An auxiliary power source is typically used to provide backup, redundancy, or temporary power when the main power source is unavailable, disrupted, or insufficient.
     \item[III.] \textbf{Bio-Metric Scanner}: A technology that identifies and authenticates users based on their unique biological characteristics, typically fingerprints, retina patterns, or other traits.
-    \item[IV.] \textbf{Microcontroller}: A microcontroller is a small integrated circuit serving as the central processing unit (CPU) of a safe's electronic system. It contains a processor, memory, and input/output ports and can include programmable capabilities. Microcontrollers manage the safe's tasks, user input, security protocols, and control functions, including locks, interface interactions, and external device communication.
+    \item[IV.] \textbf{Microcontroller}: A microcontroller is a small integrated circuit serving as the central processing unit (CPU) of a safeGUI's electronic system. It contains a processor, memory, and input/output ports and can include programmable capabilities. Microcontrollers manage the safeGUI's tasks, user input, security protocols, and control functions, including locks, interface interactions, and external device communication.
     \item[V.] \textbf{Personal Identification Number (PIN)}: A numerical code that serves as a security credential used to authenticate and verify the identity of an individual. PINs are commonly used in various systems, such as electronic devices, bank accounts, and access control systems, to ensure that only authorized users can gain access.
     \item[VI.] \textbf{Two-Factor Authentication (2FA)}: A security protocol that requires users to provide two distinct forms of verification to access a system. This commonly involves a combination of something known (such as a password), and something possessed (such as a generated code or biometric information), adding an extra layer of security and protection against unauthorized access \cite{identityautomationTwoFactorAuthentication}.
 \end{enumerate}
 
 \section{Objectives}
-Our primary aim is to create a platform within our safe that accommodates multiple individual users, granting independent access while allowing the administrator to extend access to up to six users. Simplicity of setup and maintenance has been a core objective, reflected in the user-friendly interface that ensures easy management and configuration. This convenience extends to the activation of Two-Factor Authentication, bolstering security with a biometric retina scan. This security-focused approach maintains user data integrity even during power outages, underscoring our commitment to seamless access and protection.
+Our primary aim is to create a platform within our safeGUI that accommodates multiple individual users, granting independent access while allowing the administrator to extend access to up to six users. Simplicity of setup and maintenance has been a core objective, reflected in the user-friendly interface that ensures easy management and configuration. This convenience extends to the activation of Two-Factor Authentication, bolstering security with a biometric retina scan. This security-focused approach maintains user data integrity even during power outages, underscoring our commitment to seamless access and protection.
 
 \subsection{Multi-User Capability}
-The safe will include the functionality to store codes for numerous users. The administrator can provide access to as many as six distinct users. Each user will have the capability to unlock the safe. Additionally, the administrator can monitor the opening and closing of the safe, recording details about who accessed it and when it was shut.
+The safeGUI will include the functionality to store codes for numerous users. The administrator can provide access to as many as six distinct users. Each user will have the capability to unlock the safeGUI. Additionally, the administrator can monitor the opening and closing of the safeGUI, recording details about who accessed it and when it was shut.
 
 \subsection{Enhanced Security with Two-Factor Authentication}
-Users can opt for Two-Factor Authentication (2FA) to enhance security measures with an iris scanner. This involves receiving a code through their chosen 2FA method, such as biometric retina scans, which are inputted into the safe to finalize setup. Once activated, users must enter the 2FA code alongside their safe code to gain access, ensuring an added layer of protection.
+Users can opt for Two-Factor Authentication (2FA) to enhance security measures with an iris scanner. This involves receiving a code through their chosen 2FA method, such as biometric retina scans, which are inputted into the safeGUI to finalize setup. Once activated, users must enter the 2FA code alongside their safeGUI code to gain access, ensuring an added layer of protection.
 
 \subsection{Easy Setup and Care}
 
-When you receive HomeSafe, the setup process is made smoother with pre-installed batteries, eliminating the requirement for extra assembly. The unit is meticulously designed for user-friendly operation: just power on the safe and follow the straightforward prompts to finalize the setup. This method guarantees a seamless experience from the beginning, reducing user involvement and erasing the usual intricacies linked to initial installation.
+When you receive HomeSafe, the setup process is made smoother with pre-installed batteries, eliminating the requirement for extra assembly. The unit is meticulously designed for user-friendly operation: just power on the safeGUI and follow the straightforward prompts to finalize the setup. This method guarantees a seamless experience from the beginning, reducing user involvement and erasing the usual intricacies linked to initial installation.
 
 \subsection{Uninterrupted Security and Access}
-Should a power failure occur, rest assured that the safe retains its stored user data intact. However, for users who have activated 2FA, accessing the safe will necessitate the presence of the administrator to grant access in the absence of regular authentication. This safety measure underscores our commitment to maintaining data integrity and security, even during unexpected power interruptions.
+Should a power failure occur, rest assured that the safeGUI retains its stored user data intact. However, for users who have activated 2FA, accessing the safeGUI will necessitate the presence of the administrator to grant access in the absence of regular authentication. This safety measure underscores our commitment to maintaining data integrity and security, even during unexpected power interruptions.
 
 \section{System Organization}
 In this section, we offer an outline of the organizational structure of the HomeSafe system, encompassing insights into its user interface, internal components, and their interplay.
@@ -116,23 +116,23 @@ This section will provide an overview of the user interface. The user will utili
     \item \textbf{Iris Scanner}: The primary source of authentication. Once the user provides a retinal scan, the microcontroller will enable communication with the keypad. This will prompt the user to input their six-digit code using the keypad on the LED Display.
     \item \textbf{Speaker}: Provides auditory feedback to the user when interacting with the user interface.
     \item \textbf{Volume Buttons}: The user can increase or decrease volume levels.
-    \item \textbf{Door Handle}: Used to open the safe once the latches have been released after successful authentication.
+    \item \textbf{Door Handle}: Used to open the safeGUI once the latches have been released after successful authentication.
 \end{enumerate}
 
 \subsection{Interior Design}
-In this section, we outline how the internal components of HomeSafe are organized. These components encompass the safe materials, the locking system, and the elements governing HomeSafe's software and power management.
+In this section, we outline how the internal components of HomeSafe are organized. These components encompass the safeGUI materials, the locking system, and the elements governing HomeSafe's software and power management.
 
 \begin{enumerate}
-    \item \textbf{Foam Interior Base}: A soft foam base that covers the steel floor of the safe. This allows for the safe storage of otherwise delicate items.
-    \item \textbf{Steel Latches}: While the safe is locked, the twin steel latches press down on the lock sensors.
-    \item \textbf{Lock Sensors}: Communicates with the microcontroller whether the safe is in the locked or unlocked state.
+    \item \textbf{Foam Interior Base}: A soft foam base that covers the steel floor of the safeGUI. This allows for the safeGUI storage of otherwise delicate items.
+    \item \textbf{Steel Latches}: While the safeGUI is locked, the twin steel latches press down on the lock sensors.
+    \item \textbf{Lock Sensors}: Communicates with the microcontroller whether the safeGUI is in the locked or unlocked state.
     \item \textbf{Micro-Controller}: Powered by the batteries, this is where the system's brains are housed. Inputs are received and interpreted before sending any output to the user. Requires power to store user data such as PINs, bio-metric, and user data \cite{gridling2007introduction}.
     \item \textbf{Battery Compartment}: Compartment where the primary power source, two AA batteries, is stored.
     \item \textbf{Auxiliary Power}: The secondary power source is stored inside the microcontroller, a single CR2032 cell battery.
 \end{enumerate}
 
 \section{Capabilities}
-The safe's design incorporates a diverse range of functionalities, all of which align seamlessly with the established project objectives. These stipulated capabilities collectively guarantee that HomeSafe retains its user-friendly interface, heightened security measures, and uninterrupted security and access even during power failures. The subsequent sections expound upon these meticulously discussed features to comprehensively understand their implementation within HomeSafe's framework.
+The safeGUI's design incorporates a diverse range of functionalities, all of which align seamlessly with the established project objectives. These stipulated capabilities collectively guarantee that HomeSafe retains its user-friendly interface, heightened security measures, and uninterrupted security and access even during power failures. The subsequent sections expound upon these meticulously discussed features to comprehensively understand their implementation within HomeSafe's framework.
 
 \subsection{Multi-User Capability}
 The Multi-User Capability enhances convenience and swift access for numerous individuals, promoting seamless collaboration. This feature includes:
@@ -179,7 +179,7 @@ The HomeSafe design adheres to the system's usage and physical limitations.
     \item The auxiliary power supply can power the system for approximately ten years \cite{microbatteryEverythingNeed}. If the auxiliary power supply is depleted before the primary power supply is restored, all user data will be lost, and the unit's contents will not be accessible.
     \item If a user without administrative access loses access to their PIN, they will be completely unable to access the HomeSafe. An administrator must grant access to the specific user to reset a PIN.
     \item The HomeSafe is 12 x 16 x 12 inches (L x W x H). This may limit how much the customer can store inside.
-    \item All images of the safe were created using the DALL-E 2 generative AI technology by OpenAI \cite{openaiDALLE}. We added labels and arrows to each safe component using Microsoft Word.
+    \item All images of the safeGUI were created using the DALL-E 2 generative AI technology by OpenAI \cite{openaiDALLE}. We added labels and arrows to each safeGUI component using Microsoft Word.
 \end{itemize}
 
 \newpage

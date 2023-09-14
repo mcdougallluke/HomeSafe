@@ -27,7 +27,7 @@
 \vspace*{1cm}
 
 \Huge
-\textbf{Project 01: Home Safe}
+\textbf{Project 01: Home SafeGUI}
 
 \vspace{0.5cm}
 \Large
@@ -51,7 +51,7 @@
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.25\textwidth]{docs/figs/safe.png}
+    \includegraphics[width=0.25\textwidth]{docs/figs/safeGUI.png}
     \caption*{Image courtesy of Flaticon.com \cite{flaticonSafeDeposit}.}
     \label{fig:safeIcon}
 \end{figure}
@@ -71,7 +71,7 @@
 \newpage
 
 \section{Introduction}
-In today's homes, safes have become commonplace, and digital safes are increasingly favored by Americans for their convenience and heightened security features. Our product, HomeSafe, has been meticulously designed with the vigilant consumer in mind, catering to those who value convenience, security, and reliability. It distinguishes itself through a streamlined setup process, robust biometric two-factor authentication (2FA), user monitoring for access control, and an auxiliary power source. While mirroring the user experience of a typical digital safe, HomeSafe aims to encompass a unique set of features typically associated with commercial-grade safes. \\ \\
+In today's homes, safes have become commonplace, and digital safes are increasingly favored by Americans for their convenience and heightened security features. Our product, HomeSafe, has been meticulously designed with the vigilant consumer in mind, catering to those who value convenience, security, and reliability. It distinguishes itself through a streamlined setup process, robust biometric two-factor authentication (2FA), user monitoring for access control, and an auxiliary power source. While mirroring the user experience of a typical digital safeGUI, HomeSafe aims to encompass a unique set of features typically associated with commercial-grade safes. \\ \\
 The Software Requirements Specification (SRS) provides a comprehensive insight into the features, external and internal interfaces, control logic, and design constraints of HomeSafe. The system employs a dynamic model based on the Object Modeling Technique (OMT) to direct and structure user interactions with the product, effectively governing the control flow within the system. \\ \\
 As previously detailed in the Requirements Definitions Document (RDD), the core requirements formulated by the marketing team encompass multi-user capability, enhanced security via 2FA, user-friendly setup and maintenance, and continuous security and access. These fundamental requirements lay the groundwork for HomeSafe's development, guiding the organization of its components to achieve these objectives. The RDD outlines the capabilities and design constraints essential for realizing HomeSafe's overarching goals.
 
@@ -82,7 +82,7 @@ This section provides definitions for critical terms recurrently utilized throug
     \item[I.] \textbf{Administrator}: An individual with authority to establish and oversee separate user profiles within the system, regulating user access to the system's settings and contents.
     \item[II.] \textbf{Auxiliary}: An additional or secondary power source that supports the main or primary power supply. An auxiliary power source is typically used to provide backup, redundancy, or temporary power when the main power source is unavailable, disrupted, or insufficient.
     \item[III.] \textbf{Bio-Metric Scanner}: A technology that identifies and authenticates users based on their unique biological characteristics, typically fingerprints, retina patterns, or other traits.
-    \item[IV.] \textbf{Microcontroller}: A microcontroller is a small integrated circuit serving as the central processing unit (CPU) of a safe's electronic system. It contains a processor, memory, and input/output ports and can include programmable capabilities. Microcontrollers manage the safe's tasks, user input, security protocols, and control functions, including locks, interface interactions, and external device communication.
+    \item[IV.] \textbf{Microcontroller}: A microcontroller is a small integrated circuit serving as the central processing unit (CPU) of a safeGUI's electronic system. It contains a processor, memory, and input/output ports and can include programmable capabilities. Microcontrollers manage the safeGUI's tasks, user input, security protocols, and control functions, including locks, interface interactions, and external device communication.
     \item[V.] \textbf{Personal Identification Number (PIN)}: A numerical code that serves as a security credential used to authenticate and verify the identity of an individual. PINs are commonly used in various systems, such as electronic devices, bank accounts, and access control systems, to ensure that only authorized users can gain access.
     \item[VI.] \textbf{Two-Factor Authentication (2FA)}: A security protocol that requires users to provide two distinct forms of verification to access a system. This commonly involves a combination of something known (such as a password), and something possessed (such as a generated code or biometric information), adding an extra layer of security and protection against unauthorized access \cite{identityautomationTwoFactorAuthentication}.
 \end{enumerate}
@@ -101,7 +101,7 @@ At the core of our software architecture lies the microcontroller, serving as th
 
 \begin{itemize}
     \item \textbf{Keypad}: The software permits users to enter their assigned PIN using the numeric keys 0-9. Any key press triggers the LED display screen and speaker to offer visual and auditory feedback. Upon successful identity verification via the correct passkey, the software sends a signal to the microcontroller, activating the iris scanner for two-factor authentication (2FA). After inputting the entire PIN, the user must press the ENTER button to initiate password verification. In the case of an erroneous number entry during PIN input, the user can press the CANCEL button to abort the entry attempt and reset the procedure.
-    \item \textbf{Iris Scanner}: The software allows users to input data through the Iris Scanner after successfully verifying the PIN. After completing the PIN verification, the system will prompt the user for an iris scan. Once the iris scan is completed and the user's identity is confirmed, access to the safe is granted. Visual and auditory notifications are provided through the LED Display and Speaker, and a signal is sent to the Lock System to switch the safe's status from LOCKED to UNLOCKED.
+    \item \textbf{Iris Scanner}: The software allows users to input data through the Iris Scanner after successfully verifying the PIN. After completing the PIN verification, the system will prompt the user for an iris scan. Once the iris scan is completed and the user's identity is confirmed, access to the safeGUI is granted. Visual and auditory notifications are provided through the LED Display and Speaker, and a signal is sent to the Lock System to switch the safeGUI's status from LOCKED to UNLOCKED.
     \item \textbf{Power}: When you press this button, the system will initiate, showing the main menu for PIN input on the LED Display. A startup sound will also emanate from the Speaker, signaling the user that the system is operational. It's important to note that the system can only be powered off when in the LOCKED state. If the user tries to power off the procedure while in this state, a warning message will be displayed on the LED screen.
     \item \textbf{Lock Sensors}: The interface tasked with conveying the current status of the HomeSafe (whether in the LOCKED or UNLOCKED state) to the microcontroller.
     \item \textbf{LED Display}: The LED (Light Emitting Diode) display is a visual interface for user interaction. Its primary role is to initiate user input and, when input is made via the keypad, to provide feedback by indicating the current number of characters entered. Furthermore, it can convey additional information, such as system warnings or low-power notifications, to the user.
@@ -124,15 +124,15 @@ In this section, we take a deep dive into the inner workings of the system logic
 The software residing on the microcontroller governs all communication between the input and output components. Figure 2 provides a graphical representation of the physical input channels and the feasible output channels they can activate. Section 3.1 elaborates on the dynamics of interactions occurring between these inputs and outputs, while Section 3.2 illustrates the system's control flow using transition-state models.
 
 \subsubsection{Input Events}
-The interaction between users and the safe is facilitated through the keypad, iris scanner, and lock sensors, each serving a vital role in ensuring security and accessibility.
+The interaction between users and the safeGUI is facilitated through the keypad, iris scanner, and lock sensors, each serving a vital role in ensuring security and accessibility.
 
 \begin{itemize}
     \item \textbf{Keypad}: As the primary means of user authentication, the user can input their designated PIN using the numeric keys 0-9 through the software. Each keypress triggers the LED display screen and speaker to provide visual and auditory feedback. When the correct passkey is entered, confirming the user's identity, the software communicates with the microcontroller to activate the iris scanner for two-factor authentication (2FA). To initiate password verification, the user must press the ENTER button after entering the complete PIN.
-    \item \textbf{Iris Scanner}: This system represents the second user authentication layer. After successful PIN verification, the software allows users to input data through the Iris Scanner. After validating the PIN, the system prompts the user for an iris scan. Upon the successful completion of the iris scan and the subsequent confirmation of the user's identity, access to the safe is authorized. Visual and auditory notifications are provided through the LED Display and Speaker to enhance user understanding and engagement. Simultaneously, a signal is dispatched to the Lock System, orchestrating the transition of the safe's status from LOCKED to UNLOCKED, ensuring a robust and multi-tiered security approach.
+    \item \textbf{Iris Scanner}: This system represents the second user authentication layer. After successful PIN verification, the software allows users to input data through the Iris Scanner. After validating the PIN, the system prompts the user for an iris scan. Upon the successful completion of the iris scan and the subsequent confirmation of the user's identity, access to the safeGUI is authorized. Visual and auditory notifications are provided through the LED Display and Speaker to enhance user understanding and engagement. Simultaneously, a signal is dispatched to the Lock System, orchestrating the transition of the safeGUI's status from LOCKED to UNLOCKED, ensuring a robust and multi-tiered security approach.
 \end{itemize}
 
 \subsubsection{Output Events}
-The channels where the safe interacts with the input mechanisms are the LED Display, Speaker, and Lock System.
+The channels where the safeGUI interacts with the input mechanisms are the LED Display, Speaker, and Lock System.
 \begin{itemize}
     \item \textbf{LED Display}: The LED display serves as a visual interface for user interaction, primarily initiating input and providing character count feedback when using the keypad. Additionally, it communicates important system information, such as warnings and low-power notifications, to the user.
     \item \textbf{Speaker}: A micro-speaker is seamlessly integrated into the HomeSafe, designed to deliver crucial auditory output events to the user in response to button presses.
@@ -148,18 +148,18 @@ Serving as the system's central intelligence hub, the microcontroller is powered
 The software is the critical bridge between the user and the system's hardware components. It operates with the microcontroller to manage user interactions and authentication processes. The software ensures that the user's input is processed correctly, and it facilitates communication between the various hardware components to provide a seamless and secure user experience.
 
 \subsubsection{Lock Mechanism}
-The lock mechanism's primary role is granting entry into the HomeSafe once user authentication is completed. Upon successful authentication, the microcontroller, in conjunction with the software, transmits a signal to the lock mechanism, effectively releasing the latch and permitting the user to access the contents of the safe.
+The lock mechanism's primary role is granting entry into the HomeSafe once user authentication is completed. Upon successful authentication, the microcontroller, in conjunction with the software, transmits a signal to the lock mechanism, effectively releasing the latch and permitting the user to access the contents of the safeGUI.
 
 \subsubsection{Lock Sensors}
-Integral to the security of the HomeSafe, the lock sensors continuously monitor the status of the safe's door, accurately detecting whether the locking mechanism is in a locked or unlocked state. This crucial information is communicated to the microcontroller and software, ensuring real-time awareness of the safe's security status and allowing the system to respond promptly to user actions and the safe's condition.
+Integral to the security of the HomeSafe, the lock sensors continuously monitor the status of the safeGUI's door, accurately detecting whether the locking mechanism is in a locked or unlocked state. This crucial information is communicated to the microcontroller and software, ensuring real-time awareness of the safeGUI's security status and allowing the system to respond promptly to user actions and the safeGUI's condition.
 
 \subsection{Control Logic}
-The control flow of the system orchestrates various operations to ensure the secure and efficient functionality of the safe. This section outlines the process of setting up initial user credentials and subsequent actions within the system.
+The control flow of the system orchestrates various operations to ensure the secure and efficient functionality of the safeGUI. This section outlines the process of setting up initial user credentials and subsequent actions within the system.
 
 \subsubsection{Initial Setup Process}
-This control logic section facilitates users configuring their PIN and adding their biometric information (specifically, an iris scan) for authorization to unlock the safe. When a user purchases the safe, it is delivered in a locked state with a functioning battery and an active keypad. The user who performs the initial setup automatically gains administrative access to the safe. \\ \\
-The safe includes a paper manual containing a unique 6-digit code printed on the last page. When the system is powered on for the first time, the user will be prompted to input this unique code before configuring their credentials. Once this initial step is completed, the user will be guided to enter their 6-digit PIN. After entering six numbers and confirming them, the system will request the entry of the unique code once more. Subsequently, the user will be asked to provide a biometric scan of their iris. \\ \\
-Once the user's PIN and iris scans are successfully recorded within the system, the safe will be unlocked, and the user's credentials will be securely stored. It's important to note that after the initial user has configured their credentials, the initial setup process becomes inaccessible, as it is permanently locked within the microprocessor and can only be re-enabled by the manufacturer.
+This control logic section facilitates users configuring their PIN and adding their biometric information (specifically, an iris scan) for authorization to unlock the safeGUI. When a user purchases the safeGUI, it is delivered in a locked state with a functioning battery and an active keypad. The user who performs the initial setup automatically gains administrative access to the safeGUI. \\ \\
+The safeGUI includes a paper manual containing a unique 6-digit code printed on the last page. When the system is powered on for the first time, the user will be prompted to input this unique code before configuring their credentials. Once this initial step is completed, the user will be guided to enter their 6-digit PIN. After entering six numbers and confirming them, the system will request the entry of the unique code once more. Subsequently, the user will be asked to provide a biometric scan of their iris. \\ \\
+Once the user's PIN and iris scans are successfully recorded within the system, the safeGUI will be unlocked, and the user's credentials will be securely stored. It's important to note that after the initial user has configured their credentials, the initial setup process becomes inaccessible, as it is permanently locked within the microprocessor and can only be re-enabled by the manufacturer.
 
 \begin{figure}[!h]
     \centering
@@ -169,7 +169,7 @@ Once the user's PIN and iris scans are successfully recorded within the system, 
 \end{figure}
 
 \subsubsection{Authorization}
-Within the framework of the control logic, this segment orchestrates the critical aspect of user authorization to access the safe, commencing with a locked door and an enabled keypad. The user initiates this sequence by activating the safe's power and entering their PIN on the keypad. If the system identifies the entered PIN, a secondary verification step prompts the user to re-enter the PIN for confirmation. \\ \\
+Within the framework of the control logic, this segment orchestrates the critical aspect of user authorization to access the safeGUI, commencing with a locked door and an enabled keypad. The user initiates this sequence by activating the safeGUI's power and entering their PIN on the keypad. If the system identifies the entered PIN, a secondary verification step prompts the user to re-enter the PIN for confirmation. \\ \\
 Once the system successfully validates the PIN, it activates the Iris Scanner, implementing a robust two-factor authentication (2FA) protocol. Subsequently, the user is guided to perform an Iris Scan on the Display. Upon the successful completion of the initial scan, the system further enhances security by requesting an additional iris scan for verification purposes, thereby ensuring a comprehensive and robust user authentication process.
 
 \begin{figure}[!h]
@@ -183,7 +183,7 @@ Once the system successfully validates the PIN, it activates the Iris Scanner, i
 
 \begin{itemize}
     \item The control software for HomeSafe is crafted using Java, which means it operates within the confines and opportunities presented by an object-oriented programming language. This choice of language enables a structured and modular design approach, allowing for the efficient management of complex system behaviors. However, it also implies certain limitations associated with Java-based applications' performance and resource utilization.
-    \item The auxiliary power supply, a single CR2032 cell battery, can sustain the system for an estimated ten years \cite{microbatteryEverythingNeed}. However, suppose the additional power supply depletes before the primary power source is reinstated (two non-rechargeable alkaline AA batteries). All user data will be forfeited, rendering the unit's contents inaccessible. Additionally, due to the microcontroller's exclusive control over the lock mechanism, manual operation of the safe box is not feasible. Consequently, should both the primary and secondary power sources fail, none of the users will possess the means to access HomeSafe.
+    \item The auxiliary power supply, a single CR2032 cell battery, can sustain the system for an estimated ten years \cite{microbatteryEverythingNeed}. However, suppose the additional power supply depletes before the primary power source is reinstated (two non-rechargeable alkaline AA batteries). All user data will be forfeited, rendering the unit's contents inaccessible. Additionally, due to the microcontroller's exclusive control over the lock mechanism, manual operation of the safeGUI box is not feasible. Consequently, should both the primary and secondary power sources fail, none of the users will possess the means to access HomeSafe.
     \item The HomeSafe is 12 x 16 x 12 inches (L x W x H). This may limit how much the customer can store inside.
 \end{itemize}
 

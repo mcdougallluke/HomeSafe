@@ -20,18 +20,21 @@ public class SafeGUI extends Application {
     private Image safeOpenImage;
     private ImageView imageView;
     private Button closeButton;
+    private ButtonPanel buttonPanel;
 
 
     private SafeController safeController;
 
     @Override
     public void start(Stage primaryStage) {
-        StackPane root = new StackPane();
+        //StackPane root = new StackPane();
+        AnchorPane root = new AnchorPane();
 
         safeFrontImage = new Image(Objects.requireNonNull(getClass().getResource("images/SAFE_DISPLAY.png")).toExternalForm());
         safeCloseUpImage = new Image(Objects.requireNonNull(getClass().getResource("images/SAFE_FRONT.png")).toExternalForm());
         safeOpenImage = new Image(Objects.requireNonNull(getClass().getResource("images/SAFE_OPEN.png")).toExternalForm());
         imageView = new ImageView(safeFrontImage);
+        buttonPanel = new ButtonPanel();
 
         PINManager pinManager = new PINManager();
         InputController controller = new InputController();
@@ -58,9 +61,14 @@ public class SafeGUI extends Application {
             AnchorPane.setTopAnchor(keyPad, keypadYCoordinate);
             AnchorPane.setLeftAnchor(keyPad, keypadXCoordinate);
 
+            double buttonPanelXCoordinate = imageView.getBoundsInLocal().getWidth(); // This will position the button panel immediately to the right of the imageView
+            double buttonPanelYCoordinate = 150;
+            AnchorPane.setTopAnchor(buttonPanel.getButtonBox(), buttonPanelYCoordinate);
+            AnchorPane.setLeftAnchor(buttonPanel.getButtonBox(), buttonPanelXCoordinate);
+
             anchorPane.getChildren().addAll(screen.getScreenComponent(), keyPad);
 
-            root.getChildren().add(anchorPane);
+            root.getChildren().addAll(screen.getScreenComponent(), keyPad, buttonPanel.getButtonBox());
 
             imageView.setOnMouseClicked(null);
         });
@@ -71,7 +79,7 @@ public class SafeGUI extends Application {
 
         root.getChildren().addAll(imageView);
 
-        Scene scene = new Scene(root, 700, 700);
+        Scene scene = new Scene(root, 800, 700);
         primaryStage.setTitle("Digital Safe");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -89,10 +97,12 @@ public class SafeGUI extends Application {
                 closeButton.setVisible(false);
             });
 
-            StackPane.setAlignment(closeButton, Pos.BOTTOM_CENTER);
-            StackPane.setMargin(closeButton, new Insets(10, 0, 10, 0));
+            AnchorPane.setBottomAnchor(closeButton, 10.0);
+            AnchorPane.setLeftAnchor(closeButton, 40.0 );
+            AnchorPane.setRightAnchor(closeButton, 40.0);
 
-            ((StackPane) imageView.getParent()).getChildren().add(closeButton);
+
+            ((AnchorPane) imageView.getParent()).getChildren().add(closeButton);
         } else {
             closeButton.setVisible(true);
         }

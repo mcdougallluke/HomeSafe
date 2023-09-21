@@ -2,7 +2,7 @@
 ## Members:
 - Marina Seheon (Manager)
 - Andrei Phelps (Document Manager)
-- Luke McDougall
+- Luke McDougall (Lead Software Engineer)
 - Spoorthi Menta
 - Vamsi Krishna Singara
 - Jack Vanlyssel

@@ -1,9 +1,13 @@
 import java.util.Random;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Calendar;
 
 public class Authentication {
-    private static boolean locked;
+    private static boolean locked; // Entering wrong password multiple times locks the device
     private static boolean unlocked;
+    private static List<AuthenticationPeriod> allowedPeriods = new ArrayList<>();
 
     public Authentication() {
         locked = false;
@@ -18,6 +22,14 @@ public class Authentication {
         Authentication.unlocked = unlocked;
     }
 
+    public static void addAllowedPeriod(int startHour, int endHour) {
+        allowedPeriods.add(new AuthenticationPeriod(startHour, endHour));
+    }
+
+    public static void clearAllowedPeriods() {
+        allowedPeriods.clear();
+    }
+
     private static String generateOTP(int length) {
         int rand = (int)(Math.random()*Math.pow(10, length));
         return "" + rand;
@@ -27,17 +39,40 @@ public class Authentication {
         return true;
     }
 
+    public static boolean isAuthenticationAllowed() {
+        Calendar now = Calendar.getInstance();
+        int currentHour = now.get(Calendar.HOUR_OF_DAY);
+
+        for (AuthenticationPeriod period : allowedPeriods) {
+            if (currentHour >= period.getStartHour() && currentHour <= period.getEndHour()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static void main(String args[]) {
-        if(locked == true) {
+        if (locked) {
             return;
         }
+
+        // Default allowed authentication from 9 AM to 9 PM
+        addAllowedPeriod(9, 21);
+
         Scanner sc = new Scanner(System.in);
         System.out.println("Welcome to KNOX security");
+
+        if (!isAuthenticationAllowed()) {
+            System.out.println("Authentication is not allowed at this time.");
+            return;
+        }
+
         System.out.println("Enter password as step 1");
-        System.out.println("Scan your iris and then enter OTP send on mail.");
+        System.out.println("Scan your iris and then enter OTP sent on mail.");
 
         boolean flag = irisScan();
-        if(flag) {
+        if (flag) {
             System.out.println("Iris scan successful.");
         } else {
             System.out.println("Iris scan failed.");
@@ -54,5 +89,23 @@ public class Authentication {
         } else {
             System.out.println("OTP authentication failed!");
         }
+    }
+}
+
+class AuthenticationPeriod {
+    private int startHour;
+    private int endHour;
+
+    public AuthenticationPeriod(int startHour, int endHour) {
+        this.startHour = startHour;
+        this.endHour = endHour;
+    }
+
+    public int getStartHour() {
+        return startHour;
+    }
+
+    public int getEndHour() {
+        return endHour;
     }
 }

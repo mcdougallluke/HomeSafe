@@ -1,9 +1,14 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class SafeController {
 
     private SafeState currentState;
     private Screen screen;
     private PINManager pinManager;
     private SafeGUI safeGUI;
+    private List<User> users = new ArrayList<>();
+    private User currentUser = null;
 
 
     public SafeController(Screen screen, SafeGUI safeGUI) {
@@ -64,6 +69,9 @@ public class SafeController {
         return currentState;
     }
 
+    public void addUser(User user) {
+        users.add(user);
+    }
     public void checkPIN(String enteredPIN) {
         if (currentState == SafeState.INITIAL_PIN_SETUP) {
             if ("00000".equals(enteredPIN)) {
@@ -73,11 +81,13 @@ public class SafeController {
                 screen.displayMessage("Wrong Setup PIN. Try again.");
             }
         } else if (currentState == SafeState.SETTING_NEW_PIN) {
-            pinManager.setPIN(enteredPIN);
+            currentUser = new User("DefaultUserName", enteredPIN); // Add logic to get the user name, if needed.
+            addUser(currentUser);
             screen.displayMessage("PIN Set Successfully");
             setState(SafeState.NORMAL);
-        } else if (currentState == SafeState.NORMAL) {
-            if (pinManager.checkPIN(enteredPIN)) {
+        }  else if (currentState == SafeState.NORMAL) {
+            boolean isValidUser = users.stream().anyMatch(user -> user.getPin().equals(enteredPIN));
+            if (isValidUser) {
                 handleUnlockedState();
             } else {
                 screen.displayMessage("Wrong PIN");

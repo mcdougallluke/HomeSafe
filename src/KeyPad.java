@@ -141,11 +141,11 @@ public class KeyPad extends GridPane {
     }
 
     private void setPowerButtonGraphics(Button btn) {
-//        ImageView imageView = new ImageView(new Image(getClass().getResource("images/PowerButton.png").toString()));
-//        imageView.setFitHeight(30);
-//        imageView.setFitWidth(30);
-//        btn.setGraphic(imageView);
-//        btn.setText("");
+        ImageView imageView = new ImageView(new Image(getClass().getResource("images/PowerButton.png").toString()));
+        imageView.setFitHeight(25);
+        imageView.setFitWidth(25);
+        btn.setGraphic(imageView);
+        btn.setText("");
     }
 
     private void adjustVolume(double delta) {

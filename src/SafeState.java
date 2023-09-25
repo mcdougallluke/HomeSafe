@@ -5,5 +5,5 @@ public enum SafeState {
     NORMAL,
     ADD_NEW_USER,
     CLOSED,
-    LOCKED
+    SETTING_IRIS, WAITING_FOR_IRIS, LOCKED
 }

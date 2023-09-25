@@ -1,19 +1,24 @@
 public class User {
-    private String name; // Assuming every user has a name.
+    private String irisName;
     private String pin;
 
-    public User(String name, String pin) {
-        this.name = name;
+    public User(String pin, String name) {
         this.pin = pin;
+        this.irisName = name;
+
     }
 
     public String getPin() {
         return pin;
     }
-
+    public String getIrisName() {
+        return irisName;
+    }
     public void setPin(String pin) {
         this.pin = pin;
     }
 
-    // You can also include getter and setter for the name, and other methods as needed.
+    public void setIrisName(String name) {
+        this.irisName = name;
+    }
 }

@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 
 public class SafeController {
 
@@ -9,7 +11,6 @@ public class SafeController {
     private SafeGUI safeGUI;
     private List<User> users = new ArrayList<>();
     private User currentUser = null;
-
 
     public SafeController(Screen screen, SafeGUI safeGUI) {
         this.screen = screen;
@@ -27,6 +28,8 @@ public class SafeController {
         currentState = newState;
         System.out.println("Current state: " + currentState);
         switch (currentState) {
+            case WAITING_FOR_IRIS -> handleWaitingForIris();
+            case SETTING_IRIS -> handleSettingIris();
             case INITIAL_PIN_SETUP -> handleInitialPinSetup();
             case NORMAL -> handleNormalState();
             case CLOSED -> handleCloseSafe();
@@ -36,6 +39,15 @@ public class SafeController {
 
     }
 
+    private void handleWaitingForIris() {
+        screen.displayMessage("Waiting on Iris scan");
+        // Additional setup logic here
+    }
+    private void handleSettingIris() {
+        screen.displayMessage("Scan your Iris");
+        // Additional setup logic here
+    }
+    
     private void handleInitialPinSetup() {
         screen.displayMessage("Enter Set up PIN");
         // Additional setup logic here
@@ -53,7 +65,9 @@ public class SafeController {
 
     private void handleUnlockedState() {
         screen.displayMessage("Safe Unlocked");
-        safeGUI.openSafe();
+        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(event -> safeGUI.openSafe());
+        delay.play();
     }
 
     public void handleCloseSafe() {
@@ -81,18 +95,38 @@ public class SafeController {
                 screen.displayMessage("Wrong Setup PIN. Try again.");
             }
         } else if (currentState == SafeState.SETTING_NEW_PIN) {
-            currentUser = new User("DefaultUserName", enteredPIN); // Add logic to get the user name, if needed.
-            addUser(currentUser);
-            screen.displayMessage("PIN Set Successfully");
+            screen.displayMessage("Scan Your Iris");
+            setState(SafeState.SETTING_IRIS); // New state to wait for the iris scan
+            currentUser = new User(enteredPIN, null); // Save the entered PIN temporarily
+
+        }  else if (currentState == SafeState.SETTING_IRIS) {
+            // Since the iris and pin have already been set by the time you reach here,
+            // you can simply save the user and go back to the NORMAL state.
+
+            users.add(currentUser);   // Add the current user to your list of users.
+            currentUser = null;       // Reset current user.
             setState(SafeState.NORMAL);
-        }  else if (currentState == SafeState.NORMAL) {
-            boolean isValidUser = users.stream().anyMatch(user -> user.getPin().equals(enteredPIN));
-            if (isValidUser) {
-                handleUnlockedState();
+        }else if (currentState == SafeState.NORMAL) {
+            if (currentUser != null && currentUser.getPin() != null && currentUser.getPin().equals(enteredPIN)) {
+                screen.displayMessage("Scan Your Iris");
+                setState(SafeState.WAITING_FOR_IRIS);
             } else {
                 screen.displayMessage("Wrong PIN");
             }
         }
     }
 
+    public void checkIris(String irisName) {
+        if (currentState == SafeState.WAITING_FOR_IRIS && currentUser != null) {
+            if (currentUser.getIrisName().equals(irisName)) {
+                handleUnlockedState();
+            } else {
+                screen.displayMessage("Wrong Iris");
+            }
+        }
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
 }

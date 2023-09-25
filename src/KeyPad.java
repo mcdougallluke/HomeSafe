@@ -130,6 +130,8 @@ public class KeyPad extends GridPane {
         btn.setEffect(shadow);
         btn.setOnMousePressed(event -> setButtonPressedStyle(btn));
         btn.setOnMouseReleased(event -> applyDefaultButtonStyle(btn));
+        if(btn.getText().equals("O")){btn.setStyle(gradientBackground + "-fx-text-fill: green; -fx-font-size: 24px;");}
+        if(btn.getText().equals("X")){btn.setStyle(gradientBackground + "-fx-text-fill: red; -fx-font-size: 24px;");}
     }
 
     private void setButtonPressedStyle(Button btn) {

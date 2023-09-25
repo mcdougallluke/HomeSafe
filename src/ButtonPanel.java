@@ -1,3 +1,4 @@
+import javafx.animation.PauseTransition;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -10,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class ButtonPanel {
 
@@ -21,7 +23,7 @@ public class ButtonPanel {
         buttonBox.setAlignment(Pos.CENTER_RIGHT);
 
         // Define an array of names
-        String[] names = {"Luke", "Anrei", "Marina", "Jack", "Spork", "Vamsi"};
+        String[] names = {"Marina", "Andrei", "Luke", "Spork", "Vamsi", "Jack"};
 
         // Ensure we don't exceed the length of the names array
         int numButtons = Math.min(names.length, 6);
@@ -57,7 +59,13 @@ public class ButtonPanel {
         gifStage.setScene(new Scene(layout));
         gifStage.sizeToScene(); // Adjust window size to fit GIF
         gifStage.show();
+
+        // Create a PauseTransition that lasts 2 seconds
+        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(event -> gifStage.close());
+        delay.play();
     }
+
 
     // Method to retrieve the VBox containing the buttons
     public VBox getButtonBox() {

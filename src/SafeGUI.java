@@ -79,7 +79,7 @@ public class SafeGUI extends Application {
 
         root.getChildren().addAll(imageView);
 
-        Scene scene = new Scene(root, 800, 700);
+        Scene scene = new Scene(root, 815, 700);
         primaryStage.setTitle("Digital Safe");
         primaryStage.setScene(scene);
         primaryStage.show();

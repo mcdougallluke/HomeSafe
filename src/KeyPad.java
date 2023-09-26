@@ -130,6 +130,8 @@ public class KeyPad extends GridPane {
         btn.setEffect(shadow);
         btn.setOnMousePressed(event -> setButtonPressedStyle(btn));
         btn.setOnMouseReleased(event -> applyDefaultButtonStyle(btn));
+        if(btn.getText().equals("O")){btn.setStyle(gradientBackground + "-fx-text-fill: green; -fx-font-size: 24px;");}
+        if(btn.getText().equals("X")){btn.setStyle(gradientBackground + "-fx-text-fill: red; -fx-font-size: 24px;");}
     }
 
     private void setButtonPressedStyle(Button btn) {
@@ -141,11 +143,11 @@ public class KeyPad extends GridPane {
     }
 
     private void setPowerButtonGraphics(Button btn) {
-//        ImageView imageView = new ImageView(new Image(getClass().getResource("images/PowerButton.png").toString()));
-//        imageView.setFitHeight(30);
-//        imageView.setFitWidth(30);
-//        btn.setGraphic(imageView);
-//        btn.setText("");
+        ImageView imageView = new ImageView(new Image(getClass().getResource("images/PowerButton.png").toString()));
+        imageView.setFitHeight(25);
+        imageView.setFitWidth(25);
+        btn.setGraphic(imageView);
+        btn.setText("");
     }
 
     private void adjustVolume(double delta) {

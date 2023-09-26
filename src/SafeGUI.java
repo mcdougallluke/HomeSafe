@@ -46,7 +46,7 @@ public class SafeGUI extends Application {
         controller.setSafeController(safeController);
 
         safeController.setPINManager(pinManager);
-
+        buttonPanel.setSafeController(safeController);
         imageView.setOnMouseClicked(event -> {
             imageView.setImage(safeCloseUpImage);
             AnchorPane anchorPane = new AnchorPane();

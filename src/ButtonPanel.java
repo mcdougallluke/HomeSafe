@@ -16,7 +16,11 @@ import javafx.util.Duration;
 public class ButtonPanel {
 
     private VBox buttonBox;
+    private SafeController safeController;
 
+    public void setSafeController(SafeController safeController) {
+        this.safeController = safeController;
+    }
     public ButtonPanel() {
         // Create a VBox to stack the buttons vertically
         buttonBox = new VBox(30); // 10 is the spacing between the buttons
@@ -35,7 +39,18 @@ public class ButtonPanel {
             btn.setMinWidth(75);
 
             // Attach an event to show the GIF on a new window
-            btn.setOnAction(event -> showGIFWindow());
+            int finalI = i;
+            btn.setOnAction(event -> {
+                showGIFWindow();
+                if(safeController != null) {
+                    if (safeController.getCurrentState() == SafeState.SETTING_IRIS) {
+                        safeController.getCurrentUser().setIrisName(names[finalI]);
+                        safeController.setState(SafeState.NORMAL);
+                    } else if (safeController.getCurrentState() == SafeState.WAITING_FOR_IRIS) {
+                        safeController.checkIris(names[finalI]);
+                    }
+                }
+            });
 
             buttonBox.getChildren().add(btn);
         }

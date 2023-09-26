@@ -1,54 +1,93 @@
-import javafx.geometry.Insets;
-import javafx.scene.control.TextArea;
+import javafx.animation.PauseTransition;
+import javafx.geometry.Pos;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 public class Screen {
 
-    private final TextArea display;
+    private final Text line1;
+    private final Text line2;
+    private final VBox textContainer;
+    private final Rectangle background;
+    private final InputController inputController;
     private final StackPane screenComponent;
 
-    public Screen() {
-        display = new TextArea();
-        display.setEditable(false);
-        display.setWrapText(true);
-        display.setStyle("-fx-background-color: black; " +
-                "-fx-text-fill: white; " +
-                "-fx-font-size: 20; " +
-                "-fx-border-color: black; " +
-                "-fx-focus-color: black; " +
-                "-fx-faint-focus-color: black; " +
-                "-fx-control-inner-background: black; " +
-                "-fx-padding: 0;");
+    public Screen(InputController inputController) {
+        this.inputController = inputController;
+        this.inputController.setScreen(this);
 
-        // Create a background for the screen
-        Rectangle background = new Rectangle(250, 50, Color.BLACK); // Set size of the screen to 250x50, adjust as needed
+        line1 = createTextLine();
+        line2 = createTextLine();
+
+        textContainer = new VBox(5);
+        textContainer.getChildren().addAll(line1, line2);
+        textContainer.setAlignment(Pos.CENTER);
+
+        background = new Rectangle(255, 160, Color.web("#252525"));
 
         screenComponent = new StackPane();
-        screenComponent.getChildren().addAll(background, display);
+        screenComponent.setAlignment(Pos.CENTER);
+        screenComponent.getChildren().addAll(background, textContainer);
 
-        // Define the size of the screen
-        screenComponent.setPrefWidth(270);
-        screenComponent.setPrefHeight(185);
+        screenComponent.setPrefWidth(255);
+        screenComponent.setPrefHeight(160);
+        screenComponent.setVisible(false);
     }
 
-    // Method to display a message on the screen
+    private Text createTextLine() {
+        Text text = new Text();
+        text.setFill(Color.WHITE);
+        text.setStyle("-fx-font-size: 24;");
+        return text;
+    }
+
     public void displayMessage(String message) {
-        display.setText(message);
+        if (message.length() <= 20) {
+            line1.setText(message);
+        } else {
+            line1.setText(message.substring(0, 20));
+            line2.setText(message.substring(20));
+        }
     }
 
-    // Method to append a key entry to the current display
     public void appendKeyEntry(String key) {
-        display.appendText(key);
+        String currentText = line2.getText() + key;
+
+        if (currentText.length() <= 20) {
+            line2.setText(currentText);
+        } else {
+            line2.setText(currentText.substring(0, 20));
+        }
     }
 
-    // Method to clear the screen
-    public void clear() {
-        display.clear();
+    public String getCurrentKeyEntry() {
+        return line2.getText();
     }
 
-    // Method to get the JavaFX component representing the screen
+    public void clearKeyEntry() {
+        line2.setText("");
+    }
+
+    public void removeLastKeyEntry() {
+        String currentText = line2.getText();
+        if (!currentText.isEmpty()) {
+            line2.setText(currentText.substring(0, currentText.length() - 1));
+        }
+    }
+
+    public void turnOn() {
+        screenComponent.setVisible(true);
+        displayMessage("WELCOME");
+    }
+
+    public void turnOff() {
+        screenComponent.setVisible(false);
+    }
+
     public StackPane getScreenComponent() {
         return screenComponent;
     }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Calendar;
 
+// This class handles user authentication based on multiple methods
 public class Authentication {
     private static boolean locked; // Entering wrong password multiple times locks the device
     private static boolean unlocked;
@@ -14,6 +15,7 @@ public class Authentication {
         unlocked = false;
     }
 
+    // Getter method to check if the system is unlocked
     public static boolean isUnlocked() {
         return unlocked;
     }
@@ -22,6 +24,7 @@ public class Authentication {
         Authentication.unlocked = unlocked;
     }
 
+    // Method to add a new allowed period for authentication
     public static void addAllowedPeriod(int startHour, int endHour) {
         allowedPeriods.add(new AuthenticationPeriod(startHour, endHour));
     }
@@ -35,6 +38,7 @@ public class Authentication {
         return "" + rand;
     }
 
+    // Mock method to simulate an iris scan. Always returns true for this implementation.
     private static boolean irisScan() {
         return true;
     }

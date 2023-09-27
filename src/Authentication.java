@@ -156,3 +156,4 @@ class AuthenticationPeriod {
         return endHour;
     }
 }
+

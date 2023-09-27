@@ -154,6 +154,5 @@ class AuthenticationPeriod {
 
     public int getEndHour() {
         return endHour;
-    }
+    }//endhour
 }
-

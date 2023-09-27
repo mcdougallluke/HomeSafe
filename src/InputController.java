@@ -41,7 +41,7 @@ public class InputController {
             isPoweredOn = false;
         } else {
             screen.turnOn();
-            if (pinManager.isDefaultPIN()) {
+            if (safeController.usersIsEmpty() == true) {
                 safeController.setState(SafeState.INITIAL_PIN_SETUP);
             } else {
                 safeController.setState(SafeState.NORMAL);

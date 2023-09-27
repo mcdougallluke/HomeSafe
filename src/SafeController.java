@@ -12,6 +12,7 @@ public class SafeController {
     private List<User> users = new ArrayList<>();
     private User currentUser = null;
 
+
     public SafeController(Screen screen, SafeGUI safeGUI) {
         this.screen = screen;
         this.safeGUI = safeGUI;
@@ -86,6 +87,7 @@ public class SafeController {
     public void addUser(User user) {
         users.add(user);
     }
+
     public void checkPIN(String enteredPIN) {
         if (currentState == SafeState.INITIAL_PIN_SETUP) {
             if ("00000".equals(enteredPIN)) {
@@ -96,24 +98,38 @@ public class SafeController {
             }
         } else if (currentState == SafeState.SETTING_NEW_PIN) {
             screen.displayMessage("Scan Your Iris");
-            setState(SafeState.SETTING_IRIS); // New state to wait for the iris scan
             currentUser = new User(enteredPIN, null); // Save the entered PIN temporarily
+            setState(SafeState.SETTING_IRIS); // New state to wait for the iris scan
 
-        }  else if (currentState == SafeState.SETTING_IRIS) {
-            // Since the iris and pin have already been set by the time you reach here,
-            // you can simply save the user and go back to the NORMAL state.
+        }
+//        else if (currentState == SafeState.SETTING_IRIS) {
+//            //setIrisForCurrentUser(scannedIrisName); // assuming scannedIrisName is the iris information you get after scanning
+//            users.add(currentUser);   // Add the current user to your list of users.
+//            currentUser = null;       // Reset current user.
+//            setState(SafeState.NORMAL);
+//        }
+        else if (currentState == SafeState.NORMAL) {
+            boolean pinMatchFound = false;
 
-            users.add(currentUser);   // Add the current user to your list of users.
-            currentUser = null;       // Reset current user.
-            setState(SafeState.NORMAL);
-        }else if (currentState == SafeState.NORMAL) {
-            if (currentUser != null && currentUser.getPin() != null && currentUser.getPin().equals(enteredPIN)) {
-                screen.displayMessage("Scan Your Iris");
-                setState(SafeState.WAITING_FOR_IRIS);
-            } else {
+            for (User user : users) {
+                if (user.getPin() != null && user.getPin().equals(enteredPIN)) {
+                    currentUser = user;
+                    pinMatchFound = true;
+                    screen.displayMessage("Scan Your Iris");
+                    setState(SafeState.WAITING_FOR_IRIS);
+                    break;  // Exit the loop once a match is found
+                }
+            }
+
+            if (!pinMatchFound) {
                 screen.displayMessage("Wrong PIN");
             }
         }
+
+    }
+
+    public void resetUser(){
+        currentUser = null;
     }
 
     public void checkIris(String irisName) {
@@ -126,7 +142,17 @@ public class SafeController {
         }
     }
 
+    public void setIrisForCurrentUser(String irisName) {
+        if(currentUser != null) {
+            currentUser.setIrisName(irisName);
+        }
+    }
+
     public User getCurrentUser() {
         return currentUser;
+    }
+
+    public boolean usersIsEmpty() {
+        return users.isEmpty();
     }
 }

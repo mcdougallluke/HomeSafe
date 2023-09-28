@@ -1,3 +1,4 @@
+// CS 460 Team 01
 
 // Handles input from the user via the IRIS scanner and Keypad
 public class InputController {

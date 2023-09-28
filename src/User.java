@@ -1,3 +1,5 @@
+// CS 460 Team 01
+
 public class User {
     private String irisName;
     private String pin;

@@ -1,3 +1,5 @@
+// CS 460 Team 01
+
 import java.util.ArrayList;
 import java.util.List;
 import javafx.animation.PauseTransition;

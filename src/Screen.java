@@ -1,3 +1,5 @@
+// CS 460 Team 01
+
 import javafx.animation.PauseTransition;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;

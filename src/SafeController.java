@@ -38,8 +38,13 @@ public class SafeController {
             case CLOSED -> handleCloseSafe();
             case ADD_NEW_USER -> handleAddNewUser();
             case LOCKED -> handleLockedState();
+            case MASTER_VERIFICATION -> handleMasterVerification();
         }
 
+    }
+
+    private void handleMasterVerification() {
+        screen.displayMessage("Enter Master PIN");
     }
 
     private void handleWaitingForIris() {
@@ -93,24 +98,31 @@ public class SafeController {
     public void checkPIN(String enteredPIN) {
         if (currentState == SafeState.INITIAL_PIN_SETUP) {
             if ("00000".equals(enteredPIN)) {
-                screen.displayMessage("Enter New PIN");
+                screen.displayMessage("Enter Master PIN");
                 setState(SafeState.SETTING_NEW_PIN);
             } else {
                 screen.displayMessage("Wrong Setup PIN. Try again.");
             }
         } else if (currentState == SafeState.SETTING_NEW_PIN) {
-            screen.displayMessage("Scan Your Iris");
-            currentUser = new User(enteredPIN, null); // Save the entered PIN temporarily
-            setState(SafeState.SETTING_IRIS); // New state to wait for the iris scan
-
+            if("00000".equals(enteredPIN)){
+                screen.displayMessage("Cannot use setup pin");
+            }
+            else if (pinExists(enteredPIN)) {
+                screen.displayMessage("PIN already in use. Choose a different PIN.");
+            }
+            else {
+                screen.displayMessage("Scan Your Iris");
+                currentUser = new User(enteredPIN, null); // Save the entered PIN temporarily
+                setState(SafeState.SETTING_IRIS); // New state to wait for the iris scan
+            }
         }
-//        else if (currentState == SafeState.SETTING_IRIS) {
-//            //setIrisForCurrentUser(scannedIrisName); // assuming scannedIrisName is the iris information you get after scanning
-//            users.add(currentUser);   // Add the current user to your list of users.
-//            currentUser = null;       // Reset current user.
-//            setState(SafeState.NORMAL);
-//        }
         else if (currentState == SafeState.NORMAL) {
+            if ("00000".equals(enteredPIN)) {
+                // If user enters setup PIN during NORMAL state, prompt to set up a new account.
+                setState(SafeState.MASTER_VERIFICATION);
+                return; // Exit the method to prevent further checks
+            }
+
             boolean pinMatchFound = false;
 
             for (User user : users) {
@@ -126,6 +138,25 @@ public class SafeController {
             if (!pinMatchFound) {
                 screen.displayMessage("Wrong PIN");
             }
+        }
+
+        else if (currentState == SafeState.MASTER_VERIFICATION) {
+
+            User masterUser = users.get(0);  // Assuming 'users' is a list of all users.
+
+            //pinInput.equals(masterUser.getPin()) && irisInput.equals(masterUser.getIris())
+
+            if (enteredPIN.equals(masterUser.getPin())) {
+                screen.displayMessage("Enter New PIN");
+                setState(SafeState.SETTING_NEW_PIN);
+            }
+
+            else {
+                // Notify that the verification failed.
+                screen.displayMessage("Master user verification failed!");
+                setState(SafeState.NORMAL);
+            }
+
         }
 
     }
@@ -157,4 +188,30 @@ public class SafeController {
     public boolean usersIsEmpty() {
         return users.isEmpty();
     }
+
+    // Helper method to check if a PIN already exists
+    private boolean pinExists(String pin) {
+        for (User user : users) {
+            if (pin.equals(user.getPin())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Helper method to check if an iris scan already exists
+    boolean irisScanExists(String irisName) {
+        for (User user : users) {
+            if (irisName.equals(user.getIrisName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Screen getScreen() {
+        return this.screen;
+    }
+
+
 }

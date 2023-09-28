@@ -53,8 +53,8 @@ public class SafeGUI extends Application {
             imageView.setImage(safeCloseUpImage);
             AnchorPane anchorPane = new AnchorPane();
 
-            double screenXCoordinate = 80;
-            double screenYCoordinate = 110;
+            double screenXCoordinate = 95;
+            double screenYCoordinate = 123;
             AnchorPane.setTopAnchor(screen.getScreenComponent(), screenYCoordinate);
             AnchorPane.setLeftAnchor(screen.getScreenComponent(), screenXCoordinate);
 

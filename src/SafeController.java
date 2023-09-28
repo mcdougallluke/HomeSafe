@@ -99,10 +99,13 @@ public class SafeController {
                 screen.displayMessage("Wrong Setup PIN. Try again.");
             }
         } else if (currentState == SafeState.SETTING_NEW_PIN) {
-            screen.displayMessage("Scan Your Iris");
-            currentUser = new User(enteredPIN, null); // Save the entered PIN temporarily
-            setState(SafeState.SETTING_IRIS); // New state to wait for the iris scan
-
+            if("00000".equals(enteredPIN)){
+                screen.displayMessage("Cannot use setup pin");
+            }else {
+                screen.displayMessage("Scan Your Iris");
+                currentUser = new User(enteredPIN, null); // Save the entered PIN temporarily
+                setState(SafeState.SETTING_IRIS); // New state to wait for the iris scan
+            }
         }
 //        else if (currentState == SafeState.SETTING_IRIS) {
 //            //setIrisForCurrentUser(scannedIrisName); // assuming scannedIrisName is the iris information you get after scanning

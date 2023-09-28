@@ -45,11 +45,18 @@ public class ButtonPanel {
             btn.setOnAction(event -> {
                 showGIFWindow();
                 if(safeController != null) {
-                    if (safeController.getCurrentState() == SafeState.SETTING_IRIS) {
+                    if (safeController.irisScanExists(names[finalI]) && safeController.getCurrentState() == SafeState.SETTING_IRIS) {
+                        safeController.getScreen().displayMessage("Choose another iris");
+
+                    }
+
+                    else if (safeController.getCurrentState() == SafeState.SETTING_IRIS) {
+
                         safeController.setIrisForCurrentUser(names[finalI]);
                         safeController.addUser(safeController.getCurrentUser());
                         safeController.resetUser(); //resets currentUser in safeController
                         safeController.setState(SafeState.NORMAL);
+
                     } else if (safeController.getCurrentState() == SafeState.WAITING_FOR_IRIS) {
                         safeController.checkIris(names[finalI]);
                     }

@@ -101,7 +101,11 @@ public class SafeController {
         } else if (currentState == SafeState.SETTING_NEW_PIN) {
             if("00000".equals(enteredPIN)){
                 screen.displayMessage("Cannot use setup pin");
-            }else {
+            }
+            else if (pinExists(enteredPIN)) {
+                screen.displayMessage("PIN already in use. Choose a different PIN.");
+            }
+            else {
                 screen.displayMessage("Scan Your Iris");
                 currentUser = new User(enteredPIN, null); // Save the entered PIN temporarily
                 setState(SafeState.SETTING_IRIS); // New state to wait for the iris scan
@@ -114,6 +118,13 @@ public class SafeController {
 //            setState(SafeState.NORMAL);
 //        }
         else if (currentState == SafeState.NORMAL) {
+            if ("00000".equals(enteredPIN)) {
+                // If user enters setup PIN during NORMAL state, prompt to set up a new account.
+                screen.displayMessage("Enter New PIN");
+                setState(SafeState.SETTING_NEW_PIN);
+                return; // Exit the method to prevent further checks
+            }
+
             boolean pinMatchFound = false;
 
             for (User user : users) {
@@ -160,4 +171,30 @@ public class SafeController {
     public boolean usersIsEmpty() {
         return users.isEmpty();
     }
+
+    // Helper method to check if a PIN already exists
+    private boolean pinExists(String pin) {
+        for (User user : users) {
+            if (pin.equals(user.getPin())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Helper method to check if an iris scan already exists
+    boolean irisScanExists(String irisName) {
+        for (User user : users) {
+            if (irisName.equals(user.getIrisName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Screen getScreen() {
+        return this.screen;
+    }
+
+
 }

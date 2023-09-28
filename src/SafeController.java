@@ -171,6 +171,7 @@ public class SafeController {
                 handleUnlockedState();
             } else {
                 screen.displayMessage("Wrong Iris");
+                setState(SafeState.NORMAL);
             }
         }
     }

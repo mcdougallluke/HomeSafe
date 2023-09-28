@@ -31,6 +31,7 @@ public class SafeGUI extends Application {
     public void start(Stage primaryStage) {
         //StackPane root = new StackPane();
         AnchorPane root = new AnchorPane();
+        primaryStage.setResizable(false);
 
         safeFrontImage = new Image(Objects.requireNonNull(getClass().getResource("images/SAFE_DISPLAY.png")).toExternalForm());
         safeCloseUpImage = new Image(Objects.requireNonNull(getClass().getResource("images/SAFE_FRONT.png")).toExternalForm());
@@ -91,6 +92,8 @@ public class SafeGUI extends Application {
         imageView.setImage(safeOpenImage);
         screen.getScreenComponent().setVisible(false);
         keyPad.setVisible(false);
+        buttonPanel.setButtonBoxVisible(false);
+
 
         if (closeButton == null) {
             closeButton = new Button("Close Safe");
@@ -116,6 +119,7 @@ public class SafeGUI extends Application {
         imageView.setImage(safeCloseUpImage);
         screen.getScreenComponent().setVisible(true);
         keyPad.setVisible(true);
+        buttonPanel.setButtonBoxVisible(true);
         if (closeButton != null) {
             closeButton.setVisible(false);
         }

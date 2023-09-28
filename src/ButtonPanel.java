@@ -47,7 +47,6 @@ public class ButtonPanel {
                 if(safeController != null) {
                     if (safeController.irisScanExists(names[finalI]) && safeController.getCurrentState() == SafeState.SETTING_IRIS) {
                         safeController.getScreen().displayMessage("Choose another iris");
-
                     }
 
                     else if (safeController.getCurrentState() == SafeState.SETTING_IRIS) {
@@ -67,6 +66,9 @@ public class ButtonPanel {
         }
     }
 
+    public void setButtonBoxVisible(boolean visible) {
+        buttonBox.setVisible(visible);
+    }
 
     private void showGIFWindow() {
         // Create a new stage (window)

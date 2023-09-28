@@ -1,3 +1,5 @@
+// CS 460 Team 01
+
 public class PINManager {
     private static final String DEFAULT_PIN = "00000";
     private String currentPIN = DEFAULT_PIN;

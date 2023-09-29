@@ -29,7 +29,6 @@ public class SafeGUI extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        //StackPane root = new StackPane();
         AnchorPane root = new AnchorPane();
         primaryStage.setResizable(false);
 
@@ -89,12 +88,9 @@ public class SafeGUI extends Application {
 
 
         try {
-            // Create an instance of the Battery class
             battery = new Battery();
-
-            // Monitor battery status
             Timer timer = new Timer();
-            int batteryCheckInterval = 60 * 1000; // Check every 1 minute
+            int batteryCheckInterval = 60 * 1000;
             timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
@@ -107,7 +103,6 @@ public class SafeGUI extends Application {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 
     public void openSafe() {
@@ -135,7 +130,6 @@ public class SafeGUI extends Application {
             System.out.println("Cannot open the safe. Low battery!");
         }
     }
-
 
     public void closeSafe() {
         safeController.setState(SafeState.CLOSED);

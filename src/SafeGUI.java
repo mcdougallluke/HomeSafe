@@ -1,16 +1,15 @@
 // CS 460 Team 01
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class SafeGUI extends Application {
@@ -23,13 +22,13 @@ public class SafeGUI extends Application {
     private ImageView imageView;
     private Button closeButton;
     private ButtonPanel buttonPanel;
+    private Battery battery;
 
 
     private SafeController safeController;
 
     @Override
     public void start(Stage primaryStage) {
-        //StackPane root = new StackPane();
         AnchorPane root = new AnchorPane();
         primaryStage.setResizable(false);
 
@@ -86,33 +85,51 @@ public class SafeGUI extends Application {
         primaryStage.setTitle("Digital Safe");
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-    public void openSafe() {
-        imageView.setImage(safeOpenImage);
-        screen.getScreenComponent().setVisible(false);
-        keyPad.setVisible(false);
-        buttonPanel.setButtonBoxVisible(false);
 
 
-        if (closeButton == null) {
-            closeButton = new Button("Close Safe");
-            closeButton.setOnAction(event -> {
-                closeSafe();
-                closeButton.setVisible(false);
-            });
+        try {
+            battery = new Battery();
+            Timer timer = new Timer();
+            int batteryCheckInterval = 60 * 1000;
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    if (battery.isLow()) {
+                        System.out.println("Low battery signal: Please recharge the safe.");
+                    }
+                }
+            }, batteryCheckInterval, batteryCheckInterval);
 
-            AnchorPane.setBottomAnchor(closeButton, 10.0);
-            AnchorPane.setLeftAnchor(closeButton, 40.0 );
-            AnchorPane.setRightAnchor(closeButton, 40.0);
-
-
-            ((AnchorPane) imageView.getParent()).getChildren().add(closeButton);
-        } else {
-            closeButton.setVisible(true);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
+    public void openSafe() {
+        if (battery.getChargeLevel() > 20) {
+            imageView.setImage(safeOpenImage);
+            screen.getScreenComponent().setVisible(false);
+            keyPad.setVisible(false);
+
+            if (closeButton == null) {
+                closeButton = new Button("Close Safe");
+                closeButton.setOnAction(event -> {
+                    closeSafe();
+                    closeButton.setVisible(false);
+                });
+
+                AnchorPane.setBottomAnchor(closeButton, 10.0);
+                AnchorPane.setLeftAnchor(closeButton, 40.0);
+                AnchorPane.setRightAnchor(closeButton, 40.0);
+
+                ((AnchorPane) imageView.getParent()).getChildren().add(closeButton);
+            } else {
+                closeButton.setVisible(true);
+            }
+        } else {
+            System.out.println("Cannot open the safe. Low battery!");
+        }
+    }
 
     public void closeSafe() {
         safeController.setState(SafeState.CLOSED);

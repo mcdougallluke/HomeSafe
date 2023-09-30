@@ -10,8 +10,9 @@ import java.util.Calendar;
 public class Authentication {
     private static boolean locked; // Entering wrong password multiple times locks the device
     private static boolean unlocked;
+    // List of periods during which authentication is allowed.
     private static List<AuthenticationPeriod> allowedPeriods = new ArrayList<>();
-
+    // Constructor initializes locked and unlocked states.
     public Authentication() {
         locked = false;
         unlocked = false;
@@ -45,6 +46,7 @@ public class Authentication {
         return true;
     }
 
+    // Checks if authentication is allowed at the current time true if authentication is allowed, false otherwise.
     public static boolean isAuthenticationAllowed() {
         Calendar now = Calendar.getInstance();
         int currentHour = now.get(Calendar.HOUR_OF_DAY);
@@ -58,12 +60,13 @@ public class Authentication {
         return false;
     }
 
+    // Main method to execute the authentication process.
     public static void main(String args[]) {
         if (locked) {
             return;
         }
 
-        // Default allowed authentication from 9 AM to 9 PM
+         // Set default allowed authentication period from 9 AM to 9 PM.
         addAllowedPeriod(9, 21);
 
         Scanner sc = new Scanner(System.in);
@@ -97,7 +100,7 @@ public class Authentication {
         }
     }
 }
-
+// This class defines periods (start and end hour) during which authentication is allowed.
 class AuthenticationPeriod {
     private int startHour;
     private int endHour;
@@ -106,6 +109,7 @@ class AuthenticationPeriod {
         this.startHour = startHour;
         this.endHour = endHour;
     }
+    // Getters for start and end hours.
 
     public int getStartHour() {
         return startHour;

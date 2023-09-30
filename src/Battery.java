@@ -19,6 +19,7 @@ public class Battery {
     private void startBatteryDepletion() {
         Timer timer = new Timer();
         int depletionInterval = 60 * 1000; // Deplete every 1 minute
+        // Schedule a task to run at fixed intervals to deplete the battery and check its status
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {

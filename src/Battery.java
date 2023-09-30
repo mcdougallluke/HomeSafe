@@ -1,9 +1,13 @@
+// CS 460 Team 01
+
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Battery {
     private static final double FULL_CHARGE = 100.0;
     private static final int LOW_BATTERY_THRESHOLD = 20;
+
+    // Amount of battery depletion per minute
     private static final double DEPLETION_AMOUNT = 100.0 / 2880; // Deplete 0.0347% per minute
 
     private double chargeLevel; // Battery charge level (0-100)
@@ -15,11 +19,10 @@ public class Battery {
 
         startBatteryDepletion(); // Starting battery depletion
     }
-
+    // Method to start a timer which simulates battery depletion over time
     private void startBatteryDepletion() {
         Timer timer = new Timer();
         int depletionInterval = 60 * 1000; // Deplete every 1 minute
-        // Schedule a task to run at fixed intervals to deplete the battery and check its status
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -30,6 +33,7 @@ public class Battery {
 
                     if (remainingWorkingTime <= 0) {
                         System.out.println("Battery depleted. Safe operations are no longer possible.");
+                        // stops the timer
                         timer.cancel();
                     }
                 }
@@ -44,17 +48,20 @@ public class Battery {
         }, depletionInterval, depletionInterval);
     }
 
+    // Method to discharge the battery by a certain amount
     public void discharge(double amount) {
         if (amount >= 0 && amount <= chargeLevel) {
             chargeLevel -= amount;
         }
     }
 
+    //Method to check if the provided voltage is within safe limits
     private boolean isVoltageSafe(int voltage) {
         // Check if the voltage is within a safe range
         return voltage >= 220 && voltage <= 240;
     }
 
+    // Method to charge the battery by a certain amount, given a specific voltage
     public void charge(int amount, int voltage) { // To charge battery
         if (!isVoltageSafe(voltage)) {
             System.out.println("Warning: Charging with incorrect voltage!");

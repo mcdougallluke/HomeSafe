@@ -1,3 +1,5 @@
+// CS 460 Team 01
+
 import java.util.Random;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -8,8 +10,9 @@ import java.util.Calendar;
 public class Authentication {
     private static boolean locked; // Entering wrong password multiple times locks the device
     private static boolean unlocked;
+    // List of periods during which authentication is allowed.
     private static List<AuthenticationPeriod> allowedPeriods = new ArrayList<>();
-
+    // Constructor initializes locked and unlocked states.
     public Authentication() {
         locked = false;
         unlocked = false;
@@ -43,6 +46,7 @@ public class Authentication {
         return true;
     }
 
+    // Checks if authentication is allowed at the current time true if authentication is allowed, false otherwise.
     public static boolean isAuthenticationAllowed() {
         Calendar now = Calendar.getInstance();
         int currentHour = now.get(Calendar.HOUR_OF_DAY);
@@ -56,12 +60,13 @@ public class Authentication {
         return false;
     }
 
+    // Main method to execute the authentication process.
     public static void main(String args[]) {
         if (locked) {
             return;
         }
 
-        // Default allowed authentication from 9 AM to 9 PM
+        // Set default allowed authentication period from 9 AM to 9 PM.
         addAllowedPeriod(9, 21);
 
         Scanner sc = new Scanner(System.in);
@@ -83,19 +88,33 @@ public class Authentication {
             return;
         }
 
-        String otp = generateOTP(6);
-        System.out.println("Enter the OTP: ");
-        System.out.println(otp);
-        String enteredOTP = sc.next();
+        System.out.println("Enter the PIN: ");
 
-        if (otp.equals(enteredOTP)) {
+        long startTime = System.currentTimeMillis(); // Record the start time
+        String enteredOTP = sc.next();
+        long endTime = System.currentTimeMillis(); // Record the end time
+
+        // Check if OTP was entered within 3 seconds
+        if (endTime - startTime > 3000) {
+            System.out.println("OTP entry time limit exceeded.");
+            System.exit(1); // Exit the program
+        }
+
+        if (PINManager.checkPIN(enteredOTP)) {
             System.out.println("OTP authentication successful!");
+            System.out.println("Press 1 to change pin or 2 to cancel.");
+            int ch = sc.nextInt();
+
+            if(ch == 1) {
+                String s = sc.next();
+                PINManager.setPIN(s);
+            }
         } else {
             System.out.println("OTP authentication failed!");
         }
     }
 }
-
+// This class defines periods (start and end hour) during which authentication is allowed.
 class AuthenticationPeriod {
     private int startHour;
     private int endHour;
@@ -104,6 +123,7 @@ class AuthenticationPeriod {
         this.startHour = startHour;
         this.endHour = endHour;
     }
+    // Getters for start and end hours.
 
     public int getStartHour() {
         return startHour;

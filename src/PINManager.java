@@ -1,13 +1,19 @@
-public class PINManager {
-    private static final String DEFAULT_PIN = "00000";
-    private String currentPIN = DEFAULT_PIN;
+// CS 460 Team 01
 
-    public boolean checkPIN(String pin) {
+public class PINManager {
+    private static final String DEFAULT_PIN = "000000";
+    private static String currentPIN = DEFAULT_PIN;
+
+    public static boolean checkPIN(String pin) {
         return currentPIN.equals(pin);
     }
 
-    public void setPIN(String pin) {
-        this.currentPIN = pin;
+    public static boolean setPIN(String pin) {
+        if(pin.length() == 6) {
+            currentPIN = pin;
+            return true;
+        }
+        return false;
     }
 
     public boolean isDefaultPIN() {

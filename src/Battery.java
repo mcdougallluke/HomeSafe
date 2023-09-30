@@ -86,7 +86,7 @@ public class Battery {
         return remainingWorkingTime;
     }
 
-    // Nested Main class for testing
+    // Nested static Main class for testing the Battery class functionality
     public static class Main {
         public static void main(String[] args) {
             try {

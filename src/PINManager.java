@@ -1,7 +1,7 @@
 // CS 460 Team 01
 
 public class PINManager {
-    private static final String DEFAULT_PIN = "00000";
+    private static final String DEFAULT_PIN = "000000";
     private String currentPIN = DEFAULT_PIN;
 
     public boolean checkPIN(String pin) {

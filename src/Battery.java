@@ -100,7 +100,7 @@ public class Battery {
     public static class Main {
         public static void main(String[] args) {
             try {
-                // Create an instance of the Battery class
+                // Instantiate the Battery class
                 Battery battery = new Battery();
 
                 // Simulate using the battery for some time
@@ -122,6 +122,7 @@ public class Battery {
                 }
 
             } catch (InterruptedException e) {
+                // Handle interruption exception
                 e.printStackTrace();
             }
         }

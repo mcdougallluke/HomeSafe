@@ -36,16 +36,13 @@ public class SafeGUI extends Application {
         imageView = new ImageView(safeFrontImage);
         buttonPanel = new EyeButtons();
 
-        PINManager pinManager = new PINManager();
         InputController controller = new InputController();
-        controller.setPINManager(pinManager);
         screen = new Screen(controller);
         keyPad = new KeyPad(controller);
 
         safeController = new SafeController(screen, this);
         controller.setSafeController(safeController);
 
-        safeController.setPINManager(pinManager);
         buttonPanel.setSafeController(safeController);
         imageView.setOnMouseClicked(event -> {
             imageView.setImage(safeCloseUpImage);

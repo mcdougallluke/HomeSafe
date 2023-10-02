@@ -94,7 +94,15 @@ public class Screen {
 
     private void timeout() {
         clearKeyEntry();
-        displayMessage("Timed out.");
+        displayMessage("Timed out");
+        PauseTransition revertMessageTransition = new PauseTransition(Duration.seconds(3));
+        revertMessageTransition.setOnFinished(event -> revertMessage());
+        revertMessageTransition.play();
+    }
+
+    public void tempDisplayMessage(String message) {
+        clearKeyEntry();
+        displayMessage(message);
         PauseTransition revertMessageTransition = new PauseTransition(Duration.seconds(3));
         revertMessageTransition.setOnFinished(event -> revertMessage());
         revertMessageTransition.play();
@@ -120,7 +128,6 @@ public class Screen {
 
     public void turnOn() {
         screenComponent.setVisible(true);
-        displayMessage("WELCOME");
     }
 
     public void stopTimeout() {

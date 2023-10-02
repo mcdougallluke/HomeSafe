@@ -9,10 +9,10 @@ public class SafeController {
 
     private SafeState currentState;
     private Screen screen;
-    private PINManager pinManager;
     private SafeGUI safeGUI;
     private List<User> users = new ArrayList<>();
     private User currentUser = null;
+    private boolean lockedOut = false;
     private int incorrectPinCount = 0;
     private static final String MASTER_PIN = "999999";
 
@@ -21,11 +21,6 @@ public class SafeController {
         this.screen = screen;
         this.safeGUI = safeGUI;
         currentState = SafeState.OFF;
-    }
-
-
-    public void setPINManager(PINManager pinManager) {
-        this.pinManager = pinManager;
     }
 
 
@@ -65,6 +60,7 @@ public class SafeController {
     }
 
     private void handleLockedOutState() {
+        lockedOut = true;
         screen.displayMessage("[Locked Out]");
     }
     private boolean handleLockedOutState(String enteredPIN) {
@@ -73,7 +69,7 @@ public class SafeController {
             setState(SafeState.NORMAL);
             return true;
         }
-        screen.displayMessage("Incorrect Master PIN!");
+        screen.tempDisplayMessage("Wrong PIN");
         return false;
     }
 
@@ -117,16 +113,16 @@ public class SafeController {
             setState(SafeState.SETTING_NEW_PIN);
             return true;
         }
-        screen.displayMessage("Wrong PIN");
+        screen.tempDisplayMessage("Wrong PIN");
         return false;
     }
 
     private boolean handleSettingNewPin(String enteredPIN) {
         if (MASTER_PIN.equals(enteredPIN)) {
-            screen.displayMessage("Cannot use Master PIN");
+            screen.tempDisplayMessage("Cannot use Master PIN");
         }
         if (pinExists(enteredPIN)) {
-            screen.displayMessage("PIN already in use");
+            screen.tempDisplayMessage("PIN already in use");
             return false;
         }
         screen.displayMessage("Scan Your Iris");
@@ -148,7 +144,7 @@ public class SafeController {
                 return true;
             }
         }
-        screen.displayMessage("Wrong PIN");
+        screen.tempDisplayMessage("Wrong PIN");
         incorrectPinCount++;
         if (incorrectPinCount >= 3) {
             setState(SafeState.LOCKED_OUT);
@@ -166,7 +162,8 @@ public class SafeController {
             if (currentUser.getIrisName().equals(irisName)) {
                 handleUnlockedState();
             } else {
-                screen.displayMessage("Wrong Iris");
+                screen.tempDisplayMessage("Wrong Iris");
+                incorrectPinCount++;
                 setState(SafeState.NORMAL);
             }
         }
@@ -210,5 +207,7 @@ public class SafeController {
         return this.screen;
     }
 
-
+    public boolean isLockedOut() {
+        return lockedOut;
+    }
 }

@@ -21,10 +21,8 @@ public class SafeGUI extends Application {
     private Image safeOpenImage;
     private ImageView imageView;
     private Button closeButton;
-    private ButtonPanel buttonPanel;
+    private EyeButtons buttonPanel;
     private Battery battery;
-
-
     private SafeController safeController;
 
     @Override
@@ -36,18 +34,15 @@ public class SafeGUI extends Application {
         safeCloseUpImage = new Image(Objects.requireNonNull(getClass().getResource("images/SAFE_FRONT.png")).toExternalForm());
         safeOpenImage = new Image(Objects.requireNonNull(getClass().getResource("images/SAFE_OPEN.png")).toExternalForm());
         imageView = new ImageView(safeFrontImage);
-        buttonPanel = new ButtonPanel();
+        buttonPanel = new EyeButtons();
 
-        PINManager pinManager = new PINManager();
         InputController controller = new InputController();
-        controller.setPINManager(pinManager);
         screen = new Screen(controller);
         keyPad = new KeyPad(controller);
 
         safeController = new SafeController(screen, this);
         controller.setSafeController(safeController);
 
-        safeController.setPINManager(pinManager);
         buttonPanel.setSafeController(safeController);
         imageView.setOnMouseClicked(event -> {
             imageView.setImage(safeCloseUpImage);

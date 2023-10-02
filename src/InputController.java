@@ -5,7 +5,6 @@ public class InputController {
     private boolean isPoweredOn = false;
     private Screen screen;
     private SafeController safeController;
-    private PINManager pinManager;
 
     private static final int MAX_PIN_LENGTH = 6;
 
@@ -15,10 +14,6 @@ public class InputController {
 
     public void setScreen(Screen screen) {
         this.screen = screen;
-    }
-
-    public void setPINManager(PINManager pinManager) {
-        this.pinManager = pinManager;
     }
 
     public void handleKeyInput(String key) {
@@ -50,7 +45,9 @@ public class InputController {
             isPoweredOn = false;
         } else {
             screen.turnOn();
-            if (safeController.usersIsEmpty() == true) {
+            if (safeController.isLockedOut()) {
+                safeController.setState(SafeState.LOCKED_OUT);
+            } else if (safeController.usersIsEmpty()) {
                 safeController.setState(SafeState.INITIAL_PIN_SETUP);
             } else {
                 safeController.setState(SafeState.NORMAL);

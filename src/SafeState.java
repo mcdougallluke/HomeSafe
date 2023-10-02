@@ -10,5 +10,5 @@ public enum SafeState {
     SETTING_IRIS,
     WAITING_FOR_IRIS,
     LOCKED,
-    MASTER_VERIFICATION
+    LOCKED_OUT,
 }

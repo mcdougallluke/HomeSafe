@@ -13,6 +13,7 @@ public class SafeController {
     private SafeGUI safeGUI;
     private List<User> users = new ArrayList<>();
     private User currentUser = null;
+    private int incorrectPinCount = 0;
     private static final String MASTER_PIN = "999999";
 
 
@@ -39,32 +40,41 @@ public class SafeController {
             case CLOSED -> handleCloseSafe();
             case LOCKED -> handleLockedState();
             case SETTING_NEW_PIN -> handleSettingNewPin();
+            case LOCKED_OUT -> handleLockedOutState();
         }
 
     }
 
     private void handleWaitingForIris() {
         screen.displayMessage("Waiting on Iris scan");
-        // Additional setup logic here
     }
     private void handleSettingIris() {
         screen.displayMessage("Scan your Iris");
-        // Additional setup logic here
     }
     
     private void handleInitialPinSetup() {
         screen.displayMessage("Enter Master PIN");
-        // Additional setup logic here
     }
 
     private void handleSettingNewPin() {
         screen.displayMessage("Enter New User PIN");
-        // Additional setup logic here
     }
 
     private void handleNormalState() {
         screen.displayMessage("Enter your PIN");
-        // Normal state logic here
+    }
+
+    private void handleLockedOutState() {
+        screen.displayMessage("[Locked Out]");
+    }
+    private boolean handleLockedOutState(String enteredPIN) {
+        if (MASTER_PIN.equals(enteredPIN)) {
+            incorrectPinCount = 0;
+            setState(SafeState.NORMAL);
+            return true;
+        }
+        screen.displayMessage("Incorrect Master PIN!");
+        return false;
     }
 
     private void handleUnlockedState() {
@@ -96,6 +106,7 @@ public class SafeController {
         return switch (currentState) {
             case INITIAL_PIN_SETUP -> handleInitialPinSetup(enteredPIN);
             case SETTING_NEW_PIN -> handleSettingNewPin(enteredPIN);
+            case LOCKED_OUT -> handleLockedOutState(enteredPIN);
             case NORMAL -> handleNormalState(enteredPIN);
             default -> false;
         };
@@ -138,6 +149,10 @@ public class SafeController {
             }
         }
         screen.displayMessage("Wrong PIN");
+        incorrectPinCount++;
+        if (incorrectPinCount >= 3) {
+            setState(SafeState.LOCKED_OUT);
+        }
         return false;
     }
 

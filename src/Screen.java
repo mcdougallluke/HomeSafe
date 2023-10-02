@@ -18,11 +18,14 @@ public class Screen {
     private final InputController inputController;
     private final StackPane screenComponent;
     private final StringBuilder actualInput;
+    private final PauseTransition timeoutTransition;
 
     public Screen(InputController inputController) {
         this.inputController = inputController;
         this.inputController.setScreen(this);
         this.actualInput = new StringBuilder();
+        timeoutTransition = new PauseTransition(Duration.seconds(3));
+        timeoutTransition.setOnFinished(event -> timeout());
 
         line1 = createTextLine();
         line2 = createTextLine();
@@ -68,6 +71,14 @@ public class Screen {
         } else {
             line2.setText(currentText.substring(0, 20));
         }
+
+        resetTimeout();
+    }
+
+    // reset the timeout timer
+    private void resetTimeout() {
+        timeoutTransition.stop();
+        timeoutTransition.playFromStart();
     }
 
     public String getCurrentKeyEntry() {
@@ -77,6 +88,11 @@ public class Screen {
     public void clearKeyEntry() {
         actualInput.setLength(0);
         line2.setText("");
+    }
+
+    private void timeout() {
+        clearKeyEntry();
+        displayMessage("Timed out.");
     }
 
     public void removeLastKeyEntry() {

@@ -2,7 +2,7 @@
 
 // Handles input from the user via the IRIS scanner and Keypad
 public class InputController {
-    private boolean isPoweredOn = false; // default to off
+    private boolean isPoweredOn = false;
     private Screen screen;
     private SafeController safeController;
     private PINManager pinManager;
@@ -22,8 +22,6 @@ public class InputController {
     public void handleKeyInput(String key) {
         if(isPoweredOn) {
             screen.appendKeyEntry(key);
-        } else {
-            // Optionally display a message that the safe is turned off
         }
     }
     public void handleCancel() {

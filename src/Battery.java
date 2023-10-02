@@ -4,18 +4,28 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Battery {
-    private static final double FULL_CHARGE = 100.0;
+    private static final double FULL_CHARGE = 100;
     private static final int LOW_BATTERY_THRESHOLD = 20;
     private static final double DEPLETION_AMOUNT = 100.0 / 2880; // Deplete 0.0347% per minute
 
     private double chargeLevel; // Battery charge level (0-100)
+    private double auxiliaryChargeLevel;
     private int remainingWorkingTime; // Remaining working time in minutes
 
     public Battery() throws InterruptedException {
         this.chargeLevel = FULL_CHARGE;
         this.remainingWorkingTime = 48 * 60; // 48 hours in minutes
+        this.auxiliaryChargeLevel = FULL_CHARGE * 0.4;
 
         startBatteryDepletion(); // Starting battery depletion
+    }
+
+    public double getAuxiliaryChargeLevel() {
+        return auxiliaryChargeLevel;
+    }
+
+    public void setAuxiliaryChargeLevel(double auxiliaryChargeLevel) {
+        this.auxiliaryChargeLevel = auxiliaryChargeLevel;
     }
 
     private void startBatteryDepletion() {
@@ -36,7 +46,13 @@ public class Battery {
                 }
 
                 if (chargeLevel <= 0) {
-                    System.out.println("Battery depleted. Safe operations are no longer possible.");
+                    if(auxiliaryChargeLevel != 0) {
+                        chargeLevel = auxiliaryChargeLevel;
+                        System.out.println("Running on auxiliary power source. Please charge ASAP.");
+                        auxiliaryChargeLevel = 0;
+                    } else {
+                        System.out.println("Battery depleted. Safe operations are no longer possible.");
+                    }
                     timer.cancel();
                 } else if (chargeLevel <= LOW_BATTERY_THRESHOLD) {
                     System.out.println("Low battery signal: Please recharge the safe.");

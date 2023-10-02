@@ -7,6 +7,8 @@ public class InputController {
     private SafeController safeController;
     private PINManager pinManager;
 
+    private static final int MAX_PIN_LENGTH = 6;
+
     public void setSafeController(SafeController safeController) {
         this.safeController = safeController;
     }
@@ -20,18 +22,22 @@ public class InputController {
     }
 
     public void handleKeyInput(String key) {
-        if(isPoweredOn) {
+        if(isPoweredOn && screen.getCurrentKeyEntry().length() < MAX_PIN_LENGTH) {
             screen.appendKeyEntry(key);
+        }
+    }
+
+    public void handleEnterButton() {
+        String enteredPin = screen.getCurrentKeyEntry();
+        if(enteredPin.length() == MAX_PIN_LENGTH) {
+            safeController.checkPIN(enteredPin);
+            screen.clearKeyEntry();
         }
     }
     public void handleCancel() {
         screen.removeLastKeyEntry();
     }
 
-    public void handleEnterButton() {
-        safeController.checkPIN(screen.getCurrentKeyEntry());
-        screen.clearKeyEntry();
-    }
 
     public void handlePowerButton() {
         if (screen.getScreenComponent().isVisible()) {

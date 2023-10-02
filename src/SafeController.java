@@ -97,14 +97,14 @@ public class SafeController {
 
     public void checkPIN(String enteredPIN) {
         if (currentState == SafeState.INITIAL_PIN_SETUP) {
-            if ("00000".equals(enteredPIN)) {
+            if ("000000".equals(enteredPIN)) {
                 screen.displayMessage("Enter Master PIN");
                 setState(SafeState.SETTING_NEW_PIN);
             } else {
-                screen.displayMessage("Wrong Setup PIN. Try again.");
+                screen.displayMessage("Wrong PIN.");
             }
         } else if (currentState == SafeState.SETTING_NEW_PIN) {
-            if("00000".equals(enteredPIN)){
+            if("000000".equals(enteredPIN)){
                 screen.displayMessage("Cannot use setup pin");
             }
             else if (pinExists(enteredPIN)) {
@@ -117,7 +117,7 @@ public class SafeController {
             }
         }
         else if (currentState == SafeState.NORMAL) {
-            if ("00000".equals(enteredPIN)) {
+            if ("000000".equals(enteredPIN)) {
                 // If user enters setup PIN during NORMAL state, prompt to set up a new account.
                 setState(SafeState.MASTER_VERIFICATION);
                 return; // Exit the method to prevent further checks

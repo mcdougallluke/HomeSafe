@@ -6,16 +6,13 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
 
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class ButtonPanel {
+public class EyeButtons {
 
     private VBox buttonBox;
     private SafeController safeController;
@@ -23,7 +20,7 @@ public class ButtonPanel {
     public void setSafeController(SafeController safeController) {
         this.safeController = safeController;
     }
-    public ButtonPanel() {
+    public EyeButtons() {
         // Create a VBox to stack the buttons vertically
         buttonBox = new VBox(30); // 10 is the spacing between the buttons
         buttonBox.setAlignment(Pos.CENTER_RIGHT);

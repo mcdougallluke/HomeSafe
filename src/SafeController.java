@@ -13,6 +13,7 @@ public class SafeController {
     private SafeGUI safeGUI;
     private List<User> users = new ArrayList<>();
     private User currentUser = null;
+    private static final String MASTER_PIN = "999999";
 
 
     public SafeController(Screen screen, SafeGUI safeGUI) {
@@ -36,15 +37,10 @@ public class SafeController {
             case INITIAL_PIN_SETUP -> handleInitialPinSetup();
             case NORMAL -> handleNormalState();
             case CLOSED -> handleCloseSafe();
-            case ADD_NEW_USER -> handleAddNewUser();
             case LOCKED -> handleLockedState();
-            case MASTER_VERIFICATION -> handleMasterVerification();
+            case SETTING_NEW_PIN -> handleSettingNewPin();
         }
 
-    }
-
-    private void handleMasterVerification() {
-        screen.displayMessage("Enter Master PIN");
     }
 
     private void handleWaitingForIris() {
@@ -57,18 +53,18 @@ public class SafeController {
     }
     
     private void handleInitialPinSetup() {
-        screen.displayMessage("Enter Set up PIN");
+        screen.displayMessage("Enter Master PIN");
+        // Additional setup logic here
+    }
+
+    private void handleSettingNewPin() {
+        screen.displayMessage("Enter New User PIN");
         // Additional setup logic here
     }
 
     private void handleNormalState() {
-        screen.displayMessage("Enter PIN");
+        screen.displayMessage("Enter your PIN");
         // Normal state logic here
-    }
-
-    private void handleAddNewUser() {
-        screen.displayMessage("Add User");
-        // Logic to add new user here
     }
 
     private void handleUnlockedState() {
@@ -95,71 +91,56 @@ public class SafeController {
         users.add(user);
     }
 
+
     public boolean checkPIN(String enteredPIN) {
-        if (currentState == SafeState.INITIAL_PIN_SETUP) {
-            if ("000000".equals(enteredPIN)) {
-                screen.displayMessage("Enter Master PIN");
-                setState(SafeState.SETTING_NEW_PIN);
-            } else {
-                screen.displayMessage("Wrong PIN.");
-            }
-        } else if (currentState == SafeState.SETTING_NEW_PIN) {
-            if("000000".equals(enteredPIN)){
-                screen.displayMessage("Cannot use setup pin");
-            }
-            else if (pinExists(enteredPIN)) {
-                screen.displayMessage("PIN already in use. Choose a different PIN.");
-            }
-            else {
-                screen.displayMessage("Scan Your Iris");
-                currentUser = new User(enteredPIN, null); // Save the entered PIN temporarily
-                setState(SafeState.SETTING_IRIS); // New state to wait for the iris scan
-            }
+        return switch (currentState) {
+            case INITIAL_PIN_SETUP -> handleInitialPinSetup(enteredPIN);
+            case SETTING_NEW_PIN -> handleSettingNewPin(enteredPIN);
+            case NORMAL -> handleNormalState(enteredPIN);
+            default -> false;
+        };
+    }
+
+    private boolean handleInitialPinSetup(String enteredPIN) {
+        if (MASTER_PIN.equals(enteredPIN)) {
+            setState(SafeState.SETTING_NEW_PIN);
+            return true;
         }
-        else if (currentState == SafeState.NORMAL) {
-            if ("000000".equals(enteredPIN)) {
-                // If user enters setup PIN during NORMAL state, prompt to set up a new account.
-                setState(SafeState.MASTER_VERIFICATION);
-                return true;
-            }
-
-            boolean pinMatchFound = false;
-
-            for (User user : users) {
-                if (user.getPin() != null && user.getPin().equals(enteredPIN)) {
-                    currentUser = user;
-                    screen.displayMessage("Scan Your Iris");
-                    setState(SafeState.WAITING_FOR_IRIS);
-                    return true; // Return true if a matching PIN is found
-                }
-            }
-
-            if (!pinMatchFound) {
-                screen.displayMessage("Wrong PIN");
-            }
-
-        }
-
-        else if (currentState == SafeState.MASTER_VERIFICATION) {
-
-            User masterUser = users.get(0);  // Assuming 'users' is a list of all users.
-
-            //pinInput.equals(masterUser.getPin()) && irisInput.equals(masterUser.getIris())
-
-            if (enteredPIN.equals(masterUser.getPin())) {
-                screen.displayMessage("Enter New PIN");
-                setState(SafeState.SETTING_NEW_PIN);
-            }
-
-            else {
-                // Notify that the verification failed.
-                screen.displayMessage("Master user verification failed!");
-                setState(SafeState.NORMAL);
-            }
-
-        }
+        screen.displayMessage("Wrong PIN");
         return false;
     }
+
+    private boolean handleSettingNewPin(String enteredPIN) {
+        if (MASTER_PIN.equals(enteredPIN)) {
+            screen.displayMessage("Cannot use Master PIN");
+        }
+        if (pinExists(enteredPIN)) {
+            screen.displayMessage("PIN already in use");
+            return false;
+        }
+        screen.displayMessage("Scan Your Iris");
+        currentUser = new User(enteredPIN, null);
+        setState(SafeState.SETTING_IRIS);
+        return true;
+    }
+
+    private boolean handleNormalState(String enteredPIN) {
+        if (MASTER_PIN.equals(enteredPIN)) {
+            setState(SafeState.SETTING_NEW_PIN);
+            return true;
+        }
+        for (User user : users) {
+            if (enteredPIN.equals(user.getPin())) {
+                currentUser = user;
+                screen.displayMessage("Scan Your Iris");
+                setState(SafeState.WAITING_FOR_IRIS);
+                return true;
+            }
+        }
+        screen.displayMessage("Wrong PIN");
+        return false;
+    }
+
 
     public void resetUser(){
         currentUser = null;

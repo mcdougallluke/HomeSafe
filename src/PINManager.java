@@ -1,18 +1,35 @@
 // CS 460 Team 01
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PINManager {
     private static final String DEFAULT_PIN = "000000";
-    private String currentPIN = DEFAULT_PIN;
+    private List<User> users = new ArrayList<>();
 
     public boolean checkPIN(String pin) {
-        return currentPIN.equals(pin);
+        return getUserByPIN(pin) != null;
     }
 
-    public void setPIN(String pin) {
-        this.currentPIN = pin;
+    public User getUserByPIN(String pin) {
+        for (User user : users) {
+            if (pin.equals(user.getPin())) {
+                return user;
+            }
+        }
+        return null;
     }
 
-    public boolean isDefaultPIN() {
-        return currentPIN.equals(DEFAULT_PIN);
+    public void addUser(User user) {
+        users.add(user);
+    }
+
+    public boolean pinExists(String pin) {
+        return getUserByPIN(pin) != null;
+    }
+
+    public boolean isDefaultPIN(String pin) {
+        return DEFAULT_PIN.equals(pin);
     }
 }
+

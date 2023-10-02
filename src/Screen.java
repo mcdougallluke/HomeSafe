@@ -108,6 +108,10 @@ public class Screen {
         displayMessage("WELCOME");
     }
 
+    public void stopTimeout() {
+        timeoutTransition.stop();
+    }
+
     public void turnOff() {
         screenComponent.setVisible(false);
     }

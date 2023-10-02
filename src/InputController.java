@@ -28,9 +28,13 @@ public class InputController {
     }
 
     public void handleEnterButton() {
+        screen.stopTimeout();
         String enteredPin = screen.getCurrentKeyEntry();
         if(enteredPin.length() == MAX_PIN_LENGTH) {
-            safeController.checkPIN(enteredPin);
+            boolean isPinCorrect = safeController.checkPIN(enteredPin);
+            if(isPinCorrect) {
+                screen.stopTimeout();
+            }
             screen.clearKeyEntry();
         }
     }

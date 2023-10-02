@@ -95,7 +95,7 @@ public class SafeController {
         users.add(user);
     }
 
-    public void checkPIN(String enteredPIN) {
+    public boolean checkPIN(String enteredPIN) {
         if (currentState == SafeState.INITIAL_PIN_SETUP) {
             if ("000000".equals(enteredPIN)) {
                 screen.displayMessage("Enter Master PIN");
@@ -120,7 +120,7 @@ public class SafeController {
             if ("000000".equals(enteredPIN)) {
                 // If user enters setup PIN during NORMAL state, prompt to set up a new account.
                 setState(SafeState.MASTER_VERIFICATION);
-                return; // Exit the method to prevent further checks
+                return true;
             }
 
             boolean pinMatchFound = false;
@@ -128,16 +128,16 @@ public class SafeController {
             for (User user : users) {
                 if (user.getPin() != null && user.getPin().equals(enteredPIN)) {
                     currentUser = user;
-                    pinMatchFound = true;
                     screen.displayMessage("Scan Your Iris");
                     setState(SafeState.WAITING_FOR_IRIS);
-                    break;  // Exit the loop once a match is found
+                    return true; // Return true if a matching PIN is found
                 }
             }
 
             if (!pinMatchFound) {
                 screen.displayMessage("Wrong PIN");
             }
+
         }
 
         else if (currentState == SafeState.MASTER_VERIFICATION) {
@@ -158,7 +158,7 @@ public class SafeController {
             }
 
         }
-
+        return false;
     }
 
     public void resetUser(){

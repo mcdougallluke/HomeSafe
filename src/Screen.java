@@ -19,6 +19,7 @@ public class Screen {
     private final StackPane screenComponent;
     private final StringBuilder actualInput;
     private final PauseTransition timeoutTransition;
+    private String previousMessage = "";
 
     public Screen(InputController inputController) {
         this.inputController = inputController;
@@ -53,6 +54,7 @@ public class Screen {
     }
 
     public void displayMessage(String message) {
+        previousMessage = line1.getText() + line2.getText();
         if (message.length() <= 20) {
             line1.setText(message);
         } else {
@@ -93,6 +95,19 @@ public class Screen {
     private void timeout() {
         clearKeyEntry();
         displayMessage("Timed out.");
+        PauseTransition revertMessageTransition = new PauseTransition(Duration.seconds(3));
+        revertMessageTransition.setOnFinished(event -> revertMessage());
+        revertMessageTransition.play();
+    }
+
+    private void revertMessage() {
+        if (previousMessage.length() <= 20) {
+            line1.setText(previousMessage);
+            line2.setText("");
+        } else {
+            line1.setText(previousMessage.substring(0, 20));
+            line2.setText(previousMessage.substring(20));
+        }
     }
 
     public void removeLastKeyEntry() {

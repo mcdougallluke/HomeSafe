@@ -66,6 +66,7 @@ public class SafeController {
     private boolean handleLockedOutState(String enteredPIN) {
         if (MASTER_PIN.equals(enteredPIN)) {
             incorrectPinCount = 0;
+            lockedOut = false;
             setState(SafeState.NORMAL);
             return true;
         }

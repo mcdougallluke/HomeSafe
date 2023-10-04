@@ -3,6 +3,8 @@
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
 import javafx.scene.effect.DropShadow;
@@ -10,9 +12,13 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.util.Objects;
+
 public class KeyPad extends GridPane {
 
-    private final AudioClip buttonSound = new AudioClip(getClass().getResource("audio/KeyPadBeep.mp3").toString());
+//    private final Media media = new Media(Objects.requireNonNull(getClass().getResource("audio/KeyPadBeep.mp3")).toString());
+//    private final MediaPlayer buttonSound = new MediaPlayer(media);
+    private MediaPlayer mediaPlayer;
     private double currentVolume = 0.0;
 
     private final InputController inputController;
@@ -47,49 +53,55 @@ public class KeyPad extends GridPane {
     }
 
     private void addControlButtons() {
+        // volume up button
         Button volumeUpButton = createButton("^", "volume up");
         volumeUpButton.setOnAction(event -> {
             adjustVolume(0.1);
-            buttonSound.play();
+            playAudio("audio/KeyPadBeep.mp3");
         });
-
+        // zero Button
         Button zeroButton = createButton("0", "0");
 
-        Button volumeDownButton = createButton("v", "volume down");
-        volumeDownButton.setOnAction(event -> {
-            adjustVolume(-0.1);
-            buttonSound.play();
+        // Volume down Button
+//        Button volumeDownButton = createButton("v", "volume down");
+//        volumeDownButton.setOnAction(event -> {
+//            adjustVolume(-0.1);
+//            playAudio("audio/KeyPadBeep.mp3");
+//        });
+        Button forgotPasswordButton = createButton("?","?");
+        forgotPasswordButton.setOnAction(event -> {
+            inputController.handleForgotButton();
         });
-
+        // adding the functionalities
         this.add(volumeUpButton, 0, 3);
         this.add(zeroButton, 1, 3);
-        this.add(volumeDownButton, 2, 3);
-
+        this.add(forgotPasswordButton,2,3);
+//        this.add(volumeDownButton, 2, 3);
+        // cancel Button
         Button cancelButton = createButton("X", "cancel");
         cancelButton.setTextFill(Color.RED);
         cancelButton.setOnAction(event -> {
             inputController.handleCancel();
             adjustVolume(0);
-            buttonSound.play();
+            playAudio("audio/KeyPadBeep.mp3");
         });
-
+        // power Button
         Button powerButton = createButton("*", "power");
         powerButton.setOnAction(event -> {
             inputController.handlePowerButton();
             adjustVolume(0);
-            buttonSound.play();
+            playAudio("audio/KeyPadBeep.mp3");
         });
-
+        // enter Button
         Button enterButton = createButton("O", "enter");
         enterButton.setTextFill(Color.GREEN);
         enterButton.setOnAction(event -> {
             inputController.handleEnterButton();
             adjustVolume(0);
-            buttonSound.play();
+            playAudio("audio/KeyPadBeep.mp3");
         });
-
         enterButton.setTextFill(Color.GREEN);
-
+        // add the functionalities
         this.add(cancelButton, 0, 4);
         this.add(powerButton, 1, 4);
         this.add(enterButton, 2, 4);
@@ -116,7 +128,7 @@ public class KeyPad extends GridPane {
         btn.setOnAction(event -> {
             inputController.handleKeyInput(printText);
             adjustVolume(0);
-            buttonSound.play();
+            playAudio("audio/KeyPadBeep.mp3");
         });
 
         return btn;
@@ -156,7 +168,22 @@ public class KeyPad extends GridPane {
         currentVolume += delta;
         if (currentVolume > 1.0) currentVolume = 1.0;
         else if (currentVolume < 0.0) currentVolume = 0.0;
-        buttonSound.setVolume(currentVolume);
+        if (mediaPlayer != null) {
+            mediaPlayer.setVolume(currentVolume);
+        }
+//        buttonSound.setVolume(currentVolume);
+    }
+    private void playAudio(String audioFilePath) {
+        try {
+            Media media = new Media(getClass().getResource(audioFilePath).toURI().toString());
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

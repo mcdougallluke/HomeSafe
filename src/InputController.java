@@ -21,7 +21,11 @@ public class InputController {
             screen.appendKeyEntry(key);
         }
     }
-
+    public void handleForgotButton(){
+        screen.clearKeyEntry();
+        screen.stopTimeout();
+        safeController.handleForgotPassword();
+    }
     public void handleEnterButton() {
         screen.stopTimeout();
         String enteredPin = screen.getCurrentKeyEntry();

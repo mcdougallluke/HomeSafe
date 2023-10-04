@@ -11,4 +11,5 @@ public enum SafeState {
     WAITING_FOR_IRIS,
     LOCKED,
     LOCKED_OUT,
+    FORGOT_PASSWORD,
 }

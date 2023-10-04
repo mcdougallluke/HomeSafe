@@ -23,4 +23,7 @@ public class User {
     public void setIrisName(String name) {
         this.irisName = name;
     }
+    public void resetIrisName(){
+        this.irisName = null;
+    }
 }

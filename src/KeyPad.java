@@ -53,31 +53,24 @@ public class KeyPad extends GridPane {
     }
 
     private void addControlButtons() {
-        // volume up button
         Button volumeUpButton = createButton("^", "volume up");
         volumeUpButton.setOnAction(event -> {
             adjustVolume(0.1);
             playAudio("audio/KeyPadBeep.mp3");
         });
-        // zero Button
+
         Button zeroButton = createButton("0", "0");
 
-        // Volume down Button
-//        Button volumeDownButton = createButton("v", "volume down");
-//        volumeDownButton.setOnAction(event -> {
-//            adjustVolume(-0.1);
-//            playAudio("audio/KeyPadBeep.mp3");
-//        });
-        Button forgotPasswordButton = createButton("?","?");
-        forgotPasswordButton.setOnAction(event -> {
-            inputController.handleForgotButton();
+        Button volumeDownButton = createButton("v", "volume down");
+        volumeDownButton.setOnAction(event -> {
+            adjustVolume(-0.1);
+            playAudio("audio/KeyPadBeep.mp3");
         });
-        // adding the functionalities
+
         this.add(volumeUpButton, 0, 3);
         this.add(zeroButton, 1, 3);
-        this.add(forgotPasswordButton,2,3);
-//        this.add(volumeDownButton, 2, 3);
-        // cancel Button
+        this.add(volumeDownButton, 2, 3);
+
         Button cancelButton = createButton("X", "cancel");
         cancelButton.setTextFill(Color.RED);
         cancelButton.setOnAction(event -> {
@@ -85,14 +78,14 @@ public class KeyPad extends GridPane {
             adjustVolume(0);
             playAudio("audio/KeyPadBeep.mp3");
         });
-        // power Button
+
         Button powerButton = createButton("*", "power");
         powerButton.setOnAction(event -> {
             inputController.handlePowerButton();
             adjustVolume(0);
             playAudio("audio/KeyPadBeep.mp3");
         });
-        // enter Button
+
         Button enterButton = createButton("O", "enter");
         enterButton.setTextFill(Color.GREEN);
         enterButton.setOnAction(event -> {
@@ -100,8 +93,9 @@ public class KeyPad extends GridPane {
             adjustVolume(0);
             playAudio("audio/KeyPadBeep.mp3");
         });
+
         enterButton.setTextFill(Color.GREEN);
-        // add the functionalities
+
         this.add(cancelButton, 0, 4);
         this.add(powerButton, 1, 4);
         this.add(enterButton, 2, 4);

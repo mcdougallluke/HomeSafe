@@ -18,12 +18,9 @@ public class SafeController {
     private Battery battery;
     private EyeButtons eyeButtons;
 
-    private String forgottenPIN = null;
-
-
     public void initializeBatteryListener() {
         battery.addBatteryListener(() -> {
-            eyeButtons.showGIFWindow("ALERT","images/low_battery.gif");
+            screen.forceDisplayMessage("Low Battery!"); // This line displays the temporary message.
         });
     }
 
@@ -52,7 +49,6 @@ public class SafeController {
             case INITIAL_PIN_SETUP -> handleInitialPinSetup();
             case NORMAL -> handleNormalState();
             case CLOSED -> handleCloseSafe();
-//            case FORGOT_PASSWORD -> handleForgotPassword();
             case LOCKED -> handleLockedState();
             case SETTING_NEW_PIN -> handleSettingNewPin();
             case LOCKED_OUT -> handleLockedOutState();
@@ -66,7 +62,7 @@ public class SafeController {
     private void handleSettingIris() {
         screen.displayMessage("Scan your Iris");
     }
-
+    
     private void handleInitialPinSetup() {
         screen.displayMessage("Enter Master PIN");
     }
@@ -81,7 +77,7 @@ public class SafeController {
 
     private void handleLockedOutState() {
         lockedOut = true;
-        screen.displayMessage("Enter the Master PIN");
+        screen.displayMessage("[Locked Out]");
     }
     private boolean handleLockedOutState(String enteredPIN) {
         if (MASTER_PIN.equals(enteredPIN)) {
@@ -127,13 +123,17 @@ public class SafeController {
             default -> false;
         };
     }
-    public void handleForgotPassword() {
-        if (forgottenPIN != null) {
-            screen.displayMessage("Enter New PIN for User");
-        } else {
-            forgottenPIN = currentUser.getPin();
-            screen.tempDisplayMessage("Forgot Password");
-            setState(SafeState.INITIAL_PIN_SETUP);
+    public void forgotPassword() {
+        if (currentUser != null) {
+            // Remove the currentUser from the users list
+            users.remove(currentUser);
+
+            // Clear the currentUser's PIN and iris scan
+            currentUser.setPin(null);
+            currentUser.setIrisName(null);
+
+            // Set currentUser to null
+            currentUser = null;
         }
     }
     private boolean handleInitialPinSetup(String enteredPIN) {
@@ -148,36 +148,23 @@ public class SafeController {
     private boolean handleSettingNewPin(String enteredPIN) {
         if (MASTER_PIN.equals(enteredPIN)) {
             screen.tempDisplayMessage("Cannot use Master PIN");
-            return false;
         }
-
-        if (forgottenPIN != null) {  // If a PIN was forgotten
-            for (User user : users) {
-                if (user.getPin().equals(forgottenPIN)) {  // Find the user with the forgotten PIN
-                    user.setPin(enteredPIN);  // Update their PIN
-                    user.resetIrisName();  // Reset their iris scan
-                    screen.displayMessage("PIN Updated. Set up Iris scan again.");
-                    currentUser = user;  // Set the current user for the iris scan
-                    setState(SafeState.SETTING_IRIS);
-                    forgottenPIN = null;  // Reset the forgotten PIN tracker
-                    return true;
-                }
-            }
-        }
-
         if (pinExists(enteredPIN)) {
             screen.tempDisplayMessage("PIN already in use");
             return false;
         }
-
         screen.displayMessage("Scan Your Iris");
         currentUser = new User(enteredPIN, null);
         setState(SafeState.SETTING_IRIS);
         return true;
     }
 
-
     private boolean handleNormalState(String enteredPIN) {
+        if (MASTER_PIN.equals(enteredPIN)) {
+            forgotPassword();
+            setState(SafeState.SETTING_NEW_PIN);
+            return true;
+        }
         for (User user : users) {
             if (enteredPIN.equals(user.getPin())) {
                 currentUser = user;
@@ -189,8 +176,7 @@ public class SafeController {
         screen.tempDisplayMessage("Wrong PIN");
         incorrectPinCount++;
         if (incorrectPinCount >= 3) {
-            forgottenPIN = enteredPIN;  // Store the forgotten PIN
-            setState(SafeState.FORGOT_PASSWORD);
+            setState(SafeState.LOCKED_OUT);
         }
         return false;
     }

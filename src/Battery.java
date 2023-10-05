@@ -10,7 +10,7 @@ import java.util.TimerTask;
 public class Battery {
     private static final double FULL_CHARGE = 100.0;
     private static final int LOW_BATTERY_THRESHOLD = 20;
-    private static final double DEPLETION_AMOUNT = 100.0/2880; // Deplete 0.0347% per minute
+    private static final double DEPLETION_AMOUNT =100.0/2880; // Deplete 0.0347% per minute
 
     private double chargeLevel; // Battery charge level (0-100)
     private int remainingWorkingTime; // Remaining working time in minutes
@@ -32,14 +32,14 @@ public class Battery {
 
     public Battery() throws InterruptedException {
         this.chargeLevel = FULL_CHARGE;
-        this.remainingWorkingTime = 48 * 60; // 48 hours in minutes
+        this.remainingWorkingTime =  48 * 60; // 48 hours in minutes
 
         startBatteryDepletion(); // Starting battery depletion
     }
 
     private void startBatteryDepletion() {
         Timer timer = new Timer();
-        int depletionInterval = 3000; // Deplete every 1 minute// 60*100
+        int depletionInterval = 60*100; // Deplete every 1 minute
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {

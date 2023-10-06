@@ -26,7 +26,7 @@ public class SafeGUI extends Application {
     private SafeController safeController;
 
     @Override
-    public void start(Stage primaryStage) throws InterruptedException {
+    public void start(Stage primaryStage) {
         AnchorPane root = new AnchorPane();
         primaryStage.setResizable(false);
 
@@ -80,14 +80,14 @@ public class SafeGUI extends Application {
         primaryStage.setTitle("Digital Safe");
         primaryStage.setScene(scene);
         primaryStage.show();
-        battery = new Battery();
-        safeController.setBattery(battery);
-        safeController.setEyeButtons(buttonPanel);
-        safeController.initializeBatteryListener();
+
+        primaryStage.setOnCloseRequest(event -> {
+            safeController.getBattery().stop();
+        });
+
     }
 
     public void openSafe() {
-        if (battery.getChargeLevel() > 20) {
             imageView.setImage(safeOpenImage);
             screen.getScreenComponent().setVisible(false);
             keyPad.setVisible(false);
@@ -107,9 +107,6 @@ public class SafeGUI extends Application {
             } else {
                 closeButton.setVisible(true);
             }
-        } else {
-            System.out.println("Cannot open the safe. Low battery!");
-        }
     }
 
     public void closeSafe() {

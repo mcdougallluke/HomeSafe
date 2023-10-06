@@ -8,41 +8,39 @@ import javafx.util.Duration;
 public class SafeController {
 
     private SafeState currentState;
-    private Screen screen;
-    private SafeGUI safeGUI;
+    private final Screen screen;
+    private final SafeGUI safeGUI;
+    private final Battery battery;
     private List<User> users = new ArrayList<>();
     private User currentUser = null;
     private boolean lockedOut = false;
     private int incorrectPinCount = 0;
     private static final String MASTER_PIN = "999999";
-    private Battery battery;
-    private EyeButtons eyeButtons;
 
-    public void initializeBatteryListener() {
-        battery.addBatteryListener(() -> {
-            screen.forceDisplayMessage("Low Battery!"); // This line displays the temporary message.
-        });
-    }
-
-    void setBattery(Battery battery){
-        this.battery = battery;
-    }
-
-    public void setEyeButtons(EyeButtons eyeButtons) {
-        this.eyeButtons = eyeButtons;
-    }
 
 
     public SafeController(Screen screen, SafeGUI safeGUI) {
         this.screen = screen;
         this.safeGUI = safeGUI;
         currentState = SafeState.OFF;
+        try {
+            battery = new Battery();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
     public void setState(SafeState newState) {
         currentState = newState;
         System.out.println("Current state: " + currentState);
+
+        if (currentState == SafeState.OFF) {
+            battery.stop();
+        } else {
+            battery.start();
+        }
+
         switch (currentState) {
             case WAITING_FOR_IRIS -> handleWaitingForIris();
             case SETTING_IRIS -> handleSettingIris();
@@ -65,6 +63,7 @@ public class SafeController {
 
     private void handleInitialPinSetup() {
         screen.displayMessage("Enter Master PIN");
+        checkBatteryLevel();
     }
 
     private void handleSettingNewPin() {
@@ -73,6 +72,7 @@ public class SafeController {
 
     private void handleNormalState() {
         screen.displayMessage("Enter your PIN");
+        checkBatteryLevel();
     }
 
     private void handleLockedOutState() {
@@ -225,5 +225,18 @@ public class SafeController {
 
     public boolean isLockedOut() {
         return lockedOut;
+    }
+
+    private void checkBatteryLevel() {
+        if (battery.isLow()) {
+            screen.tempDisplayMessage("LOW BATTERY [" + String.format("%.1f", battery.getChargeLevel()) + "%]");
+            System.out.println("display low battery msg");
+        }
+
+    }
+
+
+    public Battery getBattery() {
+        return battery;
     }
 }

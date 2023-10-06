@@ -4,7 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Battery {
-    private static final double FULL_CHARGE = 22.0;
+    private static final double FULL_CHARGE = 100.0;
     private static final int LOW_BATTERY_THRESHOLD = 20;
     private static final double DEPLETION_AMOUNT = 0.5;
 

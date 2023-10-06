@@ -8,14 +8,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Battery {
-    private static final double FULL_CHARGE = 100.0;
+    private static final double FULL_CHARGE = 19.0;
     private static final int LOW_BATTERY_THRESHOLD = 20;
-    private static final double DEPLETION_AMOUNT = 100.0/2880; // Deplete 0.0347% per minute
+    private static final double DEPLETION_AMOUNT = 100.0/2880;
 
-    private double chargeLevel; // Battery charge level (0-100)
-    private int remainingWorkingTime; // Remaining working time in minutes
+    private double chargeLevel;
+    private int remainingWorkingTime;
 
-    private BatteryListener listener;  // the callback reference
+    private BatteryListener listener;
     private final Label batteryLabel = new Label();
 
     private ArrayList<BatteryListener> listeners = new ArrayList<>();

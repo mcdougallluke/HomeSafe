@@ -124,19 +124,6 @@ public class SafeController {
             default -> false;
         };
     }
-    public void forgotPassword() {
-        if (currentUser != null) {
-            // Remove the currentUser from the users list
-            users.remove(currentUser);
-
-            // Clear the currentUser's PIN and iris scan
-            currentUser.setPin(null);
-            currentUser.setIrisName(null);
-
-            // Set currentUser to null
-            currentUser = null;
-        }
-    }
     private boolean handleInitialPinSetup(String enteredPIN) {
         if (MASTER_PIN.equals(enteredPIN)) {
             setState(SafeState.SETTING_NEW_PIN);
@@ -162,7 +149,6 @@ public class SafeController {
 
     private boolean handleNormalState(String enteredPIN) {
         if (MASTER_PIN.equals(enteredPIN)) {
-            forgotPassword();
             setState(SafeState.SETTING_NEW_PIN);
             return true;
         }

@@ -26,7 +26,7 @@ public class SafeGUI extends Application {
     private SafeController safeController;
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws InterruptedException {
         AnchorPane root = new AnchorPane();
         primaryStage.setResizable(false);
 
@@ -80,27 +80,10 @@ public class SafeGUI extends Application {
         primaryStage.setTitle("Digital Safe");
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        try {
-            battery = new Battery();
-            Timer timer = new Timer();
-            safeController.setBattery(battery);
-            safeController.setEyeButtons(buttonPanel);
-            safeController.initializeBatteryListener();
-            int batteryCheckInterval = 60 * 1000;
-            timer.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    if (battery.getChargeLevel()<=20) {
-                        System.out.println("The Low battery signal: Please recharge the safe.");
-                    }
-                }
-            }, batteryCheckInterval, batteryCheckInterval);
-
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        battery = new Battery();
+        safeController.setBattery(battery);
+        safeController.setEyeButtons(buttonPanel);
+        safeController.initializeBatteryListener();
     }
 
     public void openSafe() {

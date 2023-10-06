@@ -12,8 +12,6 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.util.Objects;
-
 public class EyeButtons {
 
     private VBox buttonBox;
@@ -42,7 +40,7 @@ public class EyeButtons {
             // Attach an event to show the GIF on a new window
             int finalI = i;
             btn.setOnAction(event -> {
-                showGIFWindow("Scanning", "images/eye.gif");
+                showGIFWindow();
                 if(safeController != null) {
                     if (safeController.irisScanExists(names[finalI]) && safeController.getCurrentState() == SafeState.SETTING_IRIS) {
                         safeController.getScreen().displayMessage("Choose another iris");
@@ -64,17 +62,18 @@ public class EyeButtons {
             buttonBox.getChildren().add(btn);
         }
     }
+
     public void setButtonBoxVisible(boolean visible) {
         buttonBox.setVisible(visible);
     }
 
-    void showGIFWindow(String title, String address) {
+    private void showGIFWindow() {
         // Create a new stage (window)
         Stage gifStage = new Stage();
-        gifStage.setTitle(title+"");
+        gifStage.setTitle("GIF Display");
 
         // Load the GIF
-        Image gifImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(address+"")));
+        Image gifImage = new Image(getClass().getResourceAsStream("images/eye.gif"));
         ImageView gifView = new ImageView(gifImage);
 
         // Wrap the ImageView in a StackPane

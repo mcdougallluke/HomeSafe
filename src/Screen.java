@@ -63,6 +63,24 @@ public class Screen {
         }
     }
 
+    public void forceDisplayMessage(String message) {
+        // Stop any active PauseTransitions or other timers to prevent automatic reversion
+        timeoutTransition.stop();
+//        line1.setFill(Color.RED);
+//        line2.setFill(Color.RED);
+
+        // Display the message directly
+        if (message.length() <= 20) {
+            line1.setText(message);
+            line2.setText("");
+        } else {
+            line1.setText(message.substring(0, 20));
+            line2.setText(message.substring(20));
+        }
+//        line1.setFill(Color.WHITE);
+//        line2.setFill(Color.WHITE);
+    }
+
     public void appendKeyEntry(String key) {
         actualInput.append(key);
 

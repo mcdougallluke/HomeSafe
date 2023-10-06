@@ -33,14 +33,11 @@ public class SafeController {
 
     public void setState(SafeState newState) {
         currentState = newState;
-        System.out.println("Current state: " + currentState);
-
         if (currentState == SafeState.OFF) {
             battery.stop();
         } else {
             battery.start();
         }
-
         switch (currentState) {
             case WAITING_FOR_IRIS -> handleWaitingForIris();
             case SETTING_IRIS -> handleSettingIris();
@@ -230,13 +227,7 @@ public class SafeController {
     private void checkBatteryLevel() {
         if (battery.isLow()) {
             screen.tempDisplayMessage("LOW BATTERY [" + String.format("%.1f", battery.getChargeLevel()) + "%]");
-            System.out.println("display low battery msg");
         }
 
-    }
-
-
-    public Battery getBattery() {
-        return battery;
     }
 }

@@ -82,7 +82,7 @@ public class SafeGUI extends Application {
         primaryStage.show();
 
         primaryStage.setOnCloseRequest(event -> {
-            safeController.getBattery().stop();
+            System.exit(0);
         });
 
     }

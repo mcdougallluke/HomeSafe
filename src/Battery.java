@@ -11,7 +11,7 @@ public class Battery {
     private double chargeLevel;
     private Timer timer;
 
-    public Battery() throws InterruptedException {
+    public Battery() {
         this.chargeLevel = FULL_CHARGE;
         this.timer = new Timer();
     }

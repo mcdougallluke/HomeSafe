@@ -23,11 +23,7 @@ public class SafeController {
         this.screen = screen;
         this.safeGUI = safeGUI;
         currentState = SafeState.OFF;
-        try {
-            battery = new Battery();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        battery = new Battery();
     }
 
 

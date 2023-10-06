@@ -5,7 +5,6 @@ public enum SafeState {
     INITIAL_PIN_SETUP,
     SETTING_NEW_PIN,
     NORMAL,
-    ADD_NEW_USER,
     CLOSED,
     SETTING_IRIS,
     WAITING_FOR_IRIS,

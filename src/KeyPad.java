@@ -13,7 +13,7 @@ import javafx.scene.image.ImageView;
 public class KeyPad extends GridPane {
 
     private final AudioClip buttonSound = new AudioClip(getClass().getResource("audio/KeyPadBeep.mp3").toString());
-    private double currentVolume = 0.0;
+    private double currentVolume = 0.1;
 
     private final InputController inputController;
 

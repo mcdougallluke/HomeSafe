@@ -8,8 +8,9 @@ import javafx.util.Duration;
 public class SafeController {
 
     private SafeState currentState;
-    private Screen screen;
-    private SafeGUI safeGUI;
+    private final Screen screen;
+    private final SafeGUI safeGUI;
+    private final Battery battery;
     private List<User> users = new ArrayList<>();
     private User currentUser = null;
     private boolean lockedOut = false;
@@ -17,16 +18,22 @@ public class SafeController {
     private static final String MASTER_PIN = "999999";
 
 
+
     public SafeController(Screen screen, SafeGUI safeGUI) {
         this.screen = screen;
         this.safeGUI = safeGUI;
         currentState = SafeState.OFF;
+        battery = new Battery();
     }
 
 
     public void setState(SafeState newState) {
         currentState = newState;
-        System.out.println("Current state: " + currentState);
+        if (currentState == SafeState.OFF) {
+            battery.stop();
+        } else {
+            battery.start();
+        }
         switch (currentState) {
             case WAITING_FOR_IRIS -> handleWaitingForIris();
             case SETTING_IRIS -> handleSettingIris();
@@ -46,9 +53,10 @@ public class SafeController {
     private void handleSettingIris() {
         screen.displayMessage("Scan your Iris");
     }
-    
+
     private void handleInitialPinSetup() {
         screen.displayMessage("Enter Master PIN");
+        checkBatteryLevel();
     }
 
     private void handleSettingNewPin() {
@@ -57,6 +65,7 @@ public class SafeController {
 
     private void handleNormalState() {
         screen.displayMessage("Enter your PIN");
+        checkBatteryLevel();
     }
 
     private void handleLockedOutState() {
@@ -66,6 +75,7 @@ public class SafeController {
     private boolean handleLockedOutState(String enteredPIN) {
         if (MASTER_PIN.equals(enteredPIN)) {
             incorrectPinCount = 0;
+            lockedOut = false;
             setState(SafeState.NORMAL);
             return true;
         }
@@ -107,7 +117,6 @@ public class SafeController {
             default -> false;
         };
     }
-
     private boolean handleInitialPinSetup(String enteredPIN) {
         if (MASTER_PIN.equals(enteredPIN)) {
             setState(SafeState.SETTING_NEW_PIN);
@@ -209,5 +218,12 @@ public class SafeController {
 
     public boolean isLockedOut() {
         return lockedOut;
+    }
+
+    private void checkBatteryLevel() {
+        if (battery.isLow()) {
+            screen.tempDisplayMessage("LOW BATTERY [" + String.format("%.1f", battery.getChargeLevel()) + "%]");
+        }
+
     }
 }

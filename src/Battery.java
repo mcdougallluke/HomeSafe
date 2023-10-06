@@ -1,33 +1,59 @@
 // CS 460 Team 01
 
+import javafx.application.Platform;
+
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Battery {
     private static final double FULL_CHARGE = 100.0;
     private static final int LOW_BATTERY_THRESHOLD = 20;
-    private static final double DEPLETION_AMOUNT = 100.0 / 2880; // Deplete 0.0347% per minute
+    private static final double DEPLETION_AMOUNT = 100.0/2880; // Deplete 0.0347% per minute
 
     private double chargeLevel; // Battery charge level (0-100)
     private int remainingWorkingTime; // Remaining working time in minutes
 
+    private BatteryListener listener;  // the callback reference
+    private final Label batteryLabel = new Label();
+
+    private ArrayList<BatteryListener> listeners = new ArrayList<>();
+
+    public void addBatteryListener(BatteryListener listener) {
+        listeners.add(listener);
+    }
+
+    private void notifyLowBattery() {
+        for (BatteryListener listener : listeners) {
+            listener.onLowBattery();
+        }
+    }
+
     public Battery() throws InterruptedException {
         this.chargeLevel = FULL_CHARGE;
-        this.remainingWorkingTime = 48 * 60; // 48 hours in minutes
+        this.remainingWorkingTime =  48 * 60; // 48 hours in minutes
 
         startBatteryDepletion(); // Starting battery depletion
     }
 
     private void startBatteryDepletion() {
         Timer timer = new Timer();
-        int depletionInterval = 60 * 1000; // Deplete every 1 minute
+        int depletionInterval =  60*100; // Deplete every 1 minute
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 if (chargeLevel > 0) {
+                    // Update the UI
+                    Platform.runLater(() -> {
+                        batteryLabel.setText("Charge Level: " + chargeLevel + "%");
+                    });
                     discharge(DEPLETION_AMOUNT);
                     chargeLevel -= DEPLETION_AMOUNT; // Decrement charge level
                     remainingWorkingTime -= 1; // Decrease remaining working time by 1 minute
+                    if (chargeLevel <= LOW_BATTERY_THRESHOLD && listener != null) {
+                        System.out.println("Low battery The signal: Please recharge the safe.");
+                    }
 
                     if (remainingWorkingTime <= 0) {
                         System.out.println("Battery depleted. Safe operations are no longer possible.");
@@ -39,7 +65,10 @@ public class Battery {
                     System.out.println("Battery depleted. Safe operations are no longer possible.");
                     timer.cancel();
                 } else if (chargeLevel <= LOW_BATTERY_THRESHOLD) {
-                    System.out.println("Low battery signal: Please recharge the safe.");
+                    System.out.println("Low battery signal The: Please recharge the safe.");
+                    Platform.runLater(() -> {
+                        notifyLowBattery();
+                    });
                 }
             }
         }, depletionInterval, depletionInterval);
@@ -78,6 +107,10 @@ public class Battery {
 
     public int getRemainingWorkingTime() { // Returns remaining running time in minutes
         return remainingWorkingTime;
+    }
+
+    public void setBatteryListener(BatteryListener listener) {
+        this.listener = listener;
     }
 
     // Nested Main class for testing

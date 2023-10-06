@@ -15,6 +15,22 @@ public class SafeController {
     private boolean lockedOut = false;
     private int incorrectPinCount = 0;
     private static final String MASTER_PIN = "999999";
+    private Battery battery;
+    private EyeButtons eyeButtons;
+
+    public void initializeBatteryListener() {
+        battery.addBatteryListener(() -> {
+            screen.forceDisplayMessage("Low Battery!"); // This line displays the temporary message.
+        });
+    }
+
+    void setBattery(Battery battery){
+        this.battery = battery;
+    }
+
+    public void setEyeButtons(EyeButtons eyeButtons) {
+        this.eyeButtons = eyeButtons;
+    }
 
 
     public SafeController(Screen screen, SafeGUI safeGUI) {
@@ -46,7 +62,7 @@ public class SafeController {
     private void handleSettingIris() {
         screen.displayMessage("Scan your Iris");
     }
-    
+
     private void handleInitialPinSetup() {
         screen.displayMessage("Enter Master PIN");
     }
@@ -108,7 +124,19 @@ public class SafeController {
             default -> false;
         };
     }
+    public void forgotPassword() {
+        if (currentUser != null) {
+            // Remove the currentUser from the users list
+            users.remove(currentUser);
 
+            // Clear the currentUser's PIN and iris scan
+            currentUser.setPin(null);
+            currentUser.setIrisName(null);
+
+            // Set currentUser to null
+            currentUser = null;
+        }
+    }
     private boolean handleInitialPinSetup(String enteredPIN) {
         if (MASTER_PIN.equals(enteredPIN)) {
             setState(SafeState.SETTING_NEW_PIN);
@@ -134,6 +162,7 @@ public class SafeController {
 
     private boolean handleNormalState(String enteredPIN) {
         if (MASTER_PIN.equals(enteredPIN)) {
+            forgotPassword();
             setState(SafeState.SETTING_NEW_PIN);
             return true;
         }

@@ -81,19 +81,22 @@ public class SafeGUI extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-
         try {
             battery = new Battery();
             Timer timer = new Timer();
+            safeController.setBattery(battery);
+            safeController.setEyeButtons(buttonPanel);
+            safeController.initializeBatteryListener();
             int batteryCheckInterval = 60 * 1000;
             timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
-                    if (battery.isLow()) {
-                        System.out.println("Low battery signal: Please recharge the safe.");
+                    if (battery.getChargeLevel()<=20) {
+                        System.out.println("The Low battery signal: Please recharge the safe.");
                     }
                 }
             }, batteryCheckInterval, batteryCheckInterval);
+
 
         } catch (InterruptedException e) {
             e.printStackTrace();

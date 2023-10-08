@@ -70,3 +70,67 @@ In this scenario, the user has previously configured their iris scan and PIN and
 6. The user presses the POWER button on the keypad to power down HomeSafe.
    • The power provided by the primary power supply is halted.
    • The microcontroller and all other safe components are no longer active.
+
+### PIN Timeout
+In this scenario, the user has previously configured their PIN and Iris Scan and now seeks to open the safe. However, the user waits too long between keypad inputs, resulting in a system timeout.
+1. The user presses the power button on the keypad to power the system on.
+   •  Battery power from the primary power source activates the safe components.
+   • The microcontroller is activated and awaiting input.
+   • The keypad is activated and awaiting input.
+   • The LED display prompts users to enter their 6-digit PIN.
+2. The user begins to enter their PIN but hesitates or is interrupted.
+   • The LED display shows the numbers the user has entered so far.
+   • An internal timeout counter starts when the first key is pressed.
+3. After a pause of more than 3 seconds without pressing a new key or hitting the enter button, the user’s input is automatically cleared due to a TIMEOUT.
+   • The authentication manager resets PIN input.
+   • The LED display prompts users to enter their 6-digit PIN.
+   • The keypad awaits further input from the user.
+4. After three consecutive TIMEOUT lockouts, the system enters the ”LOCKED OUT” state.
+   • The authentication manager resets PIN input.
+   • The LED display prompts the user to enter the 6-digit master PIN.
+   • The keypad awaits further input from the user.
+5. Upon entering the master PIN when prompted, the system is taken out of the ”LOCKED OUT” state, and the user can enter the AUTHORIZATION process once again.
+   • The keypad is activated and awaiting input.
+   • The LED display prompts users to enter their 6-digit PIN.
+
+### Unauthorized Access (PIN)
+In this scenario, the user has previously configured their PIN and iris scan and now seeks to open the safe. However, after three attempts, the user cannot enter their correct PIN and is prompted for the master PIN as an override.
+1. The user presses the power button on the keypad to power the system on.
+   • The battery power from the primary power source activates the safe components.
+   • The microcontroller is activated and awaiting input.
+   • The keypad is activated and awaiting input.
+   • The LED display prompts users to enter their 6-digit PIN.
+2. The user enters an incorrect PIN and presses ENTER.
+   • The authentication manager attempts to verify the PIN.
+   • The PIN Verification fails.
+   • The LED display prompts users to enter their 6-digit PIN.
+3. After three consecutive failed PIN verifications, the system enters the ”LOCKED OUT” state.
+   • The authentication manager resets PIN input.
+   • The LED display prompts the user to enter the 6-digit Master PIN.
+   • The keypad awaits further input from the user.
+4. Upon entering the master PIN when prompted, the system is taken out of the ”LOCKED OUT” state, and the user can enter the AUTHORIZATION process once again.
+   • The keypad is activated and awaiting input.
+   • The LED display prompts users to enter their 6-digit PIN.
+
+### Unauthorized Access (Iris Scan)
+In this scenario, the user has previously configured their PIN and Iris Scan and now seeks to open the safe. However, after three attempts, the user cannot provide a recognized iris scan and is prompted for the master PIN as an override.
+1. The user presses the power button on the keypad to power the system on.
+   • The battery power from the primary power source activates the safe components.
+   • The microcontroller is activated and awaiting input.
+   • The keypad is activated and awaiting input.
+   • The LED display prompts users to enter their 6-digit PIN.
+2. The user enters their PIN and presses ENTER.
+   • The authentication manager verifies the PIN.
+   • The LED display prompts the user to provide an iris scan.
+   • The iris scanner becomes active and waits for user input.
+3. The user provides an invalid Iris Scan.
+   • The authentication manager verifies the iris scan.
+   • The iris scan verification fails.
+   • The LED display prompts the user to provide an iris scan.
+4. After three consecutive failed iris scan verifications, the system enters the ”LOCKED OUT” state.
+   • The authentication manager resets the AUTHORIZATION PROCESS.
+   • The LED display prompts the user to enter the 6-digit master PIN.
+   • The keypad awaits further input from the user.
+5. Upon entering the master PIN when prompted, the system is taken out of the ”LOCKED OUT” state, and the user can enter the AUTHORIZATION process once again.
+   • The keypad is activated and awaiting input.
+   • The LED display prompts users to enter their 6-digit PIN.

@@ -1,5 +1,6 @@
 // CS 460 Team 01
 
+// Import necessary JavaFX components
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
@@ -10,24 +11,31 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+// Class representing the keypad component of the UI
 public class KeyPad extends GridPane {
 
+    // Sound that plays when a button is pressed
     private final AudioClip buttonSound = new AudioClip(getClass().getResource("audio/KeyPadBeep.mp3").toString());
+    // Volume level for the button sound
     private double currentVolume = 0.0;
 
+    // Reference to the InputController to handle button actions
     private final InputController inputController;
 
+    // Constructor initializing the keypad with given input controller
     public KeyPad(InputController inputController) {
         this.inputController = inputController;
-        initKeypad();
+        initKeypad();  // Initialize keypad buttons and layout
     }
 
+    // Method to initialize the layout and buttons of the keypad
     private void initKeypad() {
-        setLayoutProperties();
-        addNumberButtons();
-        addControlButtons();
+        setLayoutProperties();   // Set layout properties of the keypad
+        addNumberButtons();      // Add numeric buttons (1-9)
+        addControlButtons();     // Add control buttons like volume, power, etc.
     }
 
+    // Configure general layout settings of the keypad
     private void setLayoutProperties() {
         this.setAlignment(Pos.CENTER);
         this.setPadding(new Insets(10, 10, 10, 10));
@@ -36,7 +44,9 @@ public class KeyPad extends GridPane {
         this.setStyle("-fx-background-color: linear-gradient(to bottom, #a9a9a9, #ffffff, #a9a9a9);");
     }
 
+    // Method to add numeric buttons to the keypad
     private void addNumberButtons() {
+        // Loop to create numeric buttons from 1-9
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 int number = i * 3 + j + 1;
@@ -46,25 +56,31 @@ public class KeyPad extends GridPane {
         }
     }
 
+    // Method to add control buttons to the keypad
     private void addControlButtons() {
+        // Create and configure volume up button
         Button volumeUpButton = createButton("^", "volume up");
         volumeUpButton.setOnAction(event -> {
             adjustVolume(0.1);
             buttonSound.play();
         });
 
+        // Create zero button
         Button zeroButton = createButton("0", "0");
 
+        // Create and configure volume down button
         Button volumeDownButton = createButton("v", "volume down");
         volumeDownButton.setOnAction(event -> {
             adjustVolume(-0.1);
             buttonSound.play();
         });
 
+        // Add control buttons to the grid layout
         this.add(volumeUpButton, 0, 3);
         this.add(zeroButton, 1, 3);
         this.add(volumeDownButton, 2, 3);
 
+        // Create and configure cancel button
         Button cancelButton = createButton("X", "cancel");
         cancelButton.setTextFill(Color.RED);
         cancelButton.setOnAction(event -> {
@@ -73,6 +89,7 @@ public class KeyPad extends GridPane {
             buttonSound.play();
         });
 
+        // Create and configure power button
         Button powerButton = createButton("*", "power");
         powerButton.setOnAction(event -> {
             inputController.handlePowerButton();
@@ -80,6 +97,7 @@ public class KeyPad extends GridPane {
             buttonSound.play();
         });
 
+        // Create and configure enter button
         Button enterButton = createButton("O", "enter");
         enterButton.setTextFill(Color.GREEN);
         enterButton.setOnAction(event -> {
@@ -88,14 +106,13 @@ public class KeyPad extends GridPane {
             buttonSound.play();
         });
 
-        enterButton.setTextFill(Color.GREEN);
-
+        // Add remaining control buttons to the grid layout
         this.add(cancelButton, 0, 4);
         this.add(powerButton, 1, 4);
         this.add(enterButton, 2, 4);
     }
-
-
+    
+    // Helper method to create and style a button
     private Button createButton(String text, String printText) {
         Button btn = new Button(text);
         btn.setPrefSize(55, 55);
@@ -122,6 +139,7 @@ public class KeyPad extends GridPane {
         return btn;
     }
 
+    // Apply the default style to a button
     private void applyDefaultButtonStyle(Button btn) {
         String gradientBackground = "-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #3E3E3E, #2E2E2E);";
         btn.setStyle(gradientBackground + "-fx-text-fill: white; -fx-font-size: 24px;");
@@ -136,6 +154,7 @@ public class KeyPad extends GridPane {
         if(btn.getText().equals("X")){btn.setStyle(gradientBackground + "-fx-text-fill: red; -fx-font-size: 24px;");}
     }
 
+    // Apply a visual style to the button to indicate it has been pressed
     private void setButtonPressedStyle(Button btn) {
         String pressedStyle = "-fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #2E2E2E, #1E1E1E);";
         btn.setStyle(pressedStyle + "-fx-text-fill: white; -fx-font-size: 24px;");
@@ -144,6 +163,7 @@ public class KeyPad extends GridPane {
         shadow.setOffsetY(1);
     }
 
+    // Add a power icon to the power button
     private void setPowerButtonGraphics(Button btn) {
         ImageView imageView = new ImageView(new Image(getClass().getResource("images/PowerButton.png").toString()));
         imageView.setFitHeight(25);
@@ -152,6 +172,7 @@ public class KeyPad extends GridPane {
         btn.setText("");
     }
 
+     // Adjust the button sound volume
     private void adjustVolume(double delta) {
         currentVolume += delta;
         if (currentVolume > 1.0) currentVolume = 1.0;

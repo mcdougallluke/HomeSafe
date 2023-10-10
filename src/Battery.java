@@ -23,7 +23,6 @@ public class Battery {
             public void run() {
                 if (chargeLevel > 0) {
                     discharge(DEPLETION_AMOUNT);
-                    System.out.println(chargeLevel);
                 }
             }
         }, depletionInterval, depletionInterval);

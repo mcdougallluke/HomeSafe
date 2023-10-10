@@ -55,7 +55,6 @@ public class Screen {
     }
 
     public void displayMessage(String message) {
-        System.out.println("Displaying message: " + message);
         previousMessage = line1.getText() + line2.getText();
         if (message.length() <= 20) {
             line1.setText(message);
@@ -67,7 +66,6 @@ public class Screen {
     }
 
     public void tempDisplayMessage(String message) {
-        System.out.println("Temp Displaying message: " + message);
         clearKeyEntry();
         if (message.length() <= 20) {
             line1.setText(message);

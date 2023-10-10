@@ -50,8 +50,14 @@ public class EyeButtons {
 
                         safeController.setIrisForCurrentUser(names[finalI]);
                         safeController.addUser(safeController.getCurrentUser());
-                        safeController.resetUser(); //resets currentUser in safeController
-                        safeController.setState(SafeState.NORMAL);
+                        safeController.resetUser();
+                        safeController.getScreen().tempDisplayMessage("User added");
+                        PauseTransition delay = new PauseTransition(Duration.seconds(3));
+                        delay.setOnFinished(e -> {
+                            safeController.setState(SafeState.NORMAL);
+                        });
+                        delay.play();
+
 
                     } else if (safeController.getCurrentState() == SafeState.WAITING_FOR_IRIS) {
                         safeController.checkIris(names[finalI]);

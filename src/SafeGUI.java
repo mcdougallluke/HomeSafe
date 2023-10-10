@@ -8,8 +8,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class SafeGUI extends Application {
@@ -22,7 +20,6 @@ public class SafeGUI extends Application {
     private ImageView imageView;
     private Button closeButton;
     private EyeButtons buttonPanel;
-    private Battery battery;
     private SafeController safeController;
 
     @Override
@@ -77,7 +74,7 @@ public class SafeGUI extends Application {
         root.getChildren().addAll(imageView);
 
         Scene scene = new Scene(root, 815, 700);
-        primaryStage.setTitle("Digital Safe");
+        primaryStage.setTitle("Safe");
         primaryStage.setScene(scene);
         primaryStage.show();
 

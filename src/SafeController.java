@@ -15,6 +15,7 @@ public class SafeController {
     private User currentUser = null;
     private boolean lockedOut = false;
     private int incorrectPinCount = 0;
+
     private static final String MASTER_PIN = "999999";
 
 
@@ -35,35 +36,29 @@ public class SafeController {
             battery.start();
         }
         switch (currentState) {
-            case WAITING_FOR_IRIS -> handleWaitingForIris();
-            case SETTING_IRIS -> handleSettingIris();
             case INITIAL_PIN_SETUP -> handleInitialPinSetup();
             case NORMAL -> handleNormalState();
             case CLOSED -> handleCloseSafe();
-            case LOCKED -> handleLockedState();
             case SETTING_NEW_PIN -> handleSettingNewPin();
             case LOCKED_OUT -> handleLockedOutState();
         }
 
     }
 
-    private void handleWaitingForIris() {
-        screen.displayMessage("Waiting on Iris scan");
-    }
-    private void handleSettingIris() {
-        screen.displayMessage("Scan your Iris");
-    }
 
     private void handleInitialPinSetup() {
+        screen.clearKeyEntry();
         screen.displayMessage("Enter Master PIN");
         checkBatteryLevel();
     }
 
     private void handleSettingNewPin() {
+        screen.clearKeyEntry();
         screen.displayMessage("Enter New User PIN");
     }
 
     private void handleNormalState() {
+        screen.clearKeyEntry();
         screen.displayMessage("Enter your PIN");
         checkBatteryLevel();
     }
@@ -84,6 +79,7 @@ public class SafeController {
     }
 
     private void handleUnlockedState() {
+        incorrectPinCount = 0;
         screen.displayMessage("Safe Unlocked");
         PauseTransition delay = new PauseTransition(Duration.seconds(2));
         delay.setOnFinished(event -> safeGUI.openSafe());
@@ -95,10 +91,6 @@ public class SafeController {
     }
 
 
-    private void handleLockedState() {
-        screen.displayMessage("Safe Locked");
-    }
-
     public SafeState getCurrentState() {
         return currentState;
     }
@@ -109,6 +101,7 @@ public class SafeController {
 
 
     public boolean checkPIN(String enteredPIN) {
+        screen.clearKeyEntry();
         return switch (currentState) {
             case INITIAL_PIN_SETUP -> handleInitialPinSetup(enteredPIN);
             case SETTING_NEW_PIN -> handleSettingNewPin(enteredPIN);
@@ -134,7 +127,7 @@ public class SafeController {
             screen.tempDisplayMessage("PIN already in use");
             return false;
         }
-        screen.displayMessage("Scan Your Iris");
+        screen.displayMessage("Scan your Iris");
         currentUser = new User(enteredPIN, null);
         setState(SafeState.SETTING_IRIS);
         return true;
@@ -148,7 +141,7 @@ public class SafeController {
         for (User user : users) {
             if (enteredPIN.equals(user.getPin())) {
                 currentUser = user;
-                screen.displayMessage("Scan Your Iris");
+                screen.displayMessage("Scan your Iris");
                 setState(SafeState.WAITING_FOR_IRIS);
                 return true;
             }
@@ -172,11 +165,20 @@ public class SafeController {
                 handleUnlockedState();
             } else {
                 screen.tempDisplayMessage("Wrong Iris");
-                incorrectPinCount++;
-                setState(SafeState.NORMAL);
+                PauseTransition delay = new PauseTransition(Duration.seconds(3));
+                delay.setOnFinished(event -> {
+                    incorrectPinCount++;
+                    if (incorrectPinCount >= 3) {
+                        setState(SafeState.LOCKED_OUT);
+                    } else {
+                        setState(SafeState.NORMAL);
+                    }
+                });
+                delay.play();
             }
         }
     }
+
 
     public void setIrisForCurrentUser(String irisName) {
         if(currentUser != null) {

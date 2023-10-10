@@ -19,6 +19,7 @@ public class Screen {
     private final StackPane screenComponent;
     private final StringBuilder actualInput;
     private final PauseTransition timeoutTransition;
+    private PauseTransition revertMessageTransition;
     private String previousMessage = "";
 
     public Screen(InputController inputController) {
@@ -54,6 +55,7 @@ public class Screen {
     }
 
     public void displayMessage(String message) {
+        System.out.println("Displaying message: " + message);
         previousMessage = line1.getText() + line2.getText();
         if (message.length() <= 20) {
             line1.setText(message);
@@ -61,7 +63,29 @@ public class Screen {
             line1.setText(message.substring(0, 20));
             line2.setText(message.substring(20));
         }
+        stopRevertMessageTransition();
     }
+
+    public void tempDisplayMessage(String message) {
+        System.out.println("Temp Displaying message: " + message);
+        clearKeyEntry();
+        if (message.length() <= 20) {
+            line1.setText(message);
+        } else {
+            line1.setText(message.substring(0, 20));
+            line2.setText(message.substring(20));
+        }
+        revertMessageTransition = new PauseTransition(Duration.seconds(3));
+        revertMessageTransition.setOnFinished(event -> revertMessage());
+        revertMessageTransition.play();
+    }
+
+    private void stopRevertMessageTransition() {
+        if (revertMessageTransition != null) {
+            revertMessageTransition.stop();
+        }
+    }
+
 
     public void appendKeyEntry(String key) {
         actualInput.append(key);
@@ -94,19 +118,9 @@ public class Screen {
 
     private void timeout() {
         clearKeyEntry();
-        displayMessage("Timed out");
-        PauseTransition revertMessageTransition = new PauseTransition(Duration.seconds(3));
-        revertMessageTransition.setOnFinished(event -> revertMessage());
-        revertMessageTransition.play();
+        tempDisplayMessage("Timed out");
     }
 
-    public void tempDisplayMessage(String message) {
-        clearKeyEntry();
-        displayMessage(message);
-        PauseTransition revertMessageTransition = new PauseTransition(Duration.seconds(3));
-        revertMessageTransition.setOnFinished(event -> revertMessage());
-        revertMessageTransition.play();
-    }
 
     private void revertMessage() {
         if (previousMessage.length() <= 20) {

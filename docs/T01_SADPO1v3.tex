@@ -186,7 +186,7 @@ The \texttt{Battery} class in the software simulates the hardware component resp
 \end{itemize}
 \textbf{Dependencies}:
 
-The \texttt{Battery} class does not depend on other classes but is crucial for the operation of any component that requires power to function. It uses the \texttt{Timer} and \texttt{TimerTask} classes to manage the battery depletion process.
+The \texttt{Battery} class does not depend on other classes but is crucial for the operation of any component that requires power. It uses the \texttt{Timer} and \texttt{TimerTask} classes to manage the battery depletion process.
 
 
 \subsection{LED Display}
@@ -223,11 +223,11 @@ This section offers two use cases showcasing varied scenarios involving HomeSafe
     \item \textbf{Trigger}: User powers on the HomeSafe.
     \item \textbf{Scenario}: In this scenario, the user has just acquired their new HomeSafe and wishes to initialize and configure their access credentials before turning off the safe for subsequent use.
     \begin{enumerate}
-    \item \textbf{Unpacking and Placing the Safe}: User removes the HomeSafe and its manual, which contains the Master PIN, from the packaging, placing it in a preferred location.
-    \item \textbf{Powering Up}: User powers up the system by pressing the power button, activating the safe's components and prompting an LED display message to enter the Master PIN.
+    \item \textbf{Unpacking and Placing the Safe}: The user removes the HomeSafe and its manual, which contains the Master PIN, from the packaging, placing it in a preferred location.
+    \item \textbf{Powering Up}: The user powers up the system by pressing the power button, activating the safe's components, and prompting an LED display message to enter the Master PIN.
     \item \textbf{Entering Master PIN}: User inputs the provided 6-digit Master PIN and presses ENTER, prompting the system to verify it and request the creation of a new personal PIN.
     \item \textbf{Setting a New Personal PIN}: User inputs a desired 6-digit PIN and presses ENTER.
-    \item \textbf{Biometric (Iris) Configuration}: User aligns their eye with the Iris Scanner, waiting for the confirmation animation on the LED Display. This concludes the initial setup process, and the user's credentials are saved.
+    \item \textbf{Biometric (Iris) Configuration}: The user aligns their eye with the Iris Scanner, waiting for the confirmation animation on the LED Display. This concludes the initial setup process, and the user's credentials are saved.
     \item \textbf{Powering Down}: The user presses the POWER button, deactivating the HomeSafe and all its internal components.
     \end{enumerate}
 \end{itemize}
@@ -240,11 +240,11 @@ This section offers two use cases showcasing varied scenarios involving HomeSafe
     \item \textbf{Trigger}: The user wishes to access the contents of the HomeSafe.
     \item \textbf{Scenario}: The user, having previously configured their PIN and Iris Scan, seeks to gain secure access to the safe utilizing these credentials.
     \begin{enumerate}
-    \item \textbf{Initiating Access}: The user begins by powering up the HomeSafe. The LED display comes to life, prompting the user to enter their 6-digit PIN to proceed.
+    \item \textbf{Initiating Access}: The user begins by powering up the HomeSafe. The LED display comes to life, prompting users to enter their 6-digit PIN to proceed.
     \item \textbf{PIN Verification}: The user enters their personal 6-digit PIN and presses ENTER. In response, the LED display instructs the user to perform an Iris Scan, activating the scanner.
-    \item \textbf{Iris Scan Verification}: The user carefully positions their eye before the Iris Scanner. Upon seeing a confirmation animation on the LED Display which signifies a successful scan, the locking mechanism shifts to an UNLOCKED state.
-    \item \textbf{Accessing and Managing Safe Contents}: With access granted, the user opens the safe, revealing its contents. The LED display notifies “Door Open”, deactivating input controls and initiating a timer that will sound an alarm if the door remains open beyond 300 seconds (5 minutes).
-    \item \textbf{Securing the Safe Post-Use}: After managing the contents, the user closes the HomeSafe. The LED promptly indicates "Door Closed", reactivating the input controls and initializing a shutdown timer that will power down the safe after 300 seconds (5 minutes).
+    \item \textbf{Iris Scan Verification}: The user carefully positions their eye before the Iris Scanner. Upon seeing a confirmation animation on the LED Display, which signifies a successful scan, the locking mechanism shifts to an UNLOCKED state.
+    \item \textbf{Accessing and Managing Safe Contents}: With access granted, the user opens the safe, revealing its contents. The LED display notifies “Door Open,” deactivating input controls and initiating a timer to sound an alarm if the door remains open beyond 300 seconds (5 minutes).
+    \item \textbf{Securing the Safe Post-Use}: After managing the contents, the user closes the HomeSafe. The LED indicates "Door Closed," reactivating the input controls and initializing a shutdown timer to power down the safe after 300 seconds (5 minutes).
     \item \textbf{Concluding Interaction}: Optionally, to immediately cease all activity within the HomeSafe’s components, the user can manually power it down by pressing the POWER button.
     \end{enumerate}
 \end{itemize}
@@ -255,13 +255,13 @@ This section offers two use cases showcasing varied scenarios involving HomeSafe
     \item \textbf{Goal}: To access the HomeSafe despite encountering a PIN entry timeout and subsequent system lockout.
     \item \textbf{Preconditions}: The HomeSafe is configured with the user’s PIN and Iris Scan and is powered off.
     \item \textbf{Trigger}: The user desires access to the HomeSafe but experiences interruption during PIN entry.
-    \item \textbf{Scenario}: In an effort to access the HomeSafe, the user initiates the typical access protocol. However, they become subject to an unintended pause during PIN entry, initiating a timeout and subsequent challenges to regain access to the system.
+    \item \textbf{Scenario}: To access the HomeSafe, the user initiates the typical access protocol. However, they become subject to an unintended pause during PIN entry, initiating a timeout and subsequent challenges to regain access to the system.
     \begin{enumerate}
-    \item \textbf{Initiating Access}: The user powers up the HomeSafe and begins entering their personal 6-digit PIN. The LED display lights up, showing each character of the partly entered PIN as asterisks (*) while an internal counter begins silently ticking down in the background.
-    \item \textbf{Experiencing PIN Entry Timeout}: Due to a hesitation or interruption of over 3 seconds, the system enforces a timeout, resetting the PIN entry procedure and prompting the user once again for the 6-digit PIN via the LED display.
+    \item \textbf{Initiating Access}: The user powers up the HomeSafe and begins entering their 6-digit PIN. The LED display lights up, showing each character of the partly entered PIN as asterisks (*) while an internal counter begins silently ticking down in the background.
+    \item \textbf{Experiencing PIN Entry Timeout}: Due to hesitation or interruption of over 3 seconds, the system enforces a timeout, resetting the PIN entry procedure and prompting the user again for the 6-digit PIN via the LED display.
     \item \textbf{Encountering Consecutive Timeout Penalties}: After three consecutive timeout events, the HomeSafe takes a precautionary security measure, transitioning into a "LOCKED OUT" state. The LED display, adopting a more stringent security protocol, now requests the entry of the Master PIN.
     \item \textbf{Providing Master PIN to Resolve Lockout}:  In response to the "LOCKED OUT" state, the user enters the Master PIN as instructed. Successful verification removes the system from the lockout, reactivating standard access protocols.
-    \item \textbf{Resuming Standard Access Procedure}: The LED display reverts to requesting the user’s personal 6-digit PIN, offering another opportunity to access the HomeSafe by proceeding with the authorization process.
+    \item \textbf{Resuming Standard Access Procedure}: The LED display reverts to requesting the user’s 6-digit PIN, offering another opportunity to access the HomeSafe by proceeding with the authorization process.
     \end{enumerate}
 \end{itemize}
 
@@ -271,11 +271,11 @@ This section offers two use cases showcasing varied scenarios involving HomeSafe
     \item \textbf{Goal}: To access the HomeSafe using established credentials while navigating through unauthorized access protocols upon multiple incorrect PIN entries.
     \item \textbf{Preconditions}:  The HomeSafe is configured with the user’s PIN and Iris Scan and is powered off.
     \item \textbf{Trigger}: The user intends to access the HomeSafe but fails to provide the correct PIN in multiple attempts.
-    \item \textbf{Scenario}: The user, attempting to gain access to their HomeSafe, inadvertently fails to provide the correct PIN repeatedly. Subsequent incorrect entries enforce a system lockdown, prompting the user to establish their legitimacy by entering the Master PIN as a security override.
+    \item \textbf{Scenario}: The user, attempting to gain access to their HomeSafe, inadvertently fails to provide the correct PIN repeatedly. Subsequent incorrect entries enforce a system lockdown, prompting users to establish their legitimacy by entering the Master PIN as a security override.
     \begin{enumerate}
     \item \textbf{Initiating Access}: The user powers up the HomeSafe, engaging the microcontroller and keypad. The LED display prompts the user for their 6-digit PIN.
-    \item \textbf{Experiencing Failed PIN Entries}: The user enters an incorrect PIN and, upon pressing ENTER, is met with a failed verification message. This initiates an internal counter while the LED display prompts the user to try their 6-digit PIN again.
-    \item \textbf{Encountering System Lockout due to Repeated Failures}: After three consecutive incorrect PIN entries, the HomeSafe, prioritizing security, transitions into a “LOCKED OUT” state. At this juncture, the LED display alters its request, now seeking the 6-digit Master PIN to proceed.
+    \item \textbf{Experiencing Failed PIN Entries}: The user enters an incorrect PIN and, upon pressing ENTER, is met with a failed verification message. This initiates an internal counter while the LED display prompts users to try their 6-digit PIN again.
+    \item \textbf{Encountering System Lockout due to Repeated Failures}: After three consecutive incorrect PIN entries, the HomeSafe, prioritizing security, transitions into a “LOCKED OUT” state. At this juncture, the LED display alters its request, seeking the 6-digit Master PIN to proceed.
     \item \textbf{Overriding Lockout with Master PIN}: The user provides the Master PIN when requested. A successful entry recalibrates the system, lifting it from the “LOCKED OUT” state and reinstating the standard authorization protocols.
     \item \textbf{Resuming Standard Access Procedure}: With the lockout condition removed, the LED display reverts to requesting the user’s 6-digit PIN, allowing the user to proceed with the typical authorization process.
     \end{enumerate}
@@ -287,10 +287,10 @@ This section offers two use cases showcasing varied scenarios involving HomeSafe
     \item \textbf{Goal}: Gain access to the HomeSafe despite encountering challenges with Iris Scan verification, utilizing the Master PIN as an override upon failed attempts.
     \item \textbf{Preconditions}:  The HomeSafe is configured with the user’s PIN and Iris Scan and is powered off.
     \item \textbf{Trigger}: The user seeks access to the HomeSafe but encounters difficulty with the Iris Scan verification process.
-    \item \textbf{Scenario}: The user, having previously established both PIN and Iris Scan credentials, attempts to access the HomeSafe. A series of unsuccessful Iris Scan attempts propels the system into a secured "LOCKED OUT" state, prompting the user to affirm identity and intent via the Master PIN.
+    \item \textbf{Scenario}: Having previously established PIN and Iris Scan credentials, the user attempts to access the HomeSafe. A series of unsuccessful Iris Scan attempts propels the system into a secured "LOCKED OUT" state, prompting the user to affirm identity and intent via the Master PIN.
     \begin{enumerate}
     \item \textbf{Initiating Access}: The user powers up the HomeSafe, engaging the microcontroller and keypad. The LED display prompts the user for their 6-digit PIN.
-    \item \textbf{PIN Verification}: he user enters their personal 6-digit PIN and presses ENTER. In response, the LED display instructs the user to perform an Iris Scan, activating the scanner.
+    \item \textbf{PIN Verification}: the user enters their personal 6-digit PIN and presses ENTER. In response, the LED display instructs the user to perform an Iris Scan, activating the scanner.
     \item \textbf{Unsuccessful Iris Scan Attempts}: The user attempts the Iris Scan, but upon being determined as invalid, the LED display persists in its request for a valid Iris Scan.
     \item \textbf{Encountering System Lockout due to Repeated Failures}: After three continuous failed Iris Scan verifications, the HomeSafe enters a “LOCKED OUT” state. In this phase, the LED display modifies its prompt, now demanding the 6-digit Master PIN to override the lockout.
     \item \textbf{Overriding Lockout with Master PIN}: The user provides the Master PIN when requested. A successful entry recalibrates the system, lifting it from the “LOCKED OUT” state and reinstating the standard authorization protocols.
